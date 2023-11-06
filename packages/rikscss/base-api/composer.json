@@ -1,0 +1,33 @@
+{
+    "name": "rikscss/base-api",
+    "description": "This packages adds api call logging and offers standardised http responses for CRUD",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^8.0|^9.0|^10.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.0|^8.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Rikscss\\BaseApi\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rikscss\\BaseAPI\\BaseApiServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Klaas Rikhotso",
+            "email": "klaas@rikscss.co.za"
+        }
+    ],
+    "minimum-stability": "dev"
+}
