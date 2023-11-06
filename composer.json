@@ -9,8 +9,16 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "rikscss/base-api": "dev-main"
     },
+    "repositories": [{
+        "type": "path",
+        "url": "packages/rikscss/base-api",
+        "options": {
+            "symlink": true
+        }
+    }],
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
