@@ -5,7 +5,7 @@ namespace Rikscss\BaseApi\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Route;
-use Rikscss\BaseApi\Models\BaseApi;
+use Rikscss\BaseApi\Models\BaseApiLog;
 
 class BaseApiController extends Controller
 {
@@ -26,7 +26,7 @@ class BaseApiController extends Controller
     public function logSuccess($message, $user_id, $route, $payload, $response, $code = 200, $old_value = [], $new_value = [])
     {
         if ($this->logging == true) {
-            $flowLog = new BaseApi();
+            $flowLog = new BaseApiLog();
             $flowLog->user_id = $user_id;
             $flowLog->route = $route;
             $flowLog->payload = json_encode($payload);
@@ -45,7 +45,7 @@ class BaseApiController extends Controller
     public function logError($message, $user_id, $route, $payload, $response, $code, $old_value = [], $new_value = [])
     {
         if ($this->logging == true) {
-            $flowLog = new BaseApi();
+            $flowLog = new BaseApiLog();
             $flowLog->user_id = $user_id;
             $flowLog->route = $route;
             $flowLog->payload = json_encode($payload);

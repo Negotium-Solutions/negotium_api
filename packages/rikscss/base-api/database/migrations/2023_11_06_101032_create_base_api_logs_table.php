@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('base_apis', function (Blueprint $table) {
+        Schema::create('base_api_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->nullable();
             $table->string('route')->nullable();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('base_apis');
+        Schema::dropIfExists('base_api_logs');
     }
 };
