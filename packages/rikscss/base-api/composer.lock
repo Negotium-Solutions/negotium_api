@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e52f30eb74b90c97a7899a44499a811",
+    "content-hash": "77ad117599ca92c0dacfd88bd18c7bf4",
     "packages": [
         {
             "name": "brick/math",
@@ -3006,12 +3006,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "9bd707368b6a22875fad69651b05a7cdb0bdedd5"
+                "reference": "f6366804fc2779994978f8e3e33c4d7360d3673e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/9bd707368b6a22875fad69651b05a7cdb0bdedd5",
-                "reference": "9bd707368b6a22875fad69651b05a7cdb0bdedd5",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/f6366804fc2779994978f8e3e33c4d7360d3673e",
+                "reference": "f6366804fc2779994978f8e3e33c4d7360d3673e",
                 "shasum": ""
             },
             "require": {
@@ -3111,7 +3111,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-29T14:55:55+00:00"
+            "time": "2023-11-06T11:00:25+00:00"
         },
         {
             "name": "symfony/mailer",
@@ -4091,12 +4091,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
-                "reference": "0ef6850321f6b2216376f558df276b7df9e8e735"
+                "reference": "ba1b0dc73d526787bd64929269927c7f9ae33769"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/0ef6850321f6b2216376f558df276b7df9e8e735",
-                "reference": "0ef6850321f6b2216376f558df276b7df9e8e735",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/ba1b0dc73d526787bd64929269927c7f9ae33769",
+                "reference": "ba1b0dc73d526787bd64929269927c7f9ae33769",
                 "shasum": ""
             },
             "require": {
@@ -4166,7 +4166,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-29T16:00:00+00:00"
+            "time": "2023-11-06T09:15:24+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -8174,12 +8174,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "96d3ed6e28fdffa9d07d874e586c4d5da59798f6"
+                "reference": "4f9237a1bb42455d609e6687d2613dde5b41a587"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/96d3ed6e28fdffa9d07d874e586c4d5da59798f6",
-                "reference": "96d3ed6e28fdffa9d07d874e586c4d5da59798f6",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/4f9237a1bb42455d609e6687d2613dde5b41a587",
+                "reference": "4f9237a1bb42455d609e6687d2613dde5b41a587",
                 "shasum": ""
             },
             "require": {
@@ -8238,7 +8238,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-29T09:51:40+00:00"
+            "time": "2023-11-06T11:00:25+00:00"
         },
         {
             "name": "theseer/tokenizer",

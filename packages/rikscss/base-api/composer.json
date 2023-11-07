@@ -13,13 +13,25 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Rikscss\\BaseApi\\": "src/"
+            "Rikscss\\BaseApi\\": "src/",
+            "Rikscss\\BaseApi\\Database\\Factories\\": "database/factories/",
+            "Rikscss\\BaseApi\\Database\\Seeders\\": "database/seeders/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rikscss\\BaseApi\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Rikscss\\BaseAPI\\BaseApiServiceProvider"
+                "Rikscss\\BaseApi\\BaseApiServiceProvider"
             ]
         }
     },

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('base_apis', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user_id')->nullable();
+        Schema::create('base_api_logs', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->nullable();
             $table->string('route')->nullable();
-            $table->longText('payload')->nullable();
-            $table->longText('response')->nullable();
-            $table->longText('old_value')->nullable();
-            $table->longText('new_value')->nullable();
+            $table->json('payload')->nullable();
+            $table->json('response')->nullable();
+            $table->json('old_value')->nullable();
+            $table->json('new_value')->nullable();
             $table->string('message')->nullable();
             $table->integer('code')->nullable();
             $table->enum('is_error', ['success', 'error'])->nullable();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('base_apis');
+        Schema::dropIfExists('base_api_logs');
     }
 };
