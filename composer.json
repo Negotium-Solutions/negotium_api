@@ -16,7 +16,7 @@
         "type": "path",
         "url": "packages/rikscss/base-api",
         "options": {
-            "symlink": true
+            "symlink": false
         }
     }],
     "require-dev": {

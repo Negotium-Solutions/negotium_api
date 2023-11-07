@@ -5,7 +5,7 @@ namespace Rikscss\BaseApi\Http\Controllers\Api;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 use Illuminate\Http\Request;
-use Rikscss\BaseApiController\Models\BaseApi;
+use Rikscss\BaseApi\Models\BaseApiLog;
 
 class BaseApiLogController extends BaseAPIController
 {
@@ -14,11 +14,11 @@ class BaseApiLogController extends BaseAPIController
      */
     public function get(Request $request, $id = null) : Response
     {
-        $query = isset($id) ? BaseApi::find($id) : BaseApi::query();
+        $query = isset($id) ? BaseApiLog::find($id) : BaseApiLog::query();
 
         $data = isset($id) ? $query : $query->get();
 
-        return $this->success($data, 'BaseApis successfully retrieved', [], Response::HTTP_OK);
+        return $this->success($data, 'api logs successfully retrieved', [], Response::HTTP_OK);
     }
 
     /**
@@ -27,10 +27,7 @@ class BaseApiLogController extends BaseAPIController
     public function create(Request $request) : Response
     {
         $validator = \Validator::make($request->all(),
-            ['first_name' => 'string|required'],
-            ['last_name' => 'string|required'],
-            ['email' => 'unique:email|email|required'],
-            ['password' => 'required|required|confirmed']
+            ['route' => 'string|required']
         );
 
         if ($validator->fails()) {
@@ -38,21 +35,25 @@ class BaseApiLogController extends BaseAPIController
         }
 
         try {
-            $BaseApi = new BaseApi();
-            $BaseApi->first_name = $request->first_name;
-            $BaseApi->last_name = $request->last_name;
-            $BaseApi->email = $request->email;
-            $BaseApi->email_verified_at = now();
-            $BaseApi->password = $request->password;
-            $BaseApi->avatar = $request->avatar;
+            $baseApiLog = new BaseApiLog();
+            $baseApiLog->user_id = $request->user_id;
+            $baseApiLog->route = $request->route;
+            $baseApiLog->payload = json_encode($request->payload);
+            $baseApiLog->response = json_encode($request->response);
+            $baseApiLog->old_value = json_encode($request->old_value);
+            $baseApiLog->new_value = json_encode($request->new_value);
+            $baseApiLog->message = $request->message;
+            $baseApiLog->code = $request->code;
+            $baseApiLog->is_error = $request->is_error;
+            $baseApiLog->save();
 
-            if ($BaseApi->save() === false) {
-                throw new \RuntimeException('Could not save BaseApi');
+            if ($baseApiLog->save() === false) {
+                throw new \RuntimeException('Could not save base api log');
             }
 
-            return $this->success(['id' => $BaseApi->id], 'BaseApi successfully created.', $request->all(), 200);
+            return $this->success(['id' => $baseApiLog->id], 'base api log successfully created.', $request->all(), 200);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create BaseApi.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create the base api log.', []);
         }
     }
 
@@ -62,9 +63,7 @@ class BaseApiLogController extends BaseAPIController
     public function update(Request $request, $id) : Response
     {
         $validator = \Validator::make($request->all(),
-            ['first_name' => 'string|required'],
-            ['last_name' => 'string|required'],
-            ['email' => 'unique|email|required']
+            ['message' => 'string|required']
         );
 
         if ($validator->fails()) {
@@ -72,33 +71,33 @@ class BaseApiLogController extends BaseAPIController
         }
 
         try {
-            $BaseApi = BaseApi::findOrFail($id);
+            $baseApiLog = BaseApiLog::findOrFail($id);
 
-            if ($BaseApi->updateOrFail($request->all()) === false) {
+            if ($baseApiLog->updateOrFail($request->all()) === false) {
                 throw new \RuntimeException('Could not update BaseApi');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the BaseApi', $request->all(), Response::HTTP_BAD_REQUEST);
+            return $this->error($exception->getMessage(), 'There was an error trying to update the base api log', $request->all(), Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->success([], 'BaseApi successfully updated', $request->all(), Response::HTTP_OK);
+        return $this->success([], 'base api log successfully updated', $request->all(), Response::HTTP_OK);
     }
 
     /**
      * Delete the BaseApi.
      */
-    public function destroy($id) : Response
+    public function delete($id) : Response
     {
         try {
-            $BaseApi = BaseApi::find($id);
+            $baseApiLog = BaseApiLog::find($id);
 
-            if ($BaseApi->delete() === false) {
-                throw new \RuntimeException('Could not delete the BaseApi');
+            if ($baseApiLog->delete() === false) {
+                throw new \RuntimeException('Could not delete the base api log');
             }
 
-            return $this->success([], 'BaseApi successfully deleted', [], Response::HTTP_OK);
+            return $this->success([], 'base api log successfully deleted', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
-            return $this->error([$exception->getMessage()], 'There was an error trying to delete the BaseApi', ['BaseApi_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error([$exception->getMessage()], 'There was an error trying to delete the base api log', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
