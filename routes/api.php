@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +15,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+*/
+
+Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
+
+Route::get('/user/{id?}', [UserController::class, 'get'])->name('api.user');
+Route::post('/user/create', [UserController::class, 'create'])->name('api.user.create');
+Route::put('/user/update/{id}', [UserController::class, 'update'])->name('api.user.update');
+Route::delete('/user/delete/{id?}', [UserController::class, 'delete'])->name('api.user.delete');
