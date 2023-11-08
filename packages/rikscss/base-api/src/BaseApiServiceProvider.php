@@ -3,6 +3,7 @@
 namespace Rikscss\BaseApi;
 
 use Illuminate\Support\ServiceProvider;
+use Rikscss\BaseApi\Http\Controllers\Api\BaseApiLogController;
 use Rikscss\BaseApi\Models\BaseApiLog;
 
 class BaseApiServiceProvider extends ServiceProvider
@@ -55,7 +56,7 @@ class BaseApiServiceProvider extends ServiceProvider
 
         // Register the main class to use with the facade
         $this->app->singleton('base-api', function () {
-            return new BaseApiLog;
+            return new BaseApiLogController;
         });
     }
 }

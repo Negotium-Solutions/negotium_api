@@ -5,6 +5,7 @@ namespace Rikscss\BaseApi\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Rikscss\BaseApi\Models\BaseApiLog;
 use Illuminate\Routing\Controller as BaseController;
@@ -21,8 +22,24 @@ class BaseApiController extends BaseController
 
     public function __construct()
     {
-        // $this->middleware(['auth:api', 'auth:sanctum']);
-        $this->debug = env('APP_DEBUG');
+        $config_sanctum = Config::get('base-api.auth.sanctum');
+        $config_api = Config::get('base-api.auth.api');
+
+        $middleware = [];
+
+        if($config_sanctum){
+            $middleware[] = 'auth:sanctum';
+        }
+
+        if($config_api){
+            $middleware[] = 'auth:api';
+        }
+
+        if(!empty($middleware)) {
+            $this->middleware($middleware);
+        }
+
+        $this->debug = Config::get('base-api.debug');
     }
 
     public function logSuccess($message, $user_id, $route, $payload, $response, $code = 200, $old_value = [], $new_value = [])
@@ -74,7 +91,8 @@ class BaseApiController extends BaseController
         if ($this->logging == true) {
             $logId = $this->logSuccess(
                 $message,
-                1, // auth('api')->user()->id(), // Todo: Login the correct way
+                Config::get('base-api.auth.sanctum') === true ?  auth('sanctum')->user()->id :
+                    (Config::get('base-api.auth.api') === true ? auth('api')->user()->id : null),
                 Route::currentRouteName(),
                 $this->logPayload == true ? $payload : null,
                 $this->logResponse == true ? $response : null,
@@ -105,7 +123,8 @@ class BaseApiController extends BaseController
         if ($this->logging == true) {
             $logId = $this->logError(
                 $message,
-                1, // auth('api')->user()->id, // Todo: Login the correct way
+                Config::get('base-api.auth.sanctum') === true ?  auth('sanctum')->user()->id :
+                    (Config::get('base-api.auth.api') === true ? auth('api')->user()->id : null),
                 Route::currentRouteName(),
                 $this->logPayload == true ? $payload : null,
                 $this->logResponse == true ? $response : null,
