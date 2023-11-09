@@ -4,7 +4,6 @@ namespace Rikscss\BaseApi;
 
 use Illuminate\Support\ServiceProvider;
 use Rikscss\BaseApi\Http\Controllers\Api\BaseApiLogController;
-use Rikscss\BaseApi\Models\BaseApiLog;
 
 class BaseApiServiceProvider extends ServiceProvider
 {
@@ -16,33 +15,17 @@ class BaseApiServiceProvider extends ServiceProvider
         /*
          * Optional methods to load your package assets
          */
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'base-api');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'base-api');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('base-api.php'),
+                __DIR__.'/../config/config.php' => config_path('base-api.php')
             ], 'config');
 
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/base-api'),
-            ], 'views');*/
-
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/base-api'),
-            ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/base-api'),
-            ], 'lang');*/
-
-            // Registering package commands.
-            // $this->commands([]);
+            $this->publishes([
+                __DIR__.'/../database/migrations/' => database_path('migrations')
+            ], 'migrations');
         }
     }
 

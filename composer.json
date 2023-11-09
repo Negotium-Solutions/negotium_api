@@ -10,7 +10,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "rikscss/base-api": "@dev"
+        "rikscss/base-api": "@dev",
+        "spatie/laravel-activitylog": "^4.7"
     },
     "repositories": [{
         "type": "path",

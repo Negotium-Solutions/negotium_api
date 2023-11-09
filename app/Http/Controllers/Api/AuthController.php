@@ -18,6 +18,8 @@ class AuthController extends Controller
      */
     public function login(Request $request) : Response
     {
+        $user = User::where('email', $request->email)->first();
+
         try {
             $validator = \Validator::make($request->all(), [
                 'email' => 'required|email',
@@ -25,6 +27,8 @@ class AuthController extends Controller
             ]);
 
             if($validator->fails()){
+                activity('User')->causedBy($request->user())->log('Input validation error for user '.$request->email);
+
                 return response([
                     'code' => SymfonyResponse::HTTP_UNPROCESSABLE_ENTITY,
                     'message' => 'Input validation error',
@@ -33,6 +37,8 @@ class AuthController extends Controller
             }
 
             if(!Auth::attempt($request->only(['email', 'password']))) {
+                activity('User')->causedBy($request->user())->log('Wrong email or password provided for user '.$request->email);
+
                 return response([
                     'code' => SymfonyResponse::HTTP_UNAUTHORIZED,
                     'message' => 'Wrong email or password provided',
@@ -41,6 +47,8 @@ class AuthController extends Controller
             }
 
         } catch (Throwable $exception) {
+            activity('User')->performedOn($user)->causedBy($request->user())->log('There was an error trying to update the user '.$user->email);
+
             return response([
                 'code' => SymfonyResponse::HTTP_BAD_REQUEST,
                 'message' => 'There was an error trying to update the user',
@@ -48,8 +56,13 @@ class AuthController extends Controller
             ])->setStatusCode(SymfonyResponse::HTTP_BAD_REQUEST);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user->last_login_at = now();
+        $user->last_login_ip = $_SERVER['REMOTE_ADDR'];
+        $user->save();
+
         $token = $user->createToken('API_TOKEN')->plainTextToken;
+
+        activity('User')->performedOn($user)->causedBy($request->user())->log('User '.$user->email.' logged in successfully');
 
         return response([
             'code' => SymfonyResponse::HTTP_OK,
@@ -63,9 +76,25 @@ class AuthController extends Controller
     /**
      * @return bool
      */
-    public function logout(Request $request): bool
+    public function logout(Request $request): Response
     {
-        auth()->user()->tokens()->delete();
+        try {
+            if(auth()->user()->tokens()->delete() === false){
+                throw new \RuntimeException('user could not be logged out');
+            }
+        } catch (Throwable $exception) {
+            activity('User')->performedOn(auth()->user())->causedBy($request->user())->log('User '.auth()->user()->email.' could not be logged out');
+
+            return response([
+                'code' => SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'user could not be logged out',
+                'errors' => [
+                    $exception->getMessage()
+                ]
+            ])->setStatusCode(SymfonyResponse::HTTP_OK);
+        }
+
+        activity('User')->performedOn(auth()->user())->causedBy($request->user())->log('User '.auth()->user()->email.' logged out successfully');
 
         return response([
             'message' => 'user logged out successfully',

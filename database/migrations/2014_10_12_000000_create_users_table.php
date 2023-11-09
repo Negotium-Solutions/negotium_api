@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('avatar')->nullable();
+            $table->date('last_login_at')->nullable();
+            $table->string('last_login_ip')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
