@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -72,7 +71,7 @@ class UserController extends BaseAPIController
 
         try {
             $user = User::findOrFail($id);
-            $old_value = $user;
+            $old_value = User::findOrFail($id);
             $new_value = $request->all();
 
             if ($user->updateOrFail($request->all()) === false) {

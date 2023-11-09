@@ -19,9 +19,9 @@ class UserApiTest extends TestCase
         $user = User::factory(['first_name' => 'Tom'])->create();
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer '. $token,
-                        'Accept' => 'application/json'
-                    ])->get('/api/user/'.$user->id);
+            'Authorization' => 'Bearer '. $token,
+            'Accept' => 'application/json'
+        ])->get('/api/user/'.$user->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -43,9 +43,9 @@ class UserApiTest extends TestCase
         ]);
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer '. $token,
-                        'Accept' => 'application/json'
-                    ])->get('/api/user');
+            'Authorization' => 'Bearer '. $token,
+            'Accept' => 'application/json'
+        ])->get('/api/user');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -62,9 +62,9 @@ class UserApiTest extends TestCase
         ]);
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer '. $token,
-                        'Accept' => 'application/json'
-                    ])->get('/api/user/9a90bb05-4a72-4b82-8e60-2b069a15d34a');
+            'Authorization' => 'Bearer '. $token,
+            'Accept' => 'application/json'
+        ])->get('/api/user/9a90bb05-4a72-4b82-8e60-2b069a15d34a');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -85,13 +85,13 @@ class UserApiTest extends TestCase
         ]);
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer '. $token,
-                        'Accept' => 'application/json'
-                    ])->put('/api/user/update/'.$user->id, [
-                        'last_name' => 'Jekkings',
-                        'email' => 'tom.jekkings@gmail.com',
-                        'avatar' => ''
-                    ]);
+            'Authorization' => 'Bearer '. $token,
+            'Accept' => 'application/json'
+        ])->put('/api/user/update/'.$user->id, [
+            'last_name' => 'Jekkings',
+            'email' => 'tom.jekkings@gmail.com',
+            'avatar' => ''
+        ]);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
@@ -116,19 +116,19 @@ class UserApiTest extends TestCase
         $token = $this->getToken();
 
         $user = User::factory()->create([
-                    'first_name' => 'Tom',
-                    'last_name' => 'Jekkings',
-                    'email' => 'tom.jekkings@gmail.com',
-                    'password' => Hash::make('password'),
-                    'avatar' => ''
-                ]);
+            'first_name' => 'Tom',
+            'last_name' => 'Jekkings',
+            'email' => 'tom.jekkings@gmail.com',
+            'password' => Hash::make('password'),
+            'avatar' => ''
+        ]);
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer '. $token,
-                        'Accept' => 'application/json'
-                    ])->put('/api/user/update/'.$user->id, [
-                        'email' => 'testing wrong email'
-                    ]);
+            'Authorization' => 'Bearer '. $token,
+            'Accept' => 'application/json'
+        ])->put('/api/user/update/'.$user->id, [
+            'email' => 'testing wrong email'
+        ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
@@ -143,16 +143,16 @@ class UserApiTest extends TestCase
         $token = $this->getToken();
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer '. $token,
-                        'Accept' => 'application/json'
-                    ])->post('/api/user/create', [
-                        'first_name' => 'Tom 2',
-                        'last_name' => 'Jekkings 2',
-                        'email' => 'tom.jekkings@gmail.com',
-                        'password' => Hash::make('password'),
-                        'confirm_password' => Hash::make('password'),
-                        'avatar' => ''
-                    ]);
+            'Authorization' => 'Bearer '. $token,
+            'Accept' => 'application/json'
+        ])->post('/api/user/create', [
+            'first_name' => 'Tom 2',
+            'last_name' => 'Jekkings 2',
+            'email' => 'tom.jekkings@gmail.com',
+            'password' => Hash::make('password'),
+            'confirm_password' => Hash::make('password'),
+            'avatar' => ''
+        ]);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -169,9 +169,9 @@ class UserApiTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer '. $token,
-                        'Accept' => 'application/json'
-                    ])->delete('/api/user/delete/'.$user->id);
+            'Authorization' => 'Bearer '. $token,
+            'Accept' => 'application/json'
+        ])->delete('/api/user/delete/'.$user->id);
 
         $response->assertStatus(Response::HTTP_OK);
 

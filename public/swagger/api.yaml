@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: Flow API documentation
+  description: The flow swagger API documentation
+  version: 1.0.0
+
+servers:
+  - url: http://localhost/api
+    description: local server
+  - url: https://flowv2.com/api
+    description: production server
+
+paths:
+  /crm:
+    get:
+      summary: Returns a list of crm array objects.
+      responses:
+        '200':
+          description: A JSON array of crm object
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
