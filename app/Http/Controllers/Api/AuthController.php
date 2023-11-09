@@ -57,7 +57,7 @@ class AuthController extends Controller
         }
 
         $user->last_login_at = now();
-        $user->last_login_ip = $_SERVER['REMOTE_ADDR'];
+        $user->last_login_ip = isset($_SERVER['REMOTE_ADDR'])? $_SERVER['REMOTE_ADDR']:'127.0.0.1';
         $user->save();
 
         $token = $user->createToken('API_TOKEN')->plainTextToken;

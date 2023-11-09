@@ -3109,7 +3109,7 @@
         },
         {
             "name": "rikscss/base-api",
-            "version": "dev-swagger-api",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/rikscss/base-api",
