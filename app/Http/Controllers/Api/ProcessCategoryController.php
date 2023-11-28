@@ -36,21 +36,16 @@ class ProcessCategoryController extends BaseAPIController
         }
 
         try {
-            $user = new User();
-            $user->name = $request->first_name;
-            $user->last_name = $request->last_name;
-            $user->email = $request->email;
-            $user->email_verified_at = now();
-            $user->password = $request->password;
-            $user->avatar = $request->avatar;
+            $processCategory = new ProcessCategory();
+            $processCategory->name = $request->name;
 
-            if ($user->save() === false) {
-                throw new \RuntimeException('Could not save user');
+            if ($processCategory->save() === false) {
+                throw new \RuntimeException('Could not save process category');
             }
 
-            return $this->success(['id' => $user->id], 'user successfully created.', $request->all(), 200);
+            return $this->success(['id' => $processCategory->id], 'process category successfully created.', $request->all(), 200);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create user.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create process category.', []);
         }
     }
 
@@ -68,11 +63,11 @@ class ProcessCategoryController extends BaseAPIController
         }
 
         try {
-            $user = User::findOrFail($id);
-            $old_value = User::findOrFail($id);
+            $processCategory = ProcessCategory::findOrFail($id);
+            $old_value = ProcessCategory::findOrFail($id);
             $new_value = $request->all();
 
-            if ($user->updateOrFail($request->all()) === false) {
+            if ($processCategory->updateOrFail($request->all()) === false) {
                 throw new \RuntimeException('Could not update the process category');
             }
         } catch (Throwable $exception) {
@@ -88,9 +83,9 @@ class ProcessCategoryController extends BaseAPIController
     public function delete($id) : Response
     {
         try {
-            $user = ProcessCategory::find($id);
+            $processCategory = ProcessCategory::find($id);
 
-            if ($user->delete() === false) {
+            if ($processCategory->delete() === false) {
                 throw new \RuntimeException('Could not delete the process category');
             }
 
