@@ -198,7 +198,728 @@
                                 "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get a user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The user's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "user successfully retrieved.",
+                                "data": {
+                                    "id": "9a925dfc-ed9c-4d13-8e4f-56a744ea2fa2",
+                                    "first_name": "Themba",
+                                    "last_name": "Mikes",
+                                    "email": "tm@gmail.com",
+                                    "avatar": null,
+                                    "last_login_at": "2023-11-09T12:50:17.003Z",
+                                    "last_login_ip": null,
+                                    "password": "password",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get users",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getUsers",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "user successfully retrieved.",
+                                "data": [{
+                                    "id": "9a925dfc-ed9c-4d13-8e4f-56a744ea2fa2",
+                                    "first_name": "Themba",
+                                    "last_name": "Mikes",
+                                    "email": "tm@gmail.com",
+                                    "avatar": null,
+                                    "last_login_at": "2023-11-09T12:50:17.003Z",
+                                    "last_login_ip": null,
+                                    "password": "password",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                {
+                                    "id": "9a925dfc-ed9c-4d13-8e4f-56a744ea2fa2",
+                                    "first_name": "Sakhile",
+                                    "last_name": "Van Heerden",
+                                    "email": "sanheerden@gmail.com",
+                                    "avatar": null,
+                                    "last_login_at": "2023-11-09T12:50:17.003Z",
+                                    "last_login_ip": null,
+                                    "password": "password",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                }],
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update/{id}": {
+            "put": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Update user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The user's id",
+                        "required": true,
+                        "type": "string"
                     },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Updated user object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "user successfully updated.",
+                                "data": {},
+                                "payload": {
+                                    "first_name": "Themba",
+                                    "last_name": "Mikes",
+                                    "email": "tm@gmail.com",
+                                    "avatar": null,
+                                    "last_login_at": "2023-11-09T12:50:17.003Z",
+                                    "last_login_ip": null,
+                                    "password": "password",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "delete user",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The user's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "user successfully deleted.",
+                                "data": {},
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process-category/{id}": {
+            "get": {
+                "tags": [
+                    "process-category"
+                ],
+                "summary": "Get a process category",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getProcess-category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The process category's id",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process category successfully retrieved.",
+                                "data": {
+                                    "id": 10000001,
+                                    "name": "HR Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process-category": {
+            "get": {
+                "tags": [
+                    "process-category"
+                ],
+                "summary": "Get process categories",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getProcess-categories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process categories successfully retrieved.",
+                                "data": [{
+                                    "id": 1,
+                                    "name": "HR Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Project Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                }],
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process-category/create": {
+            "post": {
+                "tags": [
+                    "process-category"
+                ],
+                "summary": "Create process-category",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "createProcess-category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created process-category object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ProcessCategory"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process category successfully created.",
+                                "data": {
+                                    "id": 10000001
+                                },
+                                "payload": {
+                                    "name": "HR Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process-category/update/{id}": {
+            "put": {
+                "tags": [
+                    "process-category"
+                ],
+                "summary": "Update process-category",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateProcessCategory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The process-category's id",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Updated process-category object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ProcessCategory"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process-category successfully updated.",
+                                "data": {},
+                                "payload": {
+                                    "name": "HR Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process-category/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "process-category"
+                ],
+                "summary": "delete process-category",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteProcessCategory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The process-category's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process-category successfully deleted.",
+                                "data": {},
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process/{id}": {
+            "get": {
+                "tags": [
+                    "process"
+                ],
+                "summary": "Get a process",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getProcess",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The process's id",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process successfully retrieved.",
+                                "data": {
+                                    "id": 10000001,
+                                    "name": "HR Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process": {
+            "get": {
+                "tags": [
+                    "process"
+                ],
+                "summary": "Get processes",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getProcess",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "processes successfully retrieved.",
+                                "data": [{
+                                    "id": 1,
+                                    "name": "HR Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Project Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                }],
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process/create": {
+            "post": {
+                "tags": [
+                    "process"
+                ],
+                "summary": "Create process",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "createProcess",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created process object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Process"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process successfully created.",
+                                "data": {
+                                    "id": 10000001
+                                },
+                                "payload": {
+                                    "name": "HR Process",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process/update/{id}": {
+            "put": {
+                "tags": [
+                    "process"
+                ],
+                "summary": "Update process",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateProcess",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The process's id",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Updated process object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Process"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process successfully updated.",
+                                "data": {},
+                                "payload": {
+                                    "name": "On-boarding",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "process"
+                ],
+                "summary": "delete process",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteProcess",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The process's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "process successfully deleted.",
+                                "data": {},
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -271,6 +992,30 @@
             },
             "xml": {
                 "name": "User"
+            }
+        },
+
+        "ProcessCategory": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "ProcessCategory"
+            }
+        },
+
+        "Process": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "Process"
             }
         }
     },
