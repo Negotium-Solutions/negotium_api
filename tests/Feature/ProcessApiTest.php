@@ -6,7 +6,6 @@ use App\Models\Process;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class ProcessApiTest extends TestCase

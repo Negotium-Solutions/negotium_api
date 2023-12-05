@@ -23,7 +23,7 @@ class ProcessController extends BaseAPIController
     }
 
     /**
-     * Store a newly created process 
+     * Store a newly created process
      */
     public function create(Request $request) : Response
     {
@@ -67,7 +67,7 @@ class ProcessController extends BaseAPIController
             $old_value = Process::findOrFail($id);
             $new_value = $request->all();
 
-            if ($proces->updateOrFail($request->all()) === false) {
+            if ($process->updateOrFail($request->all()) === false) {
                 throw new \RuntimeException('Could not update the process');
             }
         } catch (Throwable $exception) {
