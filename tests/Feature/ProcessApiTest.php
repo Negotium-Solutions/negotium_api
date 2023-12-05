@@ -92,7 +92,7 @@ class ProcessApiTest extends TestCase
         $response = $this->get('/api/process/'.$process->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'process successfully retrieved',
+            'message' => 'processes successfully retrieved',
             'data' => [
                 'name' => 'Equipment Allocation'
             ]
