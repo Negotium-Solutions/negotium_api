@@ -1,49 +1,49 @@
 <?php
 
-namespace Tests\Feature;
+namespace Feature;
 
-use App\Models\Process;
+use App\Models\ProcessCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class ProcessApiTest extends TestCase
+class ProcessCategoryApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testCanGetAProcess() : void
+    public function testCanGetAProcessCategory() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'On-boarding'])->create();
+        $process_category = ProcessCategory::factory(['name' => 'HR Processes'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/'.$process->id);
+        ])->get('/api/process-category/'.$process_category->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
-            'data' => ['name' => 'On-boarding']
+            'message' => 'process categories successfully retrieved',
+            'data' => ['name' => 'HR Processes']
         ]);
     }
 
-    public function testGetCanProcesses() : void
+    public function testCanProcessCategories() : void
     {
         $token = $this->getToken();
 
-        Process::factory()->count(4)->create();
+        ProcessCategory::factory()->count(4)->create();
 
-        Process::factory(['name' => 'Off-boarding'])->create();
+        ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/');
+        ])->get('/api/process-category/');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -54,61 +54,61 @@ class ProcessApiTest extends TestCase
     {
         $token = $this->getToken();
 
-        Process::factory(['name' => 'Off-boarding'])->create();
+        ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/1000000000001');
+        ])->get('/api/process-category/1000000000001');
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'process categories successfully retrieved',
             'data' => null
         ]);
     }
 
-    public function testCanUpdateProcess() : void
+    public function testCanUpdateProcessCategory() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'Off-boarding'])->create();
+        $processCategory = ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
-            'name' => 'Equipment Allocation'
+        ])->put('/api/process-category/update/'.$processCategory->id, [
+            'name' => 'Resource Allocation'
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'process successfully updated',
+            'message' => 'process category successfully updated',
             'data' => null
         ]);
 
         // Is updated
-        $response = $this->get('/api/process/'.$process->id);
+        $response = $this->get('/api/process-category/'.$processCategory->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'process categories successfully retrieved',
             'data' => [
-                'name' => 'Equipment Allocation'
+                'name' => 'Resource Allocation'
             ]
         ]);
     }
 
-    public function testCanNotUpdateProcess() : void
+    public function testCanNotUpdateProcessCategory() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'Equipment Allocation'])->create();
+        $processCategory = ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
+        ])->put('/api/process-category/update/'.$processCategory->id, [
             'name' => 1234
         ]);
 
@@ -120,40 +120,40 @@ class ProcessApiTest extends TestCase
         ]);
     }
 
-    public function testCanCreateProcess() : void
+    public function testCanCreateProcessCategory() : void
     {
         $token = $this->getToken();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->post('/api/process/create/', [
-            'name' => 'Equipment Allocation 2'
+        ])->post('/api/process-category/create/', [
+            'name' => 'Resource Allocation 2'
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'process successfully created.',
+            'message' => 'process category successfully created.',
             'data' => []
         ]);
     }
 
-    public function testCanDeleteProcess() : void
+    public function testCanDeleteProcessCategory() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory()->create();
+        $processCategory = ProcessCategory::factory()->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->delete('/api/process/delete/'.$process->id);
+        ])->delete('/api/process-category/delete/'.$processCategory->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'process successfully deleted',
+            'message' => 'process category successfully deleted',
             'data' => []
         ]);
     }
