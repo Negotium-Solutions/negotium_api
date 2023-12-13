@@ -2,114 +2,114 @@
 
 namespace Tests\Feature;
 
-use App\Models\Process;
+use App\Models\Step;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class ProcessApiTest extends TestCase
+class StepApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testCanGetAProcess() : void
+    public function testCanGetAStep() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'On-boarding'])->create();
+        $step = Step::factory(['name' => 'Personal Details'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/'.$process->id);
+        ])->get('/api/step/'.$step->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
-            'data' => ['name' => 'On-boarding']
+            'message' => 'steps successfully retrieved',
+            'data' => ['name' => 'Personal Details']
         ]);
     }
 
-    public function testCanGetProcesses() : void
+    public function testCanGetSteps() : void
     {
         $token = $this->getToken();
 
-        Process::factory()->count(4)->create();
+        Step::factory()->count(4)->create();
 
-        Process::factory(['name' => 'Off-boarding'])->create();
+        Step::factory(['name' => 'Personal Details'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/');
+        ])->get('/api/step/');
 
         $response->assertStatus(Response::HTTP_OK);
 
         $this->assertTrue(count($response['data']) === 5); // Number of users in the database, plus 1 created by getToken
     }
 
-    public function testGetProcessNotFound() : void
+    public function testGetStepNotFound() : void
     {
         $token = $this->getToken();
 
-        Process::factory(['name' => 'Off-boarding'])->create();
+        Step::factory(['name' => 'Background Check'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/1000000000001');
+        ])->get('/api/step/1000000000001');
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'steps successfully retrieved',
             'data' => null
         ]);
     }
 
-    public function testCanUpdateProcess() : void
+    public function testCanUpdateStep() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'Off-boarding'])->create();
+        $step = Step::factory(['name' => 'Health Details'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
-            'name' => 'Equipment Allocation'
+        ])->put('/api/step/update/'.$step->id, [
+            'name' => 'Medical Aid Details'
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'process successfully updated',
+            'message' => 'step successfully updated',
             'data' => null
         ]);
 
         // Is updated
-        $response = $this->get('/api/process/'.$process->id);
+        $response = $this->get('/api/step/'.$step->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'steps successfully retrieved',
             'data' => [
-                'name' => 'Equipment Allocation'
+                'name' => 'Medical Aid Details'
             ]
         ]);
     }
 
-    public function testCanNotUpdateProcess() : void
+    public function testCanNotUpdateStep() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'Equipment Allocation'])->create();
+        $step = Step::factory(['name' => 'Next Of Kin'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
-            'name' => 1234
+        ])->put('/api/step/update/'.$step->id, [
+            'name' => 00001
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -120,40 +120,40 @@ class ProcessApiTest extends TestCase
         ]);
     }
 
-    public function testCanCreateProcess() : void
+    public function testCanCreateStep() : void
     {
         $token = $this->getToken();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->post('/api/process/create/', [
-            'name' => 'Equipment Allocation 2'
+        ])->post('/api/step/create/', [
+            'name' => 'Next Of Kin Details'
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'process successfully created.',
+            'message' => 'step successfully created.',
             'data' => []
         ]);
     }
 
-    public function testCanDeleteProcess() : void
+    public function testCanDeleteStep() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory()->create();
+        $step = Step::factory()->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->delete('/api/process/delete/'.$process->id);
+        ])->delete('/api/step/delete/'.$step->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'process successfully deleted',
+            'message' => 'step successfully deleted',
             'data' => []
         ]);
     }

@@ -32,7 +32,7 @@ class ProcessCategoryApiTest extends TestCase
         ]);
     }
 
-    public function testCanProcessCategories() : void
+    public function testCanGetProcessCategories() : void
     {
         $token = $this->getToken();
 
@@ -50,7 +50,7 @@ class ProcessCategoryApiTest extends TestCase
         $this->assertTrue(count($response['data']) === 5); // Number of users in the database, plus 1 created by getToken
     }
 
-    public function testGetUserNotFound() : void
+    public function testGetProcessCategoryNotFound() : void
     {
         $token = $this->getToken();
 

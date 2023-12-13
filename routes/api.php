@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProcessCategoryController;
 use App\Http\Controllers\Api\ProcessController;
+use App\Http\Controllers\Api\StepController;
+use App\Http\Controllers\Api\ActivityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +34,22 @@ Route::post('/process-category/create', [ProcessCategoryController::class, 'crea
 Route::put('/process-category/update/{id}', [ProcessCategoryController::class, 'update'])->name('api.process-category.update');
 Route::delete('/process-category/delete/{id?}', [ProcessCategoryController::class, 'delete'])->name('api.process-category.delete');
 
+// Process routes
 Route::get('/process/{id?}', [ProcessController::class, 'get'])->name('api.process');
 Route::post('/process/create', [ProcessController::class, 'create'])->name('api.process.create');
 Route::put('/process/update/{id}', [ProcessController::class, 'update'])->name('api.process.update');
 Route::delete('/process/delete/{id?}', [ProcessController::class, 'delete'])->name('api.process.delete');
+
+// Step routes
+Route::get('/step/{id?}', [StepController::class, 'get'])->name('api.step');
+Route::post('/step/create', [StepController::class, 'create'])->name('api.step.create');
+Route::put('/step/update/{id}', [StepController::class, 'update'])->name('api.step.update');
+Route::delete('/step/delete/{id?}', [StepController::class, 'delete'])->name('api.step.delete');
+
+// Activity routes
+Route::get('/activity/{id?}', [ActivityController::class, 'get'])->name('api.activity');
+Route::post('/activity/create', [ActivityController::class, 'create'])->name('api.activity.create');
+Route::put('/activity/update/{id}', [ActivityController::class, 'update'])->name('api.activity.update');
+Route::delete('/activity/delete/{id?}', [ActivityController::class, 'delete'])->name('api.activity.delete');
+
+

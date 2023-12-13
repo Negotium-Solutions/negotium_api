@@ -2,114 +2,114 @@
 
 namespace Tests\Feature;
 
-use App\Models\Process;
+use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class ProcessApiTest extends TestCase
+class ActivityApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testCanGetAProcess() : void
+    public function testCanGetAnActivity() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'On-boarding'])->create();
+        $activity = Activity::factory(['name' => 'Add Label'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/'.$process->id);
+        ])->get('/api/activity/'.$activity->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
-            'data' => ['name' => 'On-boarding']
+            'message' => 'activities successfully retrieved',
+            'data' => ['name' => 'Add Label']
         ]);
     }
 
-    public function testCanGetProcesses() : void
+    public function testCanGetActivities() : void
     {
         $token = $this->getToken();
 
-        Process::factory()->count(4)->create();
+        Activity::factory()->count(4)->create();
 
-        Process::factory(['name' => 'Off-boarding'])->create();
+        Activity::factory(['name' => 'Add Combobox'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/');
+        ])->get('/api/activity/');
 
         $response->assertStatus(Response::HTTP_OK);
 
         $this->assertTrue(count($response['data']) === 5); // Number of users in the database, plus 1 created by getToken
     }
 
-    public function testGetProcessNotFound() : void
+    public function testGetActivityNotFound() : void
     {
         $token = $this->getToken();
 
-        Process::factory(['name' => 'Off-boarding'])->create();
+        Activity::factory(['name' => 'Add Dropdown not found'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->get('/api/process/1000000000001');
+        ])->get('/api/activity/1000000000001');
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'activities successfully retrieved',
             'data' => null
         ]);
     }
 
-    public function testCanUpdateProcess() : void
+    public function testCanUpdateActivity() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'Off-boarding'])->create();
+        $activity = Activity::factory(['name' => 'Add Timestamp'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
-            'name' => 'Equipment Allocation'
+        ])->put('/api/activity/update/'.$activity->id, [
+            'name' => 'Add Datepicker'
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'process successfully updated',
+            'message' => 'activity successfully updated',
             'data' => null
         ]);
 
         // Is updated
-        $response = $this->get('/api/process/'.$process->id);
+        $response = $this->get('/api/activity/'.$activity->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'activities successfully retrieved',
             'data' => [
-                'name' => 'Equipment Allocation'
+                'name' => 'Add Datepicker'
             ]
         ]);
     }
 
-    public function testCanNotUpdateProcess() : void
+    public function testCanNotUpdateActivity() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory(['name' => 'Equipment Allocation'])->create();
+        $activity = Activity::factory(['name' => 'Add Button'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
-            'name' => 1234
+        ])->put('/api/activity/update/'.$activity->id, [
+            'name' => 00001
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -120,40 +120,40 @@ class ProcessApiTest extends TestCase
         ]);
     }
 
-    public function testCanCreateProcess() : void
+    public function testCanCreateActivity() : void
     {
         $token = $this->getToken();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->post('/api/process/create/', [
-            'name' => 'Equipment Allocation 2'
+        ])->post('/api/activity/create/', [
+            'name' => 'Add Textbox'
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'process successfully created.',
+            'message' => 'activity successfully created.',
             'data' => []
         ]);
     }
 
-    public function testCanDeleteProcess() : void
+    public function testCanDeleteActivity() : void
     {
         $token = $this->getToken();
 
-        $process = Process::factory()->create();
+        $activity = Activity::factory()->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
             'Accept' => 'application/json'
-        ])->delete('/api/process/delete/'.$process->id);
+        ])->delete('/api/activity/delete/'.$activity->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'process successfully deleted',
+            'message' => 'activity successfully deleted',
             'data' => []
         ]);
     }

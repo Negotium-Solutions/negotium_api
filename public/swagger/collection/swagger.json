@@ -1,9 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a flow swagger API documentation.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,
-        #swagger](http://swagger.io/irc/).  For this sample, you can use the api key
-        `special-key` to test the authorization filters.",
+        "description": "This is a flow swagger API documentation.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
         "version": "1.0.0",
         "title": "Negotium Swagger API Documentation",
         "termsOfService": "http://swagger.io/terms/",
@@ -73,7 +71,7 @@
                     "401": {
                         "description": "Example: Invalid username/password supplied",
                         "schema": {
-                            "type": object,
+                            "type": "object",
                             "example": {
                                 "code": 401,
                                 "message": "Example: Wrong email or password provided",
@@ -84,7 +82,7 @@
                     "422": {
                         "description": "Example: Invalid input supplied",
                         "schema": {
-                            "type": object,
+                            "type": "object",
                             "example": {
                                 "code": 422,
                                 "message": "Input validation error",
@@ -134,7 +132,7 @@
                     "401": {
                         "description": "Example: Unauthorised access",
                         "schema": {
-                            "type": object,
+                            "type":"object" ,
                             "example": {
                                 "message": "Unauthenticated."
                             }
@@ -922,6 +920,506 @@
                     }
                 }
             }
+        },
+        "/step/{id}": {
+            "get": {
+                "tags": [
+                    "step"
+                ],
+                "summary": "Get a step",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getStep",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The step's id",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "step successfully retrieved.",
+                                "data": {
+                                    "id": 10000001,
+                                    "name": "Personal Details",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/step": {
+            "get": {
+                "tags": [
+                    "step"
+                ],
+                "summary": "Get steps",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getStep",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "steps successfully retrieved.",
+                                "data": [{
+                                    "id": 1,
+                                    "name": "Personal Details",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Contact Details",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                }],
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/step/create": {
+            "post": {
+                "tags": [
+                    "step"
+                ],
+                "summary": "Create step",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "createStep",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created step object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Step"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "step successfully created.",
+                                "data": {
+                                    "id": 10000001
+                                },
+                                "payload": {
+                                    "name": "Personal Details",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/step/update/{id}": {
+            "put": {
+                "tags": [
+                    "step"
+                ],
+                "summary": "Update step",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateStep",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The step's id",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Updated step object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Step"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "step successfully updated.",
+                                "data": {},
+                                "payload": {
+                                    "name": "Personal Details",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/step/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "step"
+                ],
+                "summary": "delete step",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteStep",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The step's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "step successfully deleted.",
+                                "data": {},
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/activity/{id}": {
+            "get": {
+                "tags": [
+                    "activity"
+                ],
+                "summary": "Get an activity",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getActivity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The activity's id",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "activity successfully retrieved.",
+                                "data": {
+                                    "id": 10000001,
+                                    "name": "Upload documents",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/activity": {
+            "get": {
+                "tags": [
+                    "activity"
+                ],
+                "summary": "Get activities",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getActivity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "activities successfully retrieved.",
+                                "data": [{
+                                    "id": 1,
+                                    "name": "Upload documents",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Send email",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                }],
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/activity/create": {
+            "post": {
+                "tags": [
+                    "activity"
+                ],
+                "summary": "Create activity",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "createActivity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created activity object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Activity"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "activity successfully created.",
+                                "data": {
+                                    "id": 10000001
+                                },
+                                "payload": {
+                                    "name": "Upload documents",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/activity/update/{id}": {
+            "put": {
+                "tags": [
+                    "activity"
+                ],
+                "summary": "Update activity",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateActivity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The activity's id",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Updated activity object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Activity"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "activity successfully updated.",
+                                "data": {},
+                                "payload": {
+                                    "name": "Upload documents",
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/activity/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "activity"
+                ],
+                "summary": "delete activity",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteActivity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The activity's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "activity successfully deleted.",
+                                "data": {},
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -984,7 +1482,7 @@
                 },
                 "last_login_at": {
                     "type": "string",
-                    format: "date-time"
+                    "format": "date-time"
                 },
                 "last_login_ip": {
                     "type": "string"
@@ -1016,6 +1514,30 @@
             },
             "xml": {
                 "name": "Process"
+            }
+        },
+
+        "Step": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "Step"
+            }
+        },
+
+        "Activity": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "Activity"
             }
         }
     },
