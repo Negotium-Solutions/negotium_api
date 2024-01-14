@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProcessCategoryController;
 use App\Http\Controllers\Api\ProcessController;
+use App\Http\Controllers\Api\TenantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,11 @@ Route::post('/process-category/create', [ProcessCategoryController::class, 'crea
 Route::put('/process-category/update/{id}', [ProcessCategoryController::class, 'update'])->name('api.process-category.update');
 Route::delete('/process-category/delete/{id?}', [ProcessCategoryController::class, 'delete'])->name('api.process-category.delete');
 
+// Process routes
 Route::get('/process/{id?}', [ProcessController::class, 'get'])->name('api.process');
 Route::post('/process/create', [ProcessController::class, 'create'])->name('api.process.create');
 Route::put('/process/update/{id}', [ProcessController::class, 'update'])->name('api.process.update');
 Route::delete('/process/delete/{id?}', [ProcessController::class, 'delete'])->name('api.process.delete');
+
+// Tenant routes
+Route::post('/tenant/create', [TenantController::class, 'create'])->name('api.tenant.create');
