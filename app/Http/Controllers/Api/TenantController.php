@@ -23,14 +23,16 @@ class TenantController extends BaseAPIController
         }
 
         try {
-            $tenant = new Tenant();
-            $tenant->domain = $request->domain;
+            // $tenant = new Tenant();
+            // $tenant->domain = $request->domain;
+            $tenant = Tenant::create(['id' => $request->name]);
+            $tenant->domains()->create(['domain' => $request->domain]);
 
             if ($tenant->save() === false) {
                 throw new \RuntimeException('Could not save tenant');
             }
 
-            return $this->success(['id' => $tenant->id], 'tenant successfully created.', $request->all(), 200);
+            return $this->success(['id' => $tenant->id], 'Tenant successfully created.', $request->all(), 200);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create tenant.', []);
         }
