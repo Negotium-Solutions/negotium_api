@@ -19,7 +19,7 @@ class TenantController extends BaseAPIController
 
         $data = isset($id) ? $query : $query->get();
 
-        return $this->success($data, 'users successfully retrieved', [], Response::HTTP_OK);
+        return $this->success($data, 'tenants successfully retrieved', [], Response::HTTP_OK);
     }
 
     /**
