@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature;
+namespace Tests\Tenant\Unit;
 
 use App\Models\ProcessCategory;
 use Illuminate\Http\Response;
