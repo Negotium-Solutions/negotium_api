@@ -1,27 +1,22 @@
 <?php
 
-namespace Feature;
+namespace Tests\Tenant\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Tests\TestCase;
+use Tests\Tenant\TestCase;
 
 class UserApiTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testCanGetAUser() : void
     {
-        $token = $this->getToken();
-
         $user = User::factory(['first_name' => 'Tom'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/user/'.$user->id);
+        ])->get('/api/'.$this->tenant.'/user/'.$user->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -33,8 +28,6 @@ class UserApiTest extends TestCase
 
     public function testCanGetUsers() : void
     {
-        $token = $this->getToken();
-
         User::factory()->count(6)->create();
 
         User::factory()->create([
@@ -43,9 +36,9 @@ class UserApiTest extends TestCase
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/user');
+        ])->get('/api/'.$this->tenant.'/user');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -54,17 +47,15 @@ class UserApiTest extends TestCase
 
     public function testGetUserNotFound() : void
     {
-        $token = $this->getToken();
-
         User::factory()->create([
             'first_name' => 'Sakhile',
             'last_name' => 'Van Heerden'
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/user/9a90bb05-4a72-4b82-8e60-2b069a15d34a');
+        ])->get('/api/'.$this->tenant.'/user/9a90bb05-4a72-4b82-8e60-2b069a15d34a');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -76,8 +67,6 @@ class UserApiTest extends TestCase
 
     public function testCanUpdateUser() : void
     {
-        $token = $this->getToken();
-
         $user = User::factory()->create([
             'first_name' => 'Sakhile',
             'last_name' => 'Van Heerden',
@@ -85,9 +74,9 @@ class UserApiTest extends TestCase
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/user/update/'.$user->id, [
+        ])->put('/api/'.$this->tenant.'/user/update/'.$user->id, [
             'last_name' => 'Jekkings',
             'email' => 'tom.jekkings@gmail.com',
             'avatar' => ''
@@ -100,7 +89,7 @@ class UserApiTest extends TestCase
         ]);
 
         // Is updated
-        $response = $this->get('/api/user/'.$user->id);
+        $response = $this->get('/api/'.$this->tenant.'/user/'.$user->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
             'message' => 'users successfully retrieved',
@@ -113,8 +102,6 @@ class UserApiTest extends TestCase
 
     public function testCanNotUpdateUser() : void
     {
-        $token = $this->getToken();
-
         $user = User::factory()->create([
             'first_name' => 'Tom',
             'last_name' => 'Jekkings',
@@ -124,9 +111,9 @@ class UserApiTest extends TestCase
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/user/update/'.$user->id, [
+        ])->put('/api/'.$this->tenant.'/user/update/'.$user->id, [
             'email' => 'testing wrong email'
         ]);
 
@@ -140,12 +127,10 @@ class UserApiTest extends TestCase
 
     public function testCanCreateUser() : void
     {
-        $token = $this->getToken();
-
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->post('/api/user/create', [
+        ])->post('/api/'.$this->tenant.'/user/create', [
             'first_name' => 'Tom 2',
             'last_name' => 'Jekkings 2',
             'email' => 'tom.jekkings@gmail.com',
@@ -164,14 +149,12 @@ class UserApiTest extends TestCase
 
     public function testCanDeleteUser() : void
     {
-        $token = $this->getToken();
-
         $user = User::factory()->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->delete('/api/user/delete/'.$user->id);
+        ])->delete('/api/'.$this->tenant.'/user/delete/'.$user->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -179,20 +162,5 @@ class UserApiTest extends TestCase
             'message' => 'user successfully deleted',
             'data' => []
         ]);
-    }
-
-    public function getToken()
-    {
-        User::factory([
-            'email' => 'admin@negotium-solutions.com',
-            'password' => 'password'
-        ])->create();
-
-        $response = $this->post('/api/auth/login',[
-            'email' => 'admin@negotium-solutions.com',
-            'password' => 'password'
-        ]);
-
-        return $response['data']['token'];
     }
 }

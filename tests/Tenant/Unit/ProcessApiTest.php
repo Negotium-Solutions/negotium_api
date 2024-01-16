@@ -3,26 +3,19 @@
 namespace Tests\Feature;
 
 use App\Models\Process;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Tests\TestCase;
+use Tests\Tenant\TestCase;
 
 class ProcessApiTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testCanGetAProcess() : void
     {
-        $token = $this->getToken();
-
         $process = Process::factory(['name' => 'On-boarding'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/process/'.$process->id);
+        ])->get('/api/'.$this->tenant.'/process/'.$process->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -34,16 +27,14 @@ class ProcessApiTest extends TestCase
 
     public function testGetCanProcesses() : void
     {
-        $token = $this->getToken();
-
         Process::factory()->count(4)->create();
 
         Process::factory(['name' => 'Off-boarding'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/process/');
+        ])->get('/api/'.$this->tenant.'/process/');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -52,14 +43,12 @@ class ProcessApiTest extends TestCase
 
     public function testGetUserNotFound() : void
     {
-        $token = $this->getToken();
-
         Process::factory(['name' => 'Off-boarding'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/process/1000000000001');
+        ])->get('/api/'.$this->tenant.'/process/1000000000001');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -71,14 +60,12 @@ class ProcessApiTest extends TestCase
 
     public function testCanUpdateProcess() : void
     {
-        $token = $this->getToken();
-
         $process = Process::factory(['name' => 'Off-boarding'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
+        ])->put('/api/'.$this->tenant.'/process/update/'.$process->id, [
             'name' => 'Equipment Allocation'
         ]);
 
@@ -89,7 +76,7 @@ class ProcessApiTest extends TestCase
         ]);
 
         // Is updated
-        $response = $this->get('/api/process/'.$process->id);
+        $response = $this->get('/api/'.$this->tenant.'/process/'.$process->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
             'message' => 'processes successfully retrieved',
@@ -101,14 +88,12 @@ class ProcessApiTest extends TestCase
 
     public function testCanNotUpdateProcess() : void
     {
-        $token = $this->getToken();
-
         $process = Process::factory(['name' => 'Equipment Allocation'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/process/update/'.$process->id, [
+        ])->put('/api/'.$this->tenant.'/process/update/'.$process->id, [
             'name' => 1234
         ]);
 
@@ -122,12 +107,10 @@ class ProcessApiTest extends TestCase
 
     public function testCanCreateProcess() : void
     {
-        $token = $this->getToken();
-
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->post('/api/process/create/', [
+        ])->post('/api/'.$this->tenant.'/process/create/', [
             'name' => 'Equipment Allocation 2'
         ]);
 
@@ -141,14 +124,12 @@ class ProcessApiTest extends TestCase
 
     public function testCanDeleteProcess() : void
     {
-        $token = $this->getToken();
-
         $process = Process::factory()->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->delete('/api/process/delete/'.$process->id);
+        ])->delete('/api/'.$this->tenant.'/process/delete/'.$process->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -156,20 +137,5 @@ class ProcessApiTest extends TestCase
             'message' => 'process successfully deleted',
             'data' => []
         ]);
-    }
-
-    public function getToken()
-    {
-        User::factory([
-            'email' => 'admin@negotium-solutions.com',
-            'password' => 'password'
-        ])->create();
-
-        $response = $this->post('/api/auth/login',[
-            'email' => 'admin@negotium-solutions.com',
-            'password' => 'password'
-        ]);
-
-        return $response['data']['token'];
     }
 }
