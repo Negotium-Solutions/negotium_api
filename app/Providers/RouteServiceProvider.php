@@ -40,6 +40,17 @@ class RouteServiceProvider extends ServiceProvider
         }
     }
 
+    protected function mapCentralRoutes()
+    {
+        foreach ($this->centralDomains() as $domain) {
+            Route::prefix('api')
+                ->domain($domain)
+                ->middleware('api')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/central.php'));
+        }
+    }
+
     protected function centralDomains(): array
     {
         return config('tenancy.central_domains');
@@ -55,6 +66,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             $this->mapApiRoutes();
             $this->mapWebRoutes();
+            $this->mapCentralRoutes();
         });
     }
 
