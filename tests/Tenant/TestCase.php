@@ -7,16 +7,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Tests\CreatesApplication;
 use App\Models\Tenant;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication, RefreshDatabase;
 
     protected $tenancy = true;
-    protected $token = null;
-    protected $tenant = null;
+    protected ?string $token;
+    protected ?string $tenant;
 
     public function setUp(): void
     {
@@ -25,16 +23,13 @@ abstract class TestCase extends BaseTestCase
         if ($this->tenancy) {
             $this->initializeTenancy();
         }
-
-        $this->token = $this->getToken();
-        $this->tenant = $this->getTenant();
     }
 
     public function initializeTenancy()
     {
-        $tenant = Tenant::create();
-
-        tenancy()->initialize($tenant);
+        $this->tenant = Tenant::create()->id;
+        tenancy()->initialize($this->tenant);
+        $this->token = $this->getToken();
     }
 
     public function getToken() : string
@@ -50,12 +45,5 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         return $response['data']['token'];
-    }
-
-    public function getTenant() : string
-    {
-        $tenant = Tenant::first();
-
-        return $tenant->id;
     }
 }
