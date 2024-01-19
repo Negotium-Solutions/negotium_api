@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProcessCategoryController;
 use App\Http\Controllers\Api\ProcessController;
-use App\Http\Controllers\Api\TenantController;
-use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
+use App\Http\Controllers\Api\SchemaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,4 +45,11 @@ Route::group([
     Route::post('/process/create', [ProcessController::class, 'create'])->name('api.process.create');
     Route::put('/process/update/{id}', [ProcessController::class, 'update'])->name('api.process.update');
     Route::delete('/process/delete/{id?}', [ProcessController::class, 'delete'])->name('api.process.delete');
+
+    // Schema routes
+    Route::get('/schema/{id?}', [SchemaController::class, 'get'])->name('api.schema');
+    Route::post('/schema/create', [SchemaController::class, 'create'])->name('api.schema.create');
+    Route::put('/schema/update/{id}', [SchemaController::class, 'update'])->name('api.schema.update');
+    Route::delete('/schema/delete/{id?}', [SchemaController::class, 'delete'])->name('api.schema.delete');
+    Route::get('/schema/{id}/columns', [SchemaController::class, 'columns'])->name('api.schema.columns');
 });
