@@ -51,6 +51,7 @@ class SchemaController extends BaseApiController
             if($request->has('parent_id')) {
                 $schema->parent_id = $request->input('parent_id');
             }
+            $schema->columns = json_encode($columns);
             $schema->save();
 
             $schema->name = $schema->name.'_'.$schema->id;
@@ -58,9 +59,8 @@ class SchemaController extends BaseApiController
 
             Schema::create($schema->name, function (Blueprint $table) use ($columns) {
                 $table->bigIncrements('id');
-                $colum_names = array_keys($columns);
-                foreach ($colum_names as $column_name) {
-                    $table->{$columns[$column_name]}($this->toCleanString($column_name))->nullable();
+                foreach ($columns as $column) {
+                    $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column['attributes']));
                 }
                 $table->timestamps();
                 $table->softDeletes();
@@ -91,11 +91,24 @@ class SchemaController extends BaseApiController
 
         try {
             $schema = CRMSchema::find($id);
+            $schema->columns = json_encode($columns);
+            $schema->save();
 
-            Schema::table($schema->name, function (Blueprint $table) use ($columns) {
-                $colum_names = array_keys($columns);
-                foreach ($colum_names as $column_name) {
-                    $table->{$columns[$column_name]}($this->toCleanString($column_name))->nullable();
+            $existing_columns = [];
+            foreach ($schema->getColumns() as $schema_column) {
+                $existing_columns[] = $schema_column['name'];
+            }
+
+            Schema::table($schema->name, function (Blueprint $table) use ($schema, $columns, $existing_columns) {
+                foreach ($columns as $column) {
+                    if(isset($column['deleted_at']) && $column['deleted_at'] != '') {
+                        $column['attributes']['deleted_at'] = $column['deleted_at'];
+                    }
+                    if (!in_array($column['name'], $existing_columns)) {
+                        $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column['attributes']));
+                    } else {
+                        $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column['attributes']))->change();
+                    }
                 }
             });
 
@@ -126,11 +139,11 @@ class SchemaController extends BaseApiController
     /**
      * Get columns.
      */
-    public function columns($id) : Response
+    public function getColumns($id) : Response
     {
         $schema = CRMSchema::find($id);
 
-        $data = $schema->columns();
+        $data = $schema->getColumns();
 
         return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
     }

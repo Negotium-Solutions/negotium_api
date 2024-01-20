@@ -51,5 +51,5 @@ Route::group([
     Route::post('/schema/create', [SchemaController::class, 'create'])->name('api.schema.create');
     Route::put('/schema/update/{id}', [SchemaController::class, 'update'])->name('api.schema.update');
     Route::delete('/schema/delete/{id?}', [SchemaController::class, 'delete'])->name('api.schema.delete');
-    Route::get('/schema/{id}/columns', [SchemaController::class, 'columns'])->name('api.schema.columns');
+    Route::get('/schema/{id}/columns', [SchemaController::class, 'getColumns'])->name('api.schema.columns');
 });

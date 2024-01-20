@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema as LaravelSchema;
 
 class Schema extends Model
@@ -16,11 +17,20 @@ class Schema extends Model
         return $this->belongsTo(Schema::class, 'parent_id');
     }
 
-    public function columns()
+    public function getColumns()
     {
-        $colums = [];
-        foreach (LaravelSchema::getColumnListing($this->name) as $column) {
-            $columns[] = [$column, LaravelSchema::getColumnType($this->name, $column)];
+        $raw_columns = DB::select("SELECT column_name as name, column_type as type, column_comment as attributes FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$this->name."'");
+
+        $columns = [];
+        foreach ($raw_columns as $key => $column) {
+            $attributes = json_decode($column->attributes, true);
+            if(!(isset($attributes['deleted_at']) && $attributes['deleted_at'] != '')) {
+                $columns[$key] = [
+                    'name' => $column->name,
+                    'type' => $column->type,
+                    'attributes' => $attributes
+                ];
+            }
         }
 
         return $columns;
