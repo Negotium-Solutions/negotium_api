@@ -39,10 +39,10 @@ class SchemaController extends BaseApiController
             return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
         }
 
-        $table = $this->toCleanString($request_data['name']);
-        $columns = $request_data['columns'];
-
         try {
+            $table = $this->toCleanString($request_data['name']);
+            $columns = $request_data['columns'];
+
             $schema = new CRMSchema();
             $schema->name = $table;
             if($request->has('model')) {
