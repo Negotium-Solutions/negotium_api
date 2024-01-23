@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProcessCategoryController;
 use App\Http\Controllers\Api\ProcessController;
 use App\Http\Controllers\Api\SchemaController;
+use App\Http\Controllers\Api\SchemaDataStoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,10 @@ Route::group([
     Route::put('/schema/update/{id}', [SchemaController::class, 'update'])->name('api.schema.update');
     Route::delete('/schema/delete/{id?}', [SchemaController::class, 'delete'])->name('api.schema.delete');
     Route::get('/schema/{id}/columns', [SchemaController::class, 'getColumns'])->name('api.schema.columns');
+
+    // Schema Data Store routes
+    Route::get('/schema-data-store/{id?}', [SchemaDataStoreController::class, 'get'])->name('api.schema-data-store');
+    Route::post('/schema-data-store/create', [SchemaDataStoreController::class, 'create'])->name('api.schema-data-store.create');
+    Route::put('/schema-data-store/update/{id}', [SchemaDataStoreController::class, 'update'])->name('api.schema-data-store.update');
+    Route::delete('/schema-data-store/delete/{id?}', [SchemaDataStoreController::class, 'delete'])->name('api.schema-data-store.delete');
 });
