@@ -385,7 +385,7 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "delete user",
+                "summary": "Delete user",
                 "description": "This can only be done by the logged in user.",
                 "operationId": "deleteUser",
                 "consumes": [
@@ -635,7 +635,7 @@
                 "tags": [
                     "process-category"
                 ],
-                "summary": "delete process-category",
+                "summary": "Delete process-category",
                 "description": "This can only be done by the logged in user.",
                 "operationId": "deleteProcessCategory",
                 "consumes": [
@@ -885,7 +885,7 @@
                 "tags": [
                     "process"
                 ],
-                "summary": "delete process",
+                "summary": "Delete process",
                 "description": "This can only be done by the logged in user.",
                 "operationId": "deleteProcess",
                 "consumes": [
@@ -913,6 +913,281 @@
                             "example": {
                                 "code": 200,
                                 "message": "process successfully deleted.",
+                                "data": {},
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tenant/{id}": {
+            "get": {
+                "tags": [
+                    "tenant"
+                ],
+                "summary": "Get a tenant",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getTenantr",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The tenant's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "tenant successfully retrieved.",
+                                "data": {
+                                    "id": "9a925dfc-ed9c-4d13-8e4f-56a744ea2fa2",
+                                    "name": "Phaks",
+                                    "domain": "Phaks.co.za",
+                                    "first_name": "Themba",
+                                    "last_name": "Mikes",
+                                    "email": "tm@gmail.com",
+                                    "password": "password",
+                                    "last_login_at": "2023-11-09T12:50:17.003Z",
+                                    "last_login_ip": null,
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tenant": {
+            "get": {
+                "tags": [
+                    "tenant"
+                ],
+                "summary": "Get tenants",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "getTenant",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "user successfully retrieved.",
+                                "data": [{
+                                    "id": "9a925dfc-ed9c-4d13-8e4f-56a744ea2fa2",
+                                    "name": "Phaks",
+                                    "domain": "Phaks.co.za",
+                                    "first_name": "Themba",
+                                    "last_name": "Mikes",
+                                    "email": "tm@gmail.com",
+                                    "password": "password",
+                                    "last_login_at": "2023-11-09T12:50:17.003Z",
+                                    "last_login_ip": null,
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                },
+                                {
+                                    "id": "9a925dfc-ed9c-4d13-8e4f-56a744ea2fa2",
+                                    "name": "sanheerden",
+                                    "domain": "sanheerden.co.za",
+                                    "first_name": "Sakhile",
+                                    "last_name": "Van Heerden",
+                                    "email": "sanheerden@gmail.com",
+                                    "password": "password",
+                                    "last_login_at": "2023-11-09T12:50:17.003Z",
+                                    "last_login_ip": null,
+                                    "created_at": "2023-11-09T12:50:17.003Z",
+                                    "updated_at": "2023-11-09T12:50:17.003Z",
+                                    "deleted_at": "2023-11-09T12:50:17.003Z"
+                                }],
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tenant/create": {
+            "post": {
+                "tags": [
+                    "tenant"
+                ],
+                "summary": "Create tenant",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "createTenant",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created tenant object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Tenant"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "tenant successfully created.",
+                                "data": {
+                                    "id": 10000001
+                                },
+                                "payload": {
+                                    "name": "Phaks",
+                                    "domain": "Phaks.co.za",
+                                    "first_name": "Themba",
+                                    "last_name": "Mikes",
+                                    "email": "tm@gmail.com",
+                                    "password": "password"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tenant/update/{id}": {
+            "put": {
+                "tags": [
+                    "tenant"
+                ],
+                "summary": "Update tenant",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "updateTenant",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The tenant's id",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Updated tenant object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Tenant"
+                        }
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "tenant successfully updated.",
+                                "data": {},
+                                "payload": {
+                                    "name": "Phaks",
+                                    "domain": "Phaks.co.za",
+                                    "first_name": "Themba",
+                                    "last_name": "Mikes",
+                                    "email": "tm@gmail.com",
+                                    "password": "password"
+                                },
+                                "old_value": [],
+                                "new_value": [],
+                                "log_id": "9a925dfc-f1c2-4a09-8024-e7b1403a8091"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tenant/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "tenant"
+                ],
+                "summary": "Delete tenant",
+                "description": "This can only be done by the logged in user.",
+                "operationId": "deleteTenant",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The tenant's id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "security": [ { "BearerAuth": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "Example: successful operation",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "code": 200,
+                                "message": "tenant successfully deleted.",
                                 "data": {},
                                 "old_value": [],
                                 "new_value": [],
@@ -1016,6 +1291,32 @@
             },
             "xml": {
                 "name": "Process"
+            }
+        },
+        "Tenant": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "domain": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "User"
             }
         }
     },

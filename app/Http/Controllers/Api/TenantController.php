@@ -57,7 +57,7 @@ class TenantController extends BaseAPIController
                 ]);
             });
 
-            return $this->success(['id' => $tenant->id], 'Tenant successfully created.', $request->all(), 200);
+            return $this->success(['id' => $tenant->id], 'tenant successfully created', $request->all(), 200);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create tenant.', []);
         }
