@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function() {
-    return view('swagger.index');
+    // return the view with some default parameters needed by swagger
+    return view('l5-swagger.index',['documentation' => 'default','urlToDocs' => env('APP_URL').'/docs/api-docs.json','useAbsolutePath' => 1]);
 });

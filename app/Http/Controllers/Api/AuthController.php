@@ -12,9 +12,49 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 class AuthController extends Controller
 {
     /**
-     * User login
-     * @param Request $request
-     * @return User
+     * @OA\POST(
+     *      path="/auth/login",
+     *      operationId="loginUser",
+     *      
+     *      summary="Logs in the user",
+     *      tags={"user"},
+     *      description="Logs in the user by email and password",
+     *      @OA\Parameter(
+     *          name="email",
+     *          description="The user email address or username",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *       @OA\Parameter(
+     *          name="password",
+     *          description="The user password",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function login(Request $request) : Response
     {
@@ -74,7 +114,40 @@ class AuthController extends Controller
     }
 
     /**
-     * @return bool
+     * @OA\POST(
+     *      path="/auth/logout",
+     *      operationId="logoutUser",
+     *      summary="Logs out the user",
+     *      tags={"user"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Log out the user using the Bearer<Token>",
+     *      @OA\Parameter(
+     *          name="Authorization",
+     *          description="Bearer Token",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function logout(Request $request): Response
     {

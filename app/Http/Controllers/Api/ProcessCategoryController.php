@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -11,8 +10,54 @@ use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 class ProcessCategoryController extends BaseAPIController
 {
     /**
-     * Get process category(s) resource(s).
-     */
+     * 
+     * 
+     * @OA\GET(
+     *      path="/process-category/{id}",
+     *      summary="Get a process category",
+     *      operationId="getProcess-category",
+     *      tags={"process-category"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="The process category's id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *          
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     * ),
+     * @OA\GET(
+     *      path="/process-category",
+     *      summary="Get process categories",
+     *      operationId="getProcess-categories",
+     *      tags={"process-category"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      )
+     * )
+     * 
+    */
     public function get(Request $request, $id = null) : Response
     {
         $query = isset($id) ? ProcessCategory::find($id) : ProcessCategory::query();
@@ -22,9 +67,40 @@ class ProcessCategoryController extends BaseAPIController
         return $this->success($data, 'process categories successfully retrieved', [], Response::HTTP_OK);
     }
 
-    /**
-     * Store a newly created process category
-     */
+   /**
+     * 
+     * 
+     * @OA\POST(
+     *      path="/process-category/create",
+     *      operationId="createProcess-category",
+     *      summary="Get a process category",
+     *      tags={"process-category"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\RequestBody(
+     *       required=true,
+     *       @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(
+     *               type="object",
+     *               @OA\Property(
+     *                   property="name",
+     *                   type="string"
+     *              )
+     *          )
+     *      )),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     * )
+     * 
+    */
     public function create(Request $request) : Response
     {
         $validator = \Validator::make($request->all(),
@@ -50,8 +126,49 @@ class ProcessCategoryController extends BaseAPIController
     }
 
     /**
-     * Update the the process category
-     */
+     * 
+     * 
+     * @OA\PUT(
+     *      path="/process-category/update/{id}",
+     *      operationId="updateProcess-category",
+     *      summary="Update process category",
+     *      tags={"process-category"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="The process category's id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *       required=true,
+     *       @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(
+     *               type="object",
+     *               @OA\Property(
+     *                   property="name",
+     *                   type="string",
+     *              ),
+     *           )
+     *         )
+     *      ),
+     *      @OA\Response(
+     *         response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     * )
+     * 
+    */
     public function update(Request $request, $id) : Response
     {
         $validator = \Validator::make($request->all(),
@@ -78,8 +195,36 @@ class ProcessCategoryController extends BaseAPIController
     }
 
     /**
-     * Delete the process category
-     */
+     * 
+     * 
+     * @OA\DELETE(
+     *      path="/process-category/delete/{id}",
+     *      operationId="deleteProcess-category",
+     *      summary="Delete process category",
+     *      tags={"process-category"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="The process category's id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *         response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     * )
+     * 
+    */
     public function delete($id) : Response
     {
         try {

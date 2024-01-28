@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Response;
@@ -10,8 +9,56 @@ use App\Models\User;
 class UserController extends BaseAPIController
 {
     /**
-     * Get user(s) resource(s).
-     */
+         * 
+         * 
+         * @OA\GET(
+         *      path="/user/{id}",
+         *      summary="Get a user",
+         *      operationId="getUser",
+         *      tags={"user"},
+         *      security = {{"BearerAuth": {}}},
+         *      description="This can only be done by the logged in user.",
+         *      @OA\Parameter(
+         *          name="id",
+         *          description="User Id",
+         *          required=true,
+         *          in="path",
+         *          @OA\Schema(
+         *              type="string"
+         *          )
+         *      ),
+         *          
+         *      @OA\Response(
+         *          response=200,
+         *          description="Successful operation",
+         *          @OA\JsonContent()
+         *       ),
+         *      @OA\Response(
+         *          response=401,
+         *          description="Unauthenticated",
+         *      ),
+         * ),
+         * @OA\GET(
+         *      path="/user",
+         *      summary="Get users",
+         *      operationId="getUsers",
+         *      tags={"user"},
+         *      security = {{"BearerAuth": {}}},
+         *      description="This can only be done by the logged in user.",
+         *      @OA\Response(
+         *          response=200,
+         *          description="Successful operation",
+         *          @OA\JsonContent()
+         *       ),
+         *      @OA\Response(
+         *          response=401,
+         *          description="Unauthenticated",
+         *      )
+         * )
+         * 
+    */
+
+    
     public function get(Request $request, $id = null) : Response
     {
         $query = isset($id) ? User::find($id) : User::query();
@@ -22,10 +69,75 @@ class UserController extends BaseAPIController
     }
 
     /**
-     * Store a newly created user.
+     * 
+     * 
+     * @OA\POST(
+     *      path="/user/create",
+     *      operationId="createUser",
+     *      summary="create a new user",
+     *      tags={"user"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\RequestBody(
+     *       required=true,
+     *       @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(
+     *               type="object",
+     *               @OA\Property(
+     *                   property="first_name",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="last_name",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="email",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="password",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="avatar",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="last_login_at",
+     *                   type="string",
+     *                   format="date-time"
+     *              ),
+     *               @OA\Property(
+     *                   property="last_login_ip",
+     *                   type="string"
+     *              ),
+     *           )
+     *       )
+     *   ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function create(Request $request) : Response
     {
+
         $validator = \Validator::make($request->all(),
             ['first_name' => 'string|required'],
             ['last_name' => 'string|required'],
@@ -57,7 +169,80 @@ class UserController extends BaseAPIController
     }
 
     /**
-     * Update the user.
+     * 
+     * 
+     * @OA\PUT(
+     *      path="/user/update/{id}",
+     *      operationId="updateUser",
+     *      summary="Update user",
+     *      tags={"user"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="The user's id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *       required=true,
+     *       @OA\MediaType(
+     *           mediaType="application/json",
+     *           @OA\Schema(
+     *               type="object",
+     *               @OA\Property(
+     *                   property="first_name",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="last_name",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="email",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="password",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="avatar",
+     *                   type="string",
+     *              ),
+     *               @OA\Property(
+     *                   property="last_login_at",
+     *                   type="string",
+     *                   format="date-time"
+     *              ),
+     *               @OA\Property(
+     *                   property="last_login_ip",
+     *                   type="string"
+     *              ),
+     *           )
+     *       )
+     *   ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function update(Request $request, $id) : Response
     {
@@ -85,7 +270,36 @@ class UserController extends BaseAPIController
     }
 
     /**
-     * Delete the user.
+     * 
+     * 
+     * @OA\DELETE(
+     *      path="/user/delete/{id}",
+     *      summary="Delete a user",
+     *      operationId="deleteUser",
+     *      tags={"user"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="The user's id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *          
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     * )
+     * 
      */
     public function delete($id) : Response
     {
