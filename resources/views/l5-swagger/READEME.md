@@ -6,6 +6,9 @@ This is the usage of the l5-swagger package for generating the swagger annotatio
 ## Contributing
 Shout of to the guys who created the packages and made life easy for us for more on the package documentation check this link [here](https://github.com/DarkaOnLine/L5-Swagger)
 
+## .env expected variables are set
+L5_SWAGGER_CONST_HOST="${APP_URL}/api"
+L5_SWAGGER_UI_FILTERS=true
 
 ## Instructions
 1. Clone this repository which resides on branch feature/laravel-swagger
