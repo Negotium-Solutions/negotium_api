@@ -12,10 +12,11 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "mehdi-fathi/eloquent-filter": "^4.1",
         "rikscss/base-api": "@dev",
         "spatie/laravel-activitylog": "^4.7",
-        "zircote/swagger-php": "^4.8",
-        "stancl/tenancy": "^3.7"
+        "stancl/tenancy": "^3.7",
+        "zircote/swagger-php": "^4.8"
     },
     "repositories": [{
         "type": "path",
