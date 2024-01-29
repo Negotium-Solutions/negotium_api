@@ -1,28 +1,21 @@
 <?php
 
-namespace Feature;
+namespace Tests\Tenant\Unit;
 
 use App\Models\ProcessCategory;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Tests\TestCase;
+use Tests\Tenant\TestCase;
 
 class ProcessCategoryApiTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testCanGetAProcessCategory() : void
     {
-        $token = $this->getToken();
-
         $process_category = ProcessCategory::factory(['name' => 'HR Processes'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/process-category/'.$process_category->id);
+        ])->get('/api/'.$this->tenant.'/process-category/'.$process_category->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -34,16 +27,14 @@ class ProcessCategoryApiTest extends TestCase
 
     public function testCanProcessCategories() : void
     {
-        $token = $this->getToken();
-
         ProcessCategory::factory()->count(4)->create();
 
         ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/process-category/');
+        ])->get('/api/'.$this->tenant.'/process-category/');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -52,14 +43,12 @@ class ProcessCategoryApiTest extends TestCase
 
     public function testGetUserNotFound() : void
     {
-        $token = $this->getToken();
-
         ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/process-category/1000000000001');
+        ])->get('/api/'.$this->tenant.'/process-category/1000000000001');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -71,14 +60,12 @@ class ProcessCategoryApiTest extends TestCase
 
     public function testCanUpdateProcessCategory() : void
     {
-        $token = $this->getToken();
-
         $processCategory = ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/process-category/update/'.$processCategory->id, [
+        ])->put('/api/'.$this->tenant.'/process-category/update/'.$processCategory->id, [
             'name' => 'Resource Allocation'
         ]);
 
@@ -89,7 +76,7 @@ class ProcessCategoryApiTest extends TestCase
         ]);
 
         // Is updated
-        $response = $this->get('/api/process-category/'.$processCategory->id);
+        $response = $this->get('/api/'.$this->tenant.'/process-category/'.$processCategory->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
             'message' => 'process categories successfully retrieved',
@@ -101,14 +88,12 @@ class ProcessCategoryApiTest extends TestCase
 
     public function testCanNotUpdateProcessCategory() : void
     {
-        $token = $this->getToken();
-
         $processCategory = ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/process-category/update/'.$processCategory->id, [
+        ])->put('/api/'.$this->tenant.'/process-category/update/'.$processCategory->id, [
             'name' => 1234
         ]);
 
@@ -122,12 +107,10 @@ class ProcessCategoryApiTest extends TestCase
 
     public function testCanCreateProcessCategory() : void
     {
-        $token = $this->getToken();
-
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->post('/api/process-category/create/', [
+        ])->post('/api/'.$this->tenant.'/process-category/create/', [
             'name' => 'Resource Allocation 2'
         ]);
 
@@ -141,14 +124,12 @@ class ProcessCategoryApiTest extends TestCase
 
     public function testCanDeleteProcessCategory() : void
     {
-        $token = $this->getToken();
-
         $processCategory = ProcessCategory::factory()->create();
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '. $token,
+            'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->delete('/api/process-category/delete/'.$processCategory->id);
+        ])->delete('/api/'.$this->tenant.'/process-category/delete/'.$processCategory->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -156,20 +137,5 @@ class ProcessCategoryApiTest extends TestCase
             'message' => 'process category successfully deleted',
             'data' => []
         ]);
-    }
-
-    public function getToken()
-    {
-        User::factory([
-            'email' => 'admin@negotium-solutions.com',
-            'password' => 'password'
-        ])->create();
-
-        $response = $this->post('/api/auth/login',[
-            'email' => 'admin@negotium-solutions.com',
-            'password' => 'password'
-        ]);
-
-        return $response['data']['token'];
     }
 }

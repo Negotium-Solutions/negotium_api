@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.8",
         "rikscss/base-api": "@dev",
         "spatie/laravel-activitylog": "^4.7",
-        "zircote/swagger-php": "^4.8"
+        "zircote/swagger-php": "^4.8",
+        "stancl/tenancy": "^3.7"
     },
     "repositories": [{
         "type": "path",
@@ -29,7 +30,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.1",
+        "phpunit/phpunit": "10.1",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
