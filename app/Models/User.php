@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use eloquentFilter\QueryFilter\ModelFilters\Filterable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +13,23 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, Filterable;
+
+
+    /**
+     * defined a new protected variable for handling dynamic filters
+     * only white list column field will be used for filtering otherwise use * to allow all
+     */
+
+     private static $whiteListFilter = [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'created_at',
+            'updated_at'
+     ];
+
 
     /**
      * The attributes that are mass assignable.

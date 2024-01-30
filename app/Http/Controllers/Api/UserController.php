@@ -61,8 +61,8 @@ class UserController extends BaseAPIController
     
     public function get(Request $request, $id = null) : Response
     {
-        $query = isset($id) ? User::find($id) : User::query();
 
+        $query = isset($id) ? User::find($id) : User::filter();
         $data = isset($id) ? $query : $query->get();
 
         return $this->success($data, 'users successfully retrieved', [], Response::HTTP_OK);
