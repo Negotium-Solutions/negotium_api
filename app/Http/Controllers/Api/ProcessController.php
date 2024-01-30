@@ -28,16 +28,10 @@ class ProcessController extends BaseAPIController
      *              type="integer"
      *          )
      *      ),
-     *          
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
      *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
+     *      @OA\Response(response=401,description="Unauthenticated",
+     *      )
      * ),
      * @OA\GET(
      *      path="/process",
@@ -46,14 +40,9 @@ class ProcessController extends BaseAPIController
      *      tags={"process"},
      *      security = {{"BearerAuth": {}}},
      *      description="This can only be done by the logged in user.",
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
      *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
+     *      @OA\Response(response=401,description="Unauthenticated",
      *      )
      * )
      * 
@@ -89,14 +78,9 @@ class ProcessController extends BaseAPIController
      *              )
      *          )
      *      )),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
      *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
+     *      @OA\Response(response=401,description="Unauthenticated",
      *      ),
      * )
      * 
@@ -157,14 +141,9 @@ class ProcessController extends BaseAPIController
      *           )
      *         )
      *      ),
-     *      @OA\Response(
-     *         response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
      *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
+     *      @OA\Response(response=401,description="Unauthenticated",
      *      ),
      * )
      * 
@@ -213,14 +192,9 @@ class ProcessController extends BaseAPIController
      *              type="integer"
      *          )
      *      ),
-     *      @OA\Response(
-     *         response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
      *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
+     *      @OA\Response(response=401,description="Unauthenticated",
      *      ),
      * )
      * 

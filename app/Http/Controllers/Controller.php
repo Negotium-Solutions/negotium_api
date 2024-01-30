@@ -4,6 +4,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 /**
+* This is needed as zigorte package checks the default controller to check if all the criteria is met for swagger,
+* otherwise it's throws an error
+*
 * @OA\Info(
 *      version="1.0.0",
 *      title="Negotium Swagger API Documentation",

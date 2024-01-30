@@ -23,12 +23,12 @@ return [
                 /*
                  * File name of the generated json documentation file
                 */
-                'docs_json' => 'api-docs.json',
+                'docs_json' => 'swagger.json',
 
                 /*
                  * File name of the generated YAML documentation file
                 */
-                'docs_yaml' => 'api-docs.yaml',
+                'docs_yaml' => 'swagger.yaml',
 
                 /*
                 * Set this to `json` or `yaml` to determine which documentation file to use in UI
@@ -50,7 +50,7 @@ return [
             /*
              * Route for accessing parsed swagger annotations.
             */
-            'docs' => 'docs',
+            'docs' => 'public/swagger/collection',
 
             /*
              * Route for Oauth2 authentication callback.
@@ -77,7 +77,7 @@ return [
             /*
              * Absolute path to location where parsed annotations will be stored
             */
-            'docs' => storage_path('api-docs'),
+            'docs' => base_path('public/swagger/collection'),
 
             /*
              * Absolute path to directory where to export views

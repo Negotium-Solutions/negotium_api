@@ -9,53 +9,42 @@ use App\Models\User;
 class UserController extends BaseAPIController
 {
     /**
-         * 
-         * 
-         * @OA\GET(
-         *      path="/user/{id}",
-         *      summary="Get a user",
-         *      operationId="getUser",
-         *      tags={"user"},
-         *      security = {{"BearerAuth": {}}},
-         *      description="This can only be done by the logged in user.",
-         *      @OA\Parameter(
-         *          name="id",
-         *          description="User Id",
-         *          required=true,
-         *          in="path",
-         *          @OA\Schema(
-         *              type="string"
-         *          )
-         *      ),
-         *          
-         *      @OA\Response(
-         *          response=200,
-         *          description="Successful operation",
-         *          @OA\JsonContent()
-         *       ),
-         *      @OA\Response(
-         *          response=401,
-         *          description="Unauthenticated",
-         *      ),
-         * ),
-         * @OA\GET(
-         *      path="/user",
-         *      summary="Get users",
-         *      operationId="getUsers",
-         *      tags={"user"},
-         *      security = {{"BearerAuth": {}}},
-         *      description="This can only be done by the logged in user.",
-         *      @OA\Response(
-         *          response=200,
-         *          description="Successful operation",
-         *          @OA\JsonContent()
-         *       ),
-         *      @OA\Response(
-         *          response=401,
-         *          description="Unauthenticated",
-         *      )
-         * )
-         * 
+     * 
+     * 
+     * @OA\GET(
+     *      path="/user/{id}",
+     *      summary="Get a user",
+     *      operationId="getUser",
+     *      tags={"user"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="User Id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=401,description="Unauthenticated",
+     *      )
+     * ),
+     * @OA\GET(
+     *      path="/user",
+     *      summary="Get users",
+     *      operationId="getUsers",
+     *      tags={"user"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="This can only be done by the logged in user.",
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=401,description="Unauthenticated",
+     *      )
+     * )
+     * 
     */
 
     
@@ -116,22 +105,9 @@ class UserController extends BaseAPIController
      *           )
      *       )
      *   ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
+     *      @OA\Response(response=200,description="Successful operation",@OA\JsonContent()
      *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     *      @OA\Response(
-     *          response=403,
-     *          description="Forbidden"
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Resource Not Found"
+     *      @OA\Response(response=401,description="Unauthenticated",
      *      )
      * )
      */
