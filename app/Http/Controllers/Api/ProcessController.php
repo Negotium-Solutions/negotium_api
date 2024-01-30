@@ -19,11 +19,7 @@ class ProcessController extends BaseAPIController
      *      tags={"process"},
      *      security = {{"BearerAuth": {}}},
      *      description="This can only be done by the logged in user.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="The process's id",
-     *          required=true,
-     *          in="path",
+     *      @OA\Parameter(name="id",description="The process's id",required=true,in="path",
      *          @OA\Schema(
      *              type="integer"
      *          )
@@ -119,19 +115,14 @@ class ProcessController extends BaseAPIController
      *      tags={"process"},
      *      security = {{"BearerAuth": {}}},
      *      description="This can only be done by the logged in user.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="The process's id",
-     *          required=true,
-     *          in="path",
+     *      @OA\Parameter(name="id",description="The process's id",required=true,in="path",
      *          @OA\Schema(
      *              type="integer"
      *          )
      *      ),
      *      @OA\RequestBody(
      *       required=true,
-     *       @OA\MediaType(
-     *           mediaType="application/json",
+     *       @OA\MediaType(mediaType="application/json",
      *           @OA\Schema(
      *               type="object",
      *               @OA\Property(
