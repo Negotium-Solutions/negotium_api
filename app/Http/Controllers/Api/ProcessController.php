@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -10,54 +11,8 @@ use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 class ProcessController extends BaseAPIController
 {
     /**
-     * 
-     * 
-     * @OA\GET(
-     *      path="/process/{id}",
-     *      summary="Get a process",
-     *      operationId="getProcess",
-     *      tags={"process"},
-     *      security = {{"BearerAuth": {}}},
-     *      description="This can only be done by the logged in user.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="The process's id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *      ),
-     *          
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     * ),
-     * @OA\GET(
-     *      path="/process",
-     *      summary="Get processes",
-     *      operationId="getProcesses",
-     *      tags={"process"},
-     *      security = {{"BearerAuth": {}}},
-     *      description="This can only be done by the logged in user.",
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      )
-     * )
-     * 
-    */
+     * Get process(s) resource(s).
+     */
     public function get(Request $request, $id = null) : Response
     {
         $query = isset($id) ? Process::find($id) : Process::query();
@@ -67,40 +22,9 @@ class ProcessController extends BaseAPIController
         return $this->success($data, 'processes successfully retrieved', [], Response::HTTP_OK);
     }
 
-     /**
-     * 
-     * 
-     * @OA\POST(
-     *      path="/process/create",
-     *      summary="Create a process",
-     *      operationId="createProcess",
-     *      tags={"process"},
-     *      security = {{"BearerAuth": {}}},
-     *      description="This can only be done by the logged in user.",
-     *      @OA\RequestBody(
-     *       required=true,
-     *       @OA\MediaType(
-     *           mediaType="application/json",
-     *           @OA\Schema(
-     *               type="object",
-     *               @OA\Property(
-     *                   property="name",
-     *                   type="string"
-     *              )
-     *          )
-     *      )),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     * )
-     * 
-    */
+    /**
+     * Store a newly created process
+     */
     public function create(Request $request) : Response
     {
         $validator = \Validator::make($request->all(),
@@ -126,49 +50,8 @@ class ProcessController extends BaseAPIController
     }
 
     /**
-     * 
-     * 
-     *   @OA\PUT(
-     *      path="/process/update/{id}",
-     *      operationId="updateProcess",
-     *      summary="Update process",
-     *      tags={"process"},
-     *      security = {{"BearerAuth": {}}},
-     *      description="This can only be done by the logged in user.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="The process's id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *      ),
-     *      @OA\RequestBody(
-     *       required=true,
-     *       @OA\MediaType(
-     *           mediaType="application/json",
-     *           @OA\Schema(
-     *               type="object",
-     *               @OA\Property(
-     *                   property="name",
-     *                   type="string",
-     *              ),
-     *           )
-     *         )
-     *      ),
-     *      @OA\Response(
-     *         response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     * )
-     * 
-    */
+     * Update the the process
+     */
     public function update(Request $request, $id) : Response
     {
         $validator = \Validator::make($request->all(),
@@ -195,36 +78,8 @@ class ProcessController extends BaseAPIController
     }
 
     /**
-     * 
-     * 
-     * @OA\DELETE(
-     *      path="/process/delete/{id}",
-     *      operationId="deleteProcess",
-     *      summary="Delete process",
-     *      tags={"process"},
-     *      security = {{"BearerAuth": {}}},
-     *      description="This can only be done by the logged in user.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="The process's id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *      ),
-     *      @OA\Response(
-     *         response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     * )
-     * 
-    */
+     * Delete the process
+     */
     public function delete($id) : Response
     {
         try {
