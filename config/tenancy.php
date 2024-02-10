@@ -17,7 +17,7 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-    'central_domains' => env('APP_ENV') === 'local' ? ['127.0.0.1','localhost',] : ['app.negotium-solutions.com',],
+    'central_domains' => env('APP_ENV') === 'local' || env('APP_ENV') === 'testing' ? ['127.0.0.1','localhost'] : ['app.negotium-solutions.com'],
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
      * Their responsibility is making Laravel features tenant-aware.
