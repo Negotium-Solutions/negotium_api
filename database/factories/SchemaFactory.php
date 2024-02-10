@@ -16,9 +16,16 @@ class SchemaFactory extends Factory
      */
     public function definition(): array
     {
+        $columns = [
+            ["name" => "first_name", "type" => "string", "attributes" => ["required" => 1,"indent" => 0,"is_id" => 0,"is_passport" => 0]],
+            ["name" => "last_name", "type" => "string", "attributes" => ["required" => 1,"indent" => 0,"is_id" => 0,"is_passport" => 0]],
+            ["name" => "email", "type" => "string", "attributes" => ["required" => 1,"indent" => 0,"is_id" => 0,"is_passport" => 0]],
+            ["name" => "age", "type" => "integer", "attributes" => ["required" => 0,"indent" => 0,"is_id" => 0,"is_passport" => 0]],
+        ];
+
         return [
             'name' => fake()->name,
-            'columns' => fake()->column()
+            'columns' => json_encode($columns)
         ];
     }
 }

@@ -11,8 +11,7 @@ class SchemaApiTest extends TestCase
     public function testCanGetASchema() : void
     {
         $mySchema = Schema::factory([
-            'name' => 'Schema1',
-            'columns' => []
+            'name' => 'Schema1'
         ])->create();
 
         $response = $this->withHeaders([
@@ -26,19 +25,17 @@ class SchemaApiTest extends TestCase
             'message' => 'schemas successfully retrieved',
             'data' => ['name' => 'Schema1']
         ]);
+
+        $this->assertTrue(true);
     }
 
     public function testCanGetSchemas() : void
     {
         Schema::factory()->count(4)->create();
 
-        Schema::factory()->create([
-            'name' => 'svanheerden',
-            'domain' => 'svanheerden.co.za',
-            'first_name' => 'Sakhile',
-            'last_name' => 'Van Heerden',
-            'email' => 'svanheerden@gmail.com'
-        ]);
+        $mySchema = Schema::factory([
+            'name' => 'Schema1'
+        ])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
@@ -139,17 +136,13 @@ class SchemaApiTest extends TestCase
 
     public function testCanCreateSchema() : void
     {
+        $json_payload = file_get_contents(public_path('tests/create_schema_payload.json'));
+        $payload = json_decode($json_payload, true);
+
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->post('/api/'.$this->tenant.'/schema/create', [
-            'name' => 'tomjekkings',
-            'domain' => 'tomjekkings.co.za',
-            'first_name' => 'Tom',
-            'last_name' => 'Jekkings',
-            'email' => 'tom.jekkings@gmail.com',
-            "password" => "password"
-        ]);
+        ])->post('/api/'.$this->tenant.'/schema/create', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
 
