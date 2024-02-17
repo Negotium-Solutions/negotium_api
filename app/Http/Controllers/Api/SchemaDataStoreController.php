@@ -16,7 +16,7 @@ class SchemaDataStoreController extends BaseApiController
     public function get(Request $request, $id = null) : Response
     {
         $request_data = json_decode($request->getContent(), true);
-
+        
         $validator = \Validator::make($request_data,
             ['schema_id' => 'integer|required']
         );
@@ -46,7 +46,8 @@ class SchemaDataStoreController extends BaseApiController
     public function create(Request $request) : Response
     {
         $request_data = json_decode($request->getContent(), true);
-
+        //$request_data = $request->input();
+        
         $validator = \Validator::make($request_data,
             ['schema_id' => 'integer|required'],
             ['data' => 'required']
@@ -58,20 +59,20 @@ class SchemaDataStoreController extends BaseApiController
 
         try {
             $schema = CRMSchema::find($request_data['schema_id']);
-
+            
             $schemaDataStore = new SchemaDataStore();
             $schemaDataStore->setTable($schema->name);
-
+            
             foreach ($request_data['data'] as $column)
             {
                 $schemaDataStore->{$column['name']} = $column['value'];
             }
 
             if ($schemaDataStore->save() === false) {
-                throw new \RuntimeException('Could not save process category');
+                throw new \RuntimeException('Could not save schema data');
             }
 
-            return $this->success(['table' => $schema->name], 'Schema data successfully stored.', $request->all(), 200);
+            return $this->success(['table' => $schema->name], 'Schema data successfully created.', $request->all(), 200);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to store schema data.', []);
         }
@@ -107,7 +108,7 @@ class SchemaDataStoreController extends BaseApiController
             }
 
             if ($schemaDataStore->save() === false) {
-                throw new \RuntimeException('Could not save process category');
+                throw new \RuntimeException('Could not save schema data');
             }
 
             return $this->success(['table' => $schema->name], 'Schema data successfully stored.', $request->all(), 200);

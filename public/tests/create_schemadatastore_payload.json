@@ -1,0 +1,60 @@
+{
+	"schema_id": 1,
+	"data": [
+		{ 
+			"name": "first_name",
+			"value": "Klaas",
+			"type": "string",
+			"attributes": { 
+				"required": 1,
+				"indent": 0,
+				"is_id": 0,
+				"is_passport": 0
+			}
+		},
+		{ 
+			"name": "last_name",
+			"value": "Rikhotso",
+			"type": "string",
+			"attributes": { 
+				"required": 1,
+				"indent": 0,
+				"is_id": 0,
+				"is_passport": 0
+			}
+		},
+		{ 
+			"name": "email",
+			"value": "klaas@rikscss.co.za",
+			"type": "string",
+			"attributes": { 
+				"required": 1,
+				"indent": 0,
+				"is_id": 0,
+				"is_passport": 0
+			}
+		},
+		{ 
+			"name": "age",
+			"value": 36,
+			"type": "integer",
+			"attributes": { 
+				"required": 1,
+				"indent": 0,
+				"is_id": 0,
+				"is_passport": 0
+			}
+		},
+		{ 
+			"name": "biography",
+			"value": "Testing 12345",
+			"type": "text",
+			"attributes": { 
+				"required": 1,
+				"indent": 0,
+				"is_id": 0,
+				"is_passport": 0
+			}
+		}
+	]
+}

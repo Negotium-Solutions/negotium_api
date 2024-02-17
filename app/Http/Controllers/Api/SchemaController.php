@@ -28,8 +28,9 @@ class SchemaController extends BaseApiController
      */
     public function create(Request $request) : Response
     {
-        $request_data = json_decode($request->getContent(), true);
-
+        //$request_data = json_decode($request->getContent(), true);
+        $request_data = $request->input();
+        
         $validator = \Validator::make($request_data,
             ['name' => 'string|required'],
             ['columns' => 'required']
@@ -66,7 +67,7 @@ class SchemaController extends BaseApiController
                 $table->softDeletes();
             });
 
-            return $this->success(['table' => $table], 'Schema successfully created.', $request->all(), 200);
+            return $this->success(['table' => $table], 'schema successfully created.', $request->all(), 200);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create schema.', []);
         }
@@ -77,7 +78,8 @@ class SchemaController extends BaseApiController
      */
     public function update(Request $request, $id) : Response
     {
-        $request_data = json_decode($request->getContent(), true);
+        //$request_data = json_decode($request->getContent(), true);
+        $request_data = $request->input();
 
         $validator = \Validator::make($request_data,
             ['columns' => 'required']
