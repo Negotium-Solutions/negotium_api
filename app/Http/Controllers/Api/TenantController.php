@@ -11,19 +11,27 @@ use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 class TenantController extends BaseAPIController
 {
     /**
-     * Get user(s) resource(s).
+     * Get tenant(s) resource(s).
      */
     public function get(Request $request, $id = null) : Response
     {
-        $query = isset($id) ? Tenant::find($id) : Tenant::query();
+        try{
+            $query = isset($id) ? Tenant::find($id) : Tenant::query();
 
-        $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query : $query->get();
 
-        return $this->success($data, 'tenants successfully retrieved', [], Response::HTTP_OK);
+            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+                return $this->success([], 'No tenant record(s) found', [], Response::HTTP_NOT_FOUND);
+            }
+
+            return $this->success($data, 'tenants successfully retrieved', [], Response::HTTP_OK);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
-     * Store a newly created process
+     * Store a newly created tenant
      */
     public function create(Request $request) : Response
     {
@@ -36,7 +44,7 @@ class TenantController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
@@ -57,14 +65,14 @@ class TenantController extends BaseAPIController
                 ]);
             });
 
-            return $this->success(['id' => $tenant->id], 'tenant successfully created', $request->all(), 200);
+            return $this->success(['id' => $tenant->id], 'tenant successfully created', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create tenant.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Update the user.
+     * Update the tenant.
      */
     public function update(Request $request, $id) : Response
     {
@@ -73,11 +81,15 @@ class TenantController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
-            $tenant = Tenant::findOrFail($id);
+            $tenant = Tenant::find($id);
+            if((!isset($tenant))){
+                return $this->success([], 'No tenant record found to update', [], Response::HTTP_NOT_FOUND);
+            }
+
             $old_value = Tenant::findOrFail($id);
             $new_value = $request->all();
 
@@ -85,7 +97,7 @@ class TenantController extends BaseAPIController
                 throw new \RuntimeException('Could not update tenant');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update a tenant', $request->all(), Response::HTTP_BAD_REQUEST);
+            return $this->error($exception->getMessage(), 'There was an error trying to update a tenant', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->success([], 'tenant successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
@@ -98,12 +110,15 @@ class TenantController extends BaseAPIController
     {
         try {
             $tenant = Tenant::find($id);
+            if((!isset($tenant))){
+                return $this->success([], 'No tenant record found to delete', [], Response::HTTP_NOT_FOUND);
+            }
 
             if ($tenant->delete() === false) {
                 throw new \RuntimeException('Could not delete the tenant');
             }
 
-            return $this->success([], 'tenant successfully deleted', [], Response::HTTP_OK);
+            return response()->noContent();
         } catch (\Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete a tenant', ['tenant_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -15,11 +15,19 @@ class ProcessController extends BaseAPIController
      */
     public function get(Request $request, $id = null) : Response
     {
-        $query = isset($id) ? Process::find($id) : Process::query();
+        try{
+            $query = isset($id) ? Process::find($id) : Process::query();
+            
+            $data = isset($id) ? $query : $query->get();
+            
+            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+                return $this->success([], 'No process record(s) found', [], Response::HTTP_NOT_FOUND);
+            }
 
-        $data = isset($id) ? $query : $query->get();
-
-        return $this->success($data, 'processes successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($data, 'processes successfully retrieved', [], Response::HTTP_OK);
+        }catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve process.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -32,7 +40,7 @@ class ProcessController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(),  Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
@@ -43,9 +51,9 @@ class ProcessController extends BaseAPIController
                 throw new \RuntimeException('Could not save process');
             }
 
-            return $this->success(['id' => $process->id], 'process successfully created.', $request->all(), 200);
+            return $this->success(['id' => $process->id], 'process successfully created.', $request->all(),  Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create process.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create process.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -59,11 +67,15 @@ class ProcessController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
-            $process = Process::findOrFail($id);
+            $process = Process::find($id);
+            if((!isset($process))){
+                return $this->success([], 'No process record found to update', [], Response::HTTP_NOT_FOUND);
+            }
+
             $old_value = Process::findOrFail($id);
             $new_value = $request->all();
 
@@ -71,7 +83,7 @@ class ProcessController extends BaseAPIController
                 throw new \RuntimeException('Could not update the process');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the process', $request->all(), Response::HTTP_BAD_REQUEST);
+            return $this->error($exception->getMessage(), 'There was an error trying to update the process', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->success([], 'process successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
@@ -84,12 +96,15 @@ class ProcessController extends BaseAPIController
     {
         try {
             $process = Process::find($id);
+            if((!isset($process))){
+                return $this->success([], 'No process record found to delete', [], Response::HTTP_NOT_FOUND);
+            }
 
             if ($process->delete() === false) {
                 throw new \RuntimeException('Could not delete the process');
             }
 
-            return $this->success([], 'process successfully deleted', [], Response::HTTP_OK);
+            return response()->noContent();
         } catch (\Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the the process', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

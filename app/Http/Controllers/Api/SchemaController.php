@@ -12,15 +12,23 @@ use App\Models\Schema as CRMSchema;
 class SchemaController extends BaseApiController
 {
     /**
-     * Get process(s) resource(s).
+     * Get schema(s) resource(s).
      */
     public function get(Request $request, $id = null) : Response
     {
-        $query = isset($id) ? CRMSchema::find($id) : CRMSchema::query();
+        try{
+            $query = isset($id) ? CRMSchema::find($id) : CRMSchema::query();
 
-        $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query : $query->get();
 
-        return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
+            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+                return $this->success([], 'No schema record(s) found', [], Response::HTTP_NOT_FOUND);
+            }
+
+            return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -36,7 +44,7 @@ class SchemaController extends BaseApiController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
@@ -66,9 +74,9 @@ class SchemaController extends BaseApiController
                 $table->softDeletes();
             });
 
-            return $this->success(['table' => $table], 'Schema successfully created.', $request->all(), 200);
+            return $this->success(['table' => $table], 'Schema successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create schema.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -84,13 +92,17 @@ class SchemaController extends BaseApiController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $columns = $request_data['columns'];
 
         try {
             $schema = CRMSchema::find($id);
+            if((!isset($tenant))){
+                return $this->success([], 'No schema record found to update', [], Response::HTTP_NOT_FOUND);
+            }
+
             $schema->columns = json_encode($columns);
             $schema->save();
 
@@ -112,9 +124,9 @@ class SchemaController extends BaseApiController
                 }
             });
 
-            return $this->success(['table' => $schema->name], 'Schema successfully updated.', $request->all(), 200);
+            return $this->success(['table' => $schema->name], 'Schema successfully updated.', $request->all(), Response::HTTP_OK);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to update schema.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to update schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -125,12 +137,15 @@ class SchemaController extends BaseApiController
     {
         try {
             $schema = CRMSchema::find($id);
+            if((!isset($schema))){
+                return $this->success([], 'No schema record found to delete', [], Response::HTTP_NOT_FOUND);
+            }
 
             if ($schema->delete() === false) {
                 throw new \RuntimeException('Could not delete the schema');
             }
 
-            return $this->success([], 'schema successfully deleted', [], Response::HTTP_OK);
+            return response()->noContent();
         } catch (\Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the the schema', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -141,11 +156,19 @@ class SchemaController extends BaseApiController
      */
     public function getColumns($id) : Response
     {
-        $schema = CRMSchema::find($id);
+        try{
+            $schema = CRMSchema::find($id);
 
-        $data = $schema->getColumns();
+            $data = $schema->getColumns();
 
-        return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
+            if((!isset($data)) || (!isset($data['data']))){
+                return $this->success([], 'No tenant record(s) found', [], Response::HTTP_NOT_FOUND);
+            }
+
+            return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function toCleanString($fieldName): string
