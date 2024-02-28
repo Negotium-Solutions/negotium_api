@@ -14,11 +14,19 @@ class UserController extends BaseAPIController
      */
     public function get(Request $request, $id = null) : Response
     {
-        $query = isset($id) ? User::find($id) : User::query();
+        try{
+            $query = isset($id) ? User::find($id) : User::query();
 
-        $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query : $query->get();
 
-        return $this->success($data, 'users successfully retrieved', [], Response::HTTP_OK);
+            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+                return $this->success([], 'No user record(s) found', [], Response::HTTP_NOT_FOUND);
+            }
+
+            return $this->success($data, 'users successfully retrieved', [], Response::HTTP_OK);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -34,7 +42,7 @@ class UserController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
@@ -50,9 +58,9 @@ class UserController extends BaseAPIController
                 throw new \RuntimeException('Could not save user');
             }
 
-            return $this->success(['id' => $user->id], 'user successfully created.', $request->all(), 200);
+            return $this->success(['id' => $user->id], 'user successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create user.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create user.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -66,11 +74,14 @@ class UserController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
-            $user = User::findOrFail($id);
+            $user = User::find($id);
+            if((!isset($user))){
+                return $this->success([], 'No user record found to update', [], Response::HTTP_NOT_FOUND);
+            }
             $old_value = User::findOrFail($id);
             $new_value = $request->all();
 
@@ -78,7 +89,7 @@ class UserController extends BaseAPIController
                 throw new \RuntimeException('Could not update user');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the user', $request->all(), Response::HTTP_BAD_REQUEST);
+            return $this->error($exception->getMessage(), 'There was an error trying to update the user', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->success([], 'user successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
@@ -91,12 +102,15 @@ class UserController extends BaseAPIController
     {
         try {
             $user = User::find($id);
+            if((!isset($user))){
+                return $this->success([], 'No user record found to delete', [], Response::HTTP_NOT_FOUND);
+            }
 
             if ($user->delete() === false) {
                 throw new \RuntimeException('Could not delete the user');
             }
 
-            return $this->success([], 'user successfully deleted', [], Response::HTTP_OK);
+            return response()->noContent();
         } catch (\Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the user', ['user_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

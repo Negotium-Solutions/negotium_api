@@ -25,7 +25,7 @@ class ProcessApiTest extends TestCase
         ]);
     }
 
-    public function testGetCanProcesses() : void
+    public function testCanGetProcesses() : void
     {
         Process::factory()->count(4)->create();
 
@@ -41,7 +41,7 @@ class ProcessApiTest extends TestCase
         $this->assertTrue(count($response['data']) === 5); // Number of users in the database, plus 1 created by getToken
     }
 
-    public function testGetUserNotFound() : void
+    public function testGetProcessNotFound() : void
     {
         Process::factory(['name' => 'Off-boarding'])->create();
 
@@ -50,10 +50,10 @@ class ProcessApiTest extends TestCase
             'Accept' => 'application/json'
         ])->get('/api/'.$this->tenant.'/process/1000000000001');
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'No process record(s) found',
             'data' => null
         ]);
     }
@@ -114,7 +114,7 @@ class ProcessApiTest extends TestCase
             'name' => 'Equipment Allocation 2'
         ]);
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_CREATED);
 
         $response->assertJson([
             'message' => 'process successfully created.',
@@ -131,11 +131,11 @@ class ProcessApiTest extends TestCase
             'Accept' => 'application/json'
         ])->delete('/api/'.$this->tenant.'/process/delete/'.$process->id);
 
-        $response->assertStatus(Response::HTTP_OK);
-
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+/*
         $response->assertJson([
             'message' => 'process successfully deleted',
             'data' => []
-        ]);
+        ]); */
     }
 }

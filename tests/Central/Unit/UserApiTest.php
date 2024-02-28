@@ -66,10 +66,10 @@ class UserApiTest extends TestCase
             'Accept' => 'application/json'
         ])->get('/api/user/9a90bb05-4a72-4b82-8e60-2b069a15d34a');
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
 
         $response->assertJson([
-            'message' => 'users successfully retrieved',
+            'message' => 'No user record(s) found',
             'data' => null
         ]);
     }
@@ -154,7 +154,7 @@ class UserApiTest extends TestCase
             'avatar' => ''
         ]);
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_CREATED);
 
         $response->assertJson([
             'message' => 'user successfully created.',
@@ -173,12 +173,12 @@ class UserApiTest extends TestCase
             'Accept' => 'application/json'
         ])->delete('/api/user/delete/'.$user->id);
 
-        $response->assertStatus(Response::HTTP_OK);
-
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+/*
         $response->assertJson([
             'message' => 'user successfully deleted',
             'data' => []
-        ]);
+        ]); */
     }
 
     public function getToken()

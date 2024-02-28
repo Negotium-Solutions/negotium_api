@@ -14,11 +14,19 @@ class ProcessCategoryController extends BaseAPIController
      */
     public function get(Request $request, $id = null) : Response
     {
-        $query = isset($id) ? ProcessCategory::find($id) : ProcessCategory::query();
+        try{
+            $query = isset($id) ? ProcessCategory::find($id) : ProcessCategory::query();
 
-        $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query : $query->get();
+            
+            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+                return $this->success([], 'No process catefory record(s) found', [], Response::HTTP_NOT_FOUND);
+            }
 
-        return $this->success($data, 'process categories successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($data, 'process categories successfully retrieved', [], Response::HTTP_OK);
+        }catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve process.', [], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -31,7 +39,7 @@ class ProcessCategoryController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
@@ -42,9 +50,9 @@ class ProcessCategoryController extends BaseAPIController
                 throw new \RuntimeException('Could not save process category');
             }
 
-            return $this->success(['id' => $processCategory->id], 'process category successfully created.', $request->all(), 200);
+            return $this->success(['id' => $processCategory->id], 'process category successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create process category.', []);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create process category.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -58,11 +66,15 @@ class ProcessCategoryController extends BaseAPIController
         );
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), 422);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
-            $processCategory = ProcessCategory::findOrFail($id);
+            $processCategory = ProcessCategory::find($id);
+            if((!isset($processCategory))){
+                return $this->success([], 'No process category record found to update', [], Response::HTTP_NOT_FOUND);
+            }
+
             $old_value = ProcessCategory::findOrFail($id);
             $new_value = $request->all();
 
@@ -70,7 +82,7 @@ class ProcessCategoryController extends BaseAPIController
                 throw new \RuntimeException('Could not update the process category');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the process category', $request->all(), Response::HTTP_BAD_REQUEST);
+            return $this->error($exception->getMessage(), 'There was an error trying to update the process category', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->success([], 'process category successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
@@ -83,12 +95,15 @@ class ProcessCategoryController extends BaseAPIController
     {
         try {
             $processCategory = ProcessCategory::find($id);
+            if((!isset($processCategory))){
+                return $this->success([], 'No process category record found to delete', [], Response::HTTP_NOT_FOUND);
+            }
 
             if ($processCategory->delete() === false) {
                 throw new \RuntimeException('Could not delete the process category');
             }
 
-            return $this->success([], 'process category successfully deleted', [], Response::HTTP_OK);
+            return response()->noContent();
         } catch (\Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the the process category', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

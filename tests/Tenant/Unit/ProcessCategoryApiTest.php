@@ -25,7 +25,7 @@ class ProcessCategoryApiTest extends TestCase
         ]);
     }
 
-    public function testCanProcessCategories() : void
+    public function testCanGetProcessCategories() : void
     {
         ProcessCategory::factory()->count(4)->create();
 
@@ -41,7 +41,7 @@ class ProcessCategoryApiTest extends TestCase
         $this->assertTrue(count($response['data']) === 5); // Number of users in the database, plus 1 created by getToken
     }
 
-    public function testGetUserNotFound() : void
+    public function testGetProcessCategoryNotFound() : void
     {
         ProcessCategory::factory(['name' => 'Project Allocation'])->create();
 
@@ -50,10 +50,10 @@ class ProcessCategoryApiTest extends TestCase
             'Accept' => 'application/json'
         ])->get('/api/'.$this->tenant.'/process-category/1000000000001');
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
 
         $response->assertJson([
-            'message' => 'process categories successfully retrieved',
+            'message' => 'No process catefory record(s) found',
             'data' => null
         ]);
     }
@@ -114,7 +114,7 @@ class ProcessCategoryApiTest extends TestCase
             'name' => 'Resource Allocation 2'
         ]);
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_CREATED);
 
         $response->assertJson([
             'message' => 'process category successfully created.',
@@ -131,11 +131,11 @@ class ProcessCategoryApiTest extends TestCase
             'Accept' => 'application/json'
         ])->delete('/api/'.$this->tenant.'/process-category/delete/'.$processCategory->id);
 
-        $response->assertStatus(Response::HTTP_OK);
-
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+/*
         $response->assertJson([
             'message' => 'process category successfully deleted',
             'data' => []
-        ]);
+        ]); */
     }
 }

@@ -21,7 +21,7 @@ class TenatApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/'.$this->tenant.'/tenant/'.$myTenant->id);
+        ])->get('/api/tenant/'.$myTenant->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -46,7 +46,7 @@ class TenatApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/'.$this->tenant.'/tenant');
+        ])->get('/api/tenant');
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -66,12 +66,12 @@ class TenatApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/'.$this->tenant.'/tenant/9a90bb05-4a72-4b82-8e60-2b069a15d34a');
+        ])->get('/api/tenant/9a90bb05-4a72-4b82-8e60-2b069a15d34a');
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
 
         $response->assertJson([
-            'message' => 'tenants successfully retrieved',
+            'message' => 'No tenant record(s) found',
             'data' => null
         ]);
     }
@@ -89,7 +89,7 @@ class TenatApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/'.$this->tenant.'/tenant/update/'.$tenant->id, [
+        ])->put('/api/tenant/update/'.$tenant->id, [
             'name' => 'svanheerden',
             'domain' => 'svanheerden.co.za',
             'first_name' => 'Sakhile',
@@ -104,7 +104,7 @@ class TenatApiTest extends TestCase
         ]);
 
         // Is updated
-        $response = $this->get('/api/'.$this->tenant.'/tenant/'.$tenant->id);
+        $response = $this->get('/api/tenant/'.$tenant->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
             'message' => 'tenants successfully retrieved',
@@ -128,7 +128,7 @@ class TenatApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/'.$this->tenant.'/tenant/update/'.$tenant->id, [
+        ])->put('/api/tenant/update/'.$tenant->id, [
             'email' => 'testing wrong email'
         ]);
 
@@ -145,7 +145,7 @@ class TenatApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->post('/api/'.$this->tenant.'/tenant/create', [
+        ])->post('/api/tenant/create', [
             'name' => 'tomjekkings',
             'domain' => 'tomjekkings.co.za',
             'first_name' => 'Tom',
@@ -154,7 +154,7 @@ class TenatApiTest extends TestCase
             "password" => "password"
         ]);
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_CREATED);
 
         $response->assertJson([
             'message' => 'tenant successfully created',
@@ -169,13 +169,13 @@ class TenatApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->delete('/api/'.$this->tenant.'/tenant/delete/'.$tenant->id);
+        ])->delete('/api/tenant/delete/'.$tenant->id);
 
-        $response->assertStatus(Response::HTTP_OK);
-
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+/*
         $response->assertJson([
             'message' => 'tenant successfully deleted',
             'data' => []
-        ]);
+        ]); */
     }
 }
