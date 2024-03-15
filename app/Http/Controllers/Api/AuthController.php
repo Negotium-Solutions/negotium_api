@@ -116,7 +116,6 @@ class AuthController extends Controller
             }
 
             $request = Request::create('/api/'.$domain->tenant_id.'/auth/login', 'POST');
-            // return response(['tenant' => $domain->tenant_id, 'domain_name' => $domain_name]);
             $response = Route::dispatch($request);
 
         } catch (Throwable $exception) {
@@ -128,7 +127,9 @@ class AuthController extends Controller
         }
 
         $response_data = json_decode($response->getContent(), true);
-        $response_data["data"]['tenant'] = $domain->tenant_id;
+        if (isset($response_data['code']) && $response_data['code'] === 200) {
+             $response_data["data"]['tenant'] = $domain->tenant_id;
+        }
 
         return response($response_data);
     }
