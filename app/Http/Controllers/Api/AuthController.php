@@ -158,6 +158,7 @@ class AuthController extends Controller
         activity('User')->performedOn(auth()->user())->causedBy($request->user())->log('User '.auth()->user()->email.' logged out successfully');
 
         return response([
+            'code' => SymfonyResponse::HTTP_OK,
             'message' => 'user logged out successfully',
             'data' => []
         ])->setStatusCode(SymfonyResponse::HTTP_OK);
