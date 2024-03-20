@@ -19,4 +19,8 @@ class ProcessCategory extends Model
         'name'
     ];
 
+    public function process()
+    {
+        return $this->hasMany(Process::class, 'id');
+    }
 }
