@@ -17,9 +17,9 @@ class ProcessController extends BaseAPIController
     {
         try{
             $query = isset($id) ? Process::find($id) : Process::query();
-            
+
             $data = isset($id) ? $query : $query->get();
-            
+
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No process record(s) found', [], Response::HTTP_NOT_FOUND);
             }
@@ -36,7 +36,8 @@ class ProcessController extends BaseAPIController
     public function create(Request $request) : Response
     {
         $validator = \Validator::make($request->all(),
-            ['name' => 'string|required']
+            ['name' => 'string|required'],
+            ['process_category_id' => 'integer|required']
         );
 
         if ($validator->fails()) {
@@ -46,6 +47,7 @@ class ProcessController extends BaseAPIController
         try {
             $process = new Process();
             $process->name = $request->name;
+            $process->process_category_id = $request->process_category_id;
 
             if ($process->save() === false) {
                 throw new \RuntimeException('Could not save process');

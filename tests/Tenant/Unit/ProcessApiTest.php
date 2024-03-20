@@ -111,7 +111,8 @@ class ProcessApiTest extends TestCase
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
         ])->post('/api/'.$this->tenant.'/process/create/', [
-            'name' => 'Equipment Allocation 2'
+            'name' => 'Equipment Allocation 2',
+            'process_category_id' => 1
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
@@ -132,10 +133,5 @@ class ProcessApiTest extends TestCase
         ])->delete('/api/'.$this->tenant.'/process/delete/'.$process->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
-/*
-        $response->assertJson([
-            'message' => 'process successfully deleted',
-            'data' => []
-        ]); */
     }
 }
