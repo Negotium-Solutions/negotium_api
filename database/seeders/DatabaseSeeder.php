@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(UserSeeder::class);
-        $this->call(TenantDataSeeder::class);
+        $this->call(UserSeeder::class, false, ['domain' => 'negotium-solutions.com']);
     }
 }

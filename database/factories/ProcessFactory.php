@@ -18,6 +18,7 @@ class ProcessFactory extends Factory
     {
         return [
             'name' => fake()->name,
+            'process_category_id' => rand(1, 5),
         ];
     }
 }

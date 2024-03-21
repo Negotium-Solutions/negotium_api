@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Tenant;
 use App\Models\User;
+use Database\Seeders\TenantDatabaseSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
@@ -63,6 +64,12 @@ class TenantController extends BaseAPIController
                     'email' => $request->input('email'),
                     'password' => $request->input('password')
                 ]);
+
+                // Run this using jobs
+                if ($request->input('seed_default_data') == 1) {
+                    $seeder = new TenantDatabaseSeeder();
+                    $seeder->run($request->input('domain'));
+                }
             });
 
             return $this->success(['id' => $tenant->id], 'tenant successfully created', $request->all(), Response::HTTP_CREATED);
