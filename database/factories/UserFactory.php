@@ -47,4 +47,14 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Indicate that the model's email address should be linked to the domain.
+     */
+    public function domain($domain): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'email' => fake()->firstName.'.'.fake()->lastName.'@'.$domain,
+        ]);
+    }
 }

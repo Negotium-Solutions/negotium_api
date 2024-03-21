@@ -17,10 +17,14 @@ class ProcessCategoryController extends BaseAPIController
         try{
             $query = isset($id) ? ProcessCategory::find($id) : ProcessCategory::query();
 
+            if ($request->has('with')) {
+                $query = $query->with($request->with);
+            }
+
             $data = isset($id) ? $query : $query->get();
-            
-            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
-                return $this->success([], 'No process catefory record(s) found', [], Response::HTTP_NOT_FOUND);
+
+            if ((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)) {
+                return $this->success([], 'No process category record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
             return $this->success($data, 'process categories successfully retrieved', [], Response::HTTP_OK);
