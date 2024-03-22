@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Tenant;
 
+use App\Models\Tenant\Schema as CRMSchema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
-use App\Models\Schema as CRMSchema;
+use Illuminate\Support\Facades\Validator;
 
 class SchemaController extends BaseApiController
 {
@@ -38,7 +39,7 @@ class SchemaController extends BaseApiController
     {
         $request_data = json_decode($request->getContent(), true);
 
-        $validator = \Validator::make($request_data,
+        $validator = Validator::make($request_data,
             ['name' => 'string|required'],
             ['columns' => 'required']
         );
@@ -87,7 +88,7 @@ class SchemaController extends BaseApiController
     {
         $request_data = json_decode($request->getContent(), true);
 
-        $validator = \Validator::make($request_data,
+        $validator = Validator::make($request_data,
             ['columns' => 'required']
         );
 

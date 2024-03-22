@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\Process;
+use Throwable;
+use App\Models\Tenant\Process;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Illuminate\Support\Facades\Validator;
 
 class ProcessController extends BaseAPIController
 {
@@ -24,7 +26,7 @@ class ProcessController extends BaseAPIController
             }
 
             return $this->success($data, 'processes successfully retrieved', [], Response::HTTP_OK);
-        }catch (\Throwable $exception) {
+        }catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve process.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -34,7 +36,7 @@ class ProcessController extends BaseAPIController
      */
     public function create(Request $request) : Response
     {
-        $validator = \Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             ['name' => 'string|required'],
             ['process_category_id' => 'integer|required']
         );
@@ -53,7 +55,7 @@ class ProcessController extends BaseAPIController
             }
 
             return $this->success(['id' => $process->id], 'process successfully created.', $request->all(),  Response::HTTP_CREATED);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create process.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -63,7 +65,7 @@ class ProcessController extends BaseAPIController
      */
     public function update(Request $request, $id) : Response
     {
-        $validator = \Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             ['name' => 'string|required']
         );
 
@@ -106,7 +108,7 @@ class ProcessController extends BaseAPIController
             }
 
             return response()->noContent();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the the process', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

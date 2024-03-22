@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\ProcessCategory;
+use Throwable;
+use App\Models\Tenant\ProcessCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Illuminate\Support\Facades\Validator;
 
 class ProcessCategoryController extends BaseAPIController
 {
@@ -28,7 +30,7 @@ class ProcessCategoryController extends BaseAPIController
             }
 
             return $this->success($data, 'process categories successfully retrieved', [], Response::HTTP_OK);
-        }catch (\Throwable $exception) {
+        }catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve process.', [], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -38,7 +40,7 @@ class ProcessCategoryController extends BaseAPIController
      */
     public function create(Request $request) : Response
     {
-        $validator = \Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             ['name' => 'string|required']
         );
 
@@ -55,7 +57,7 @@ class ProcessCategoryController extends BaseAPIController
             }
 
             return $this->success(['id' => $processCategory->id], 'process category successfully created.', $request->all(), Response::HTTP_CREATED);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create process category.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -65,7 +67,7 @@ class ProcessCategoryController extends BaseAPIController
      */
     public function update(Request $request, $id) : Response
     {
-        $validator = \Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             ['name' => 'string|required']
         );
 
@@ -108,7 +110,7 @@ class ProcessCategoryController extends BaseAPIController
             }
 
             return response()->noContent();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the the process category', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

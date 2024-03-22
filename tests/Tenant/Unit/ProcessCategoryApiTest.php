@@ -2,7 +2,7 @@
 
 namespace Tests\Tenant\Unit;
 
-use App\Models\ProcessCategory;
+use App\Models\Tenant\ProcessCategory;
 use Illuminate\Http\Response;
 use Tests\Tenant\TestCase;
 

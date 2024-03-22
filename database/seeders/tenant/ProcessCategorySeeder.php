@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\tenant;
 
-use App\Models\ProcessCategory;
+use App\Models\Tenant\ProcessCategory;
 use Illuminate\Database\Seeder;
 
 class ProcessCategorySeeder extends Seeder

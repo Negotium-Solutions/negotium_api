@@ -1,13 +1,13 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Tenant;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProcessCategory>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tenant\ProcessStep>
  */
-class ProcessCategoryFactory extends Factory
+class ProcessStepFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,6 +18,7 @@ class ProcessCategoryFactory extends Factory
     {
         return [
             'name' => fake()->name,
+            'process_id' => rand(1, 25),
         ];
     }
 }

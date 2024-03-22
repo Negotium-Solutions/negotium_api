@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Database\Seeders\tenant\ProcessCategorySeeder;
 use Database\Seeders\tenant\ProcessSeeder;
+use Database\Seeders\tenant\ProcessStepSeeder;
 use Illuminate\Database\Seeder;
 
 class TenantDatabaseSeeder extends Seeder
@@ -16,5 +17,6 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(UserSeeder::class, false, ['domain' => $domain]);
         $this->call(ProcessCategorySeeder::class);
         $this->call(ProcessSeeder::class);
+        $this->call(ProcessStepSeeder::class);
     }
 }

@@ -2,98 +2,98 @@
 
 namespace Tests\Tenant\Unit;
 
-use App\Models\Tenant\Process;
+use App\Models\Tenant\ProcessStep;
 use Illuminate\Http\Response;
 use Tests\Tenant\TestCase;
 
-class ProcessApiTest extends TestCase
+class ProcessStepApiTest extends TestCase
 {
-    public function testCanGetAProcess() : void
+    public function testCanGetAProcessStep() : void
     {
-        $process = Process::factory(['name' => 'On-boarding'])->create();
+        $process_step = ProcessStep::factory(['name' => 'Step 01'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/'.$this->tenant.'/process/'.$process->id);
+        ])->get('/api/'.$this->tenant.'/process-step/'.$process_step->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
-            'data' => ['name' => 'On-boarding']
+            'message' => 'process steps(s) successfully retrieved',
+            'data' => ['name' => 'Step 01']
         ]);
     }
 
-    public function testCanGetProcesses() : void
+    public function testCanGetProcessSteps() : void
     {
-        Process::factory()->count(4)->create();
+        ProcessStep::factory()->count(4)->create();
 
-        Process::factory(['name' => 'Off-boarding'])->create();
+        ProcessStep::factory(['name' => 'Step 01'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/'.$this->tenant.'/process/');
+        ])->get('/api/'.$this->tenant.'/process-step/');
 
         $response->assertStatus(Response::HTTP_OK);
 
         $this->assertTrue(count($response['data']) === 5); // Number of users in the database, plus 1 created by getToken
     }
 
-    public function testGetProcessNotFound() : void
+    public function testGetProcessStepNotFound() : void
     {
-        Process::factory(['name' => 'Off-boarding'])->create();
+        ProcessStep::factory(['name' => 'Step 01'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->get('/api/'.$this->tenant.'/process/1000000000001');
+        ])->get('/api/'.$this->tenant.'/process-step/1000000000001');
 
         $response->assertStatus(Response::HTTP_NOT_FOUND);
 
         $response->assertJson([
-            'message' => 'No process record(s) found',
+            'message' => 'No process step record(s) found',
             'data' => null
         ]);
     }
 
-    public function testCanUpdateProcess() : void
+    public function testCanUpdateProcessStep() : void
     {
-        $process = Process::factory(['name' => 'Off-boarding'])->create();
+        $processStep = ProcessStep::factory(['name' => 'Step 01'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/'.$this->tenant.'/process/update/'.$process->id, [
-            'name' => 'Equipment Allocation'
+        ])->put('/api/'.$this->tenant.'/process-step/update/'.$processStep->id, [
+            'name' => 'Step 02'
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'process successfully updated',
+            'message' => 'process step successfully updated',
             'data' => null
         ]);
 
         // Is updated
-        $response = $this->get('/api/'.$this->tenant.'/process/'.$process->id);
+        $response = $this->get('/api/'.$this->tenant.'/process-step/'.$processStep->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
-            'message' => 'processes successfully retrieved',
+            'message' => 'process steps(s) successfully retrieved',
             'data' => [
-                'name' => 'Equipment Allocation'
+                'name' => 'Step 02'
             ]
         ]);
     }
 
-    public function testCanNotUpdateProcess() : void
+    public function testCanNotUpdateProcessStep() : void
     {
-        $process = Process::factory(['name' => 'Equipment Allocation'])->create();
+        $processStep = ProcessStep::factory(['name' => 'Step 01'])->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->put('/api/'.$this->tenant.'/process/update/'.$process->id, [
+        ])->put('/api/'.$this->tenant.'/process-step/update/'.$processStep->id, [
             'name' => 1234
         ]);
 
@@ -105,32 +105,32 @@ class ProcessApiTest extends TestCase
         ]);
     }
 
-    public function testCanCreateProcess() : void
+    public function testCanCreateProcessStep() : void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->post('/api/'.$this->tenant.'/process/create/', [
-            'name' => 'Equipment Allocation 2',
-            'process_category_id' => 1
+        ])->post('/api/'.$this->tenant.'/process-step/create/', [
+            'name' => 'Step 01',
+            'process_id' => 1
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
 
         $response->assertJson([
-            'message' => 'process successfully created.',
+            'message' => 'process step successfully created.',
             'data' => []
         ]);
     }
 
-    public function testCanDeleteProcess() : void
+    public function testCanDeleteProcessStep() : void
     {
-        $process = Process::factory()->create();
+        $processStep = ProcessStep::factory()->create();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer '. $this->token,
             'Accept' => 'application/json'
-        ])->delete('/api/'.$this->tenant.'/process/delete/'.$process->id);
+        ])->delete('/api/'.$this->tenant.'/process-step/delete/'.$processStep->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
