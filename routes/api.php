@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Tenant\ProcessCategoryController;
+use App\Http\Controllers\Api\Tenant\ProcessController;
+use App\Http\Controllers\Api\Tenant\ProcessStepController;
+use App\Http\Controllers\Api\Tenant\SchemaController;
+use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\ProcessCategoryController;
-use App\Http\Controllers\Api\ProcessController;
-use App\Http\Controllers\Api\SchemaController;
-use App\Http\Controllers\Api\SchemaDataStoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,12 @@ Route::group([
     Route::post('/process/create', [ProcessController::class, 'create'])->name('api.process.create');
     Route::put('/process/update/{id}', [ProcessController::class, 'update'])->name('api.process.update');
     Route::delete('/process/delete/{id?}', [ProcessController::class, 'delete'])->name('api.process.delete');
+
+    // Process Steps routes
+    Route::get('/process-step/{id?}', [ProcessStepController::class, 'get'])->name('api.process-step');
+    Route::post('/process-step/create', [ProcessStepController::class, 'create'])->name('api.process-step.create');
+    Route::put('/process-step/update/{id}', [ProcessStepController::class, 'update'])->name('api.process-step.update');
+    Route::delete('/process-step/delete/{id?}', [ProcessStepController::class, 'delete'])->name('api.process-step.delete');
 
     // Schema routes
     Route::get('/schema/{id?}', [SchemaController::class, 'get'])->name('api.schema');

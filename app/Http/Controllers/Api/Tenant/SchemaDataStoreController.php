@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\SchemaDataStore;
+use App\Models\Tenant\Schema as CRMSchema;
+use App\Models\Tenant\SchemaDataStore;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
-use App\Models\Schema as CRMSchema;
+use Illuminate\Support\Facades\Validator;
 
 class SchemaDataStoreController extends BaseApiController
 {
@@ -17,7 +18,7 @@ class SchemaDataStoreController extends BaseApiController
     {
         $request_data = json_decode($request->getContent(), true);
 
-        $validator = \Validator::make($request_data,
+        $validator = Validator::make($request_data,
             ['schema_id' => 'integer|required']
         );
 
@@ -50,7 +51,7 @@ class SchemaDataStoreController extends BaseApiController
     {
         $request_data = json_decode($request->getContent(), true);
 
-        $validator = \Validator::make($request_data,
+        $validator = Validator::make($request_data,
             ['schema_id' => 'integer|required'],
             ['data' => 'required']
         );
@@ -87,7 +88,7 @@ class SchemaDataStoreController extends BaseApiController
     {
         $request_data = json_decode($request->getContent(), true);
 
-        $validator = \Validator::make($request_data,
+        $validator = Validator::make($request_data,
             ['schema_id' => 'integer|required'],
             ['data' => 'required']
         );
@@ -129,7 +130,7 @@ class SchemaDataStoreController extends BaseApiController
     {
         $request_data = json_decode($request->getContent(), true);
 
-        $validator = \Validator::make($request_data,
+        $validator = Validator::make($request_data,
             ['schema_id' => 'integer|required']
         );
 

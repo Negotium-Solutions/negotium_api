@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Tenant;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Process>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tenant\Process>
  */
 class ProcessFactory extends Factory
 {
