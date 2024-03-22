@@ -53,7 +53,7 @@ class ProcessCategoryApiTest extends TestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
 
         $response->assertJson([
-            'message' => 'No process catefory record(s) found',
+            'message' => 'No process category record(s) found',
             'data' => null
         ]);
     }

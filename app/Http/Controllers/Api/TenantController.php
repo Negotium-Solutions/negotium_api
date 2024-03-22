@@ -8,6 +8,7 @@ use Database\Seeders\TenantDatabaseSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Illuminate\Support\Facades\Validator;
 
 class TenantController extends BaseAPIController
 {
@@ -36,12 +37,13 @@ class TenantController extends BaseAPIController
      */
     public function create(Request $request) : Response
     {
-        $validator = \Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             ['name' => 'string|required'],
             ['domain' => 'string|required'],
             ['first_name' => 'string|required'],
             ['last_name' => 'string|required'],
-            ['email' => 'email|required']
+            ['email' => 'email|required'],
+            ['seed_default_data' => 'integer|required']
         );
 
         if ($validator->fails()) {
@@ -83,7 +85,7 @@ class TenantController extends BaseAPIController
      */
     public function update(Request $request, $id) : Response
     {
-        $validator = \Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             ['name' => 'string|required']
         );
 
