@@ -172,10 +172,5 @@ class TenatApiTest extends TestCase
         ])->delete('/api/tenant/delete/'.$tenant->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
-/*
-        $response->assertJson([
-            'message' => 'tenant successfully deleted',
-            'data' => []
-        ]); */
     }
 }
