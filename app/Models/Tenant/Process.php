@@ -17,4 +17,9 @@ class Process extends Model
     {
         return $this->belongsTo(ProcessCategory::class, 'process_category_id');
     }
+
+    public function steps()
+    {
+        return $this->hasMany(ProcessStep::class, 'process_id');
+    }
 }
