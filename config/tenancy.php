@@ -5,6 +5,18 @@ declare(strict_types=1);
 use Stancl\Tenancy\Database\Models\Domain;
 use Stancl\Tenancy\Database\Models\Tenant;
 
+$central_domain = ['127.0.0.1','localhost'];
+
+switch (env('APP_ENV')) {
+    case "testing":
+    case "local":
+        $central_domain = ['127.0.0.1','localhost'];
+    break;
+    case "production":
+        $central_domain = ['app.negotium-solutions.com'];
+    break;
+}
+
 return [
     // 'tenant_model' => Tenant::class,
     'tenant_model' => \App\Models\Tenant::class,
@@ -17,7 +29,7 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-    'central_domains' => env('APP_ENV') === 'local' || env('APP_ENV') === 'testing' ? ['127.0.0.1','localhost'] : ['app.negotium-solutions.com'],
+    'central_domains' => $central_domain,
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
      * Their responsibility is making Laravel features tenant-aware.
