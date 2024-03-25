@@ -13,7 +13,7 @@ switch (env('APP_ENV')) {
         $central_domain = ['127.0.0.1','localhost'];
     break;
     case "production":
-        $central_domain = ['app.negotium-solutions.com'];
+        $central_domain = ['api.negotium-solutions.com'];
     break;
 }
 
