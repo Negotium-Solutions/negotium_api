@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function() {
-    return view('swagger.index');
+    $parameters = [
+        'app_url' => env('APP_URL')
+    ];
+
+    return view('swagger.index', $parameters);
 });

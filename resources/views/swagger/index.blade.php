@@ -12,6 +12,9 @@
 
     <body>
         <div id="swagger-ui"></div>
+        <script>
+            let app_url = "{{$app_url}}";
+        </script>
         <script src="{{asset('swagger/swagger-ui-bundle.js')}}" charset="UTF-8"> </script>
         <script src="{{asset('swagger/swagger-ui-standalone-preset.js')}}" charset="UTF-8"> </script>
         <script src="{{asset('swagger/swagger-initializer.js')}}" charset="UTF-8"> </script>
