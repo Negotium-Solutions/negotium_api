@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\TenantController;
 |
 */
 
-Route::post('/auth/signin', [AuthController::class, 'getTenantAndLogin'])->name('auth.login-tenant');
+Route::post('/auth/signin', [AuthController::class, 'getTenantAndLogin'])->name('auth.signin');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth:sanctum');
 
