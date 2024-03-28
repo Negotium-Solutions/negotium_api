@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use \App\Models\Domain;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -115,7 +114,7 @@ class AuthController extends Controller
                 ])->setStatusCode(SymfonyResponse::HTTP_NOT_FOUND);
             }
 
-            $request = Request::create('/api/'.$domain->tenant_id.'/auth/login', 'POST');
+            $request = Request::create(env('APP_URL').'/api/'.$domain->tenant_id.'/auth/login', 'POST');
             $response = Route::dispatch($request);
 
         } catch (Throwable $exception) {
