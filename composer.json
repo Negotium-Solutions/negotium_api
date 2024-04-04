@@ -6,13 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
+        "darkaonline/l5-swagger": "^8.6",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "rikscss/base-api": "@dev",
         "spatie/laravel-activitylog": "^4.7",
-        "stancl/tenancy": "^3.7"
+        "stancl/tenancy": "^3.7",
+        "zircote/swagger-php": "^4.8"
     },
     "repositories": [{
         "type": "path",
