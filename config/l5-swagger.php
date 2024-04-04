@@ -77,7 +77,7 @@ return [
             /*
              * Absolute path to location where parsed annotations will be stored
             */
-            'docs' => storage_path('swagger'),
+            'docs' => public_path('swagger/collection'),
 
             /*
              * Absolute path to directory where to export views
