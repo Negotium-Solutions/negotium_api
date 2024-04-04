@@ -10,7 +10,37 @@ use App\Models\User;
 class UserController extends BaseAPIController
 {
     /**
-     * Get user(s) resource(s).
+     * Get user(s)
+     *
+     * @OA\Get(
+     *       path="/{tenant}/user/{id}",
+     *       summary="Get a user",
+     *       operationId="getUser",
+     *       tags={"User"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Parameter(name="id", description="User Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  ),
+     *
+     * @OA\Get(
+     *       path="/{tenant}/user",
+     *       summary="Get users",
+     *       operationId="getUsers",
+     *       tags={"User"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  )
+     *
+     * @param Request $request
+     * @param Request $id
+     * @return Response
+     * @throws Exception
      */
     public function get(Request $request, $id = null) : Response
     {
@@ -30,7 +60,23 @@ class UserController extends BaseAPIController
     }
 
     /**
-     * Store a newly created user.
+     * Create a new user.
+     *
+     * @OA\Post(
+     *        path="/{tenant}/user/create",
+     *        summary="Create a new user",
+     *        operationId="createUser",
+     *        tags={"User"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=500,description="Internal server error")
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     * @throws Exception
      */
     public function create(Request $request) : Response
     {
@@ -65,7 +111,24 @@ class UserController extends BaseAPIController
     }
 
     /**
-     * Update the user.
+     * Update a user BY ID.
+     *
+     * @OA\Put(
+     *        path="/{tenant}/user/update/{id}",
+     *        summary="Update a user",
+     *        operationId="updateUser",
+     *        tags={"User"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Parameter(name="id", description="User Id", required=true, in="path", @OA\Schema( type="string" )),
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=404,description="Not found")
+     *   ),
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
     public function update(Request $request, $id) : Response
     {
@@ -96,7 +159,22 @@ class UserController extends BaseAPIController
     }
 
     /**
-     * Delete the user.
+     * Delete a user by ID.
+     *
+     * @OA\Delete(
+     *      path="/{tenant}/user/delete/{id}",
+     *      operationId="deleteUserById",
+     *      tags={"User"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @param String $id
+     * @return Response
+     * @throws Exception
      */
     public function delete($id) : Response
     {
