@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\tenant\ClientSeeder;
 use Database\Seeders\tenant\ProcessCategorySeeder;
 use Database\Seeders\tenant\ProcessSeeder;
 use Database\Seeders\tenant\ProcessStepSeeder;
@@ -18,5 +19,6 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(ProcessCategorySeeder::class);
         $this->call(ProcessSeeder::class);
         $this->call(ProcessStepSeeder::class);
+        $this->call(ClientSeeder::class);
     }
 }
