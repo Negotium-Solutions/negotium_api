@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Http\Controllers\Controller;
 use App\Models\Tenant\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class ClientController extends Controller
+class ClientController extends BaseAPIController
 {
     /**
      * Get client(s)
@@ -82,9 +82,7 @@ class ClientController extends Controller
     {
         $validator = \Validator::make($request->all(),
             ['first_name' => 'string|required'],
-            ['last_name' => 'string|required'],
-            ['email' => 'unique:email|email|required'],
-            ['password' => 'required|required|confirmed']
+            ['last_name' => 'string|required']
         );
 
         if ($validator->fails()) {
@@ -95,10 +93,6 @@ class ClientController extends Controller
             $client = new Client();
             $client->first_name = $request->first_name;
             $client->last_name = $request->last_name;
-            $client->email = $request->email;
-            $client->email_verified_at = now();
-            $client->password = $request->password;
-            $client->avatar = $request->avatar;
 
             if ($client->save() === false) {
                 throw new \RuntimeException('Could not save client');
@@ -133,7 +127,8 @@ class ClientController extends Controller
     public function update(Request $request, $id) : Response
     {
         $validator = \Validator::make($request->all(),
-            ['email' => 'email']
+            ['first_name' => 'string'],
+            ['last_name' => 'string']
         );
 
         if ($validator->fails()) {

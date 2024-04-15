@@ -17,6 +17,6 @@ class ClientSeeder extends Seeder
             'last_name' => 'Riks'
         ])->create();
 
-        User::factory(4)->create();
+        Client::factory(4)->create();
     }
 }

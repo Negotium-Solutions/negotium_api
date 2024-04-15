@@ -38,13 +38,13 @@ Generate SSH Key for repo access
         </ul>
     </li>
     <li>
-        Clear all tenants databases
+        Clear all databases
         <ul>
             <li>[sail/php] artisan migrate:fresh</li>
         </ul>
     </li>
     <li>
-        Seed tenants data
+        Seed data
         <ul>
             <li>[sail/php] artisan migrate --seed</li>
         </ul>
@@ -72,3 +72,9 @@ Generate SSH Key for repo access
         </ul>
     </li>
 </ol>
+
+<p style="font-weight: bold;">Deploy the Swagger API</p>
+<p>When working on the API, make sure you always update new endpoints with swagger documentation annotations as function comments, so the documentation is always up to date.</p>
+<ul>
+    <li>[sail/php] artisan l5-swagger:generate</li>
+</ul>
