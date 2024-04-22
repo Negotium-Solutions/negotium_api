@@ -18,4 +18,9 @@ class ProcessStep extends Model
     {
         return $this->belongsTo(Process::class, 'process_id');
     }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

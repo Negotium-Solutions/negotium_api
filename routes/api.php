@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Tenant\ProcessCategoryController;
 use App\Http\Controllers\Api\Tenant\ProcessController;
 use App\Http\Controllers\Api\Tenant\ProcessStepController;
+use App\Http\Controllers\Api\Tenant\ActivityController;
 use App\Http\Controllers\Api\Tenant\SchemaController;
 use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
 use App\Http\Controllers\Api\Tenant\ClientController;
@@ -60,6 +61,12 @@ Route::group([
     Route::post('/process-step/create', [ProcessStepController::class, 'create'])->name('api.process-step.create');
     Route::put('/process-step/update/{id}', [ProcessStepController::class, 'update'])->name('api.process-step.update');
     Route::delete('/process-step/delete/{id?}', [ProcessStepController::class, 'delete'])->name('api.process-step.delete');
+
+    // Activities routes
+    Route::get('/activity/{id?}', [ActivityController::class, 'get'])->name('api.activity');
+    Route::post('/activity/create', [ActivityController::class, 'create'])->name('api.activity.create');
+    Route::put('/activity/update/{id}', [ActivityController::class, 'update'])->name('api.activity.update');
+    Route::delete('/activity/delete/{id?}', [ActivityController::class, 'delete'])->name('api.activity.delete');
 
     // Schema routes
     Route::get('/schema/{id?}', [SchemaController::class, 'get'])->name('api.schema');
