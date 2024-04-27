@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Http\Controllers\Api\ApiInterface;
 use App\Models\Tenant\Activity;
 use App\Services\SchemaService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class ActivityController extends BaseAPIController
+class ActivityController extends BaseAPIController implements ApiInterface
 {
     public function __construct(protected SchemaService $schemaService)
     {
@@ -50,15 +51,19 @@ class ActivityController extends BaseAPIController
     public function get(Request $request, int $id = null) : Response
     {
         try{
-            $query = isset($id) ? Activity::find($id) : Activity::query();
+            $query = isset($id) ? Activity::where('id', $id) : Activity::query();
 
-            $data = isset($id) ? $query : $query->get();
+            if ($request->has('with') && ($request->input('with') != '')) {
+                $query = $query->with($request->with);
+            }
+
+            $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No activity record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
-            return $this->success($data, 'activities successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($data, 'Activities successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -74,7 +79,17 @@ class ActivityController extends BaseAPIController
      *        tags={"Activity"},
      *        security = {{"BearerAuth": {}}},
      *        description="Authenticate using a bearer token",
-     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  example={"process_step_id":2,"name":"activity","columns":{{"name":"name","type":"string","attributes":{"required":1,"indent":0,"is_id":0,"is_passport":0}},{"name":"email","type":"string","attributes":{"required":1,"indent":0,"is_id":0,"is_passport":0}},{"name":"age","type":"integer","attributes":{"required":1,"indent":0,"is_id":0,"is_passport":0}},{"name":"biography","type":"text","attributes":{"required":1,"indent":0,"is_id":0,"is_passport":0}}}}
+     *              )
+     *          )
+     *        ),
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent(
+     *            @OA\Property(property="data", type="object", example={"code":201,"message":"Activity successfully created.","data":{"id":7}}),
+     *        )),
      *        @OA\Response(response=422,description="Input validation error"),
      *        @OA\Response(response=500,description="Internal server error")
      * )
@@ -86,7 +101,7 @@ class ActivityController extends BaseAPIController
     public function create(Request $request) : Response
     {
         $validator = \Validator::make($request->all(),
-            ['step_id' => 'integer|required'],
+            ['process_step_id' => 'integer|required'],
             ['name' => 'string|required'],
             ['columns' => 'required']
         );
@@ -97,7 +112,7 @@ class ActivityController extends BaseAPIController
 
         try {
             $activity = new Activity();
-            $activity->process_step_id = $request->step_id;
+            $activity->process_step_id = $request->process_step_id;
 
             if ($activity->save() === false) {
                 throw new \RuntimeException('Could not save activity');
@@ -108,7 +123,7 @@ class ActivityController extends BaseAPIController
             $request->merge(['parent_id' => $activity->id]);
             $this->schemaService->create($request);
 
-            return $this->success(['id' => $activity->id], 'activity successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $activity->id], 'Activity successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create activity.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -134,10 +149,10 @@ class ActivityController extends BaseAPIController
      * @param $id
      * @return Response
      */
-    public function update(Request $request, $id) : Response
+    public function update(Request $request, int $id) : Response
     {
         $validator = \Validator::make($request->all(),
-            ['email' => 'email']
+            ['columns' => 'required']
         );
 
         if ($validator->fails()) {
@@ -145,21 +160,12 @@ class ActivityController extends BaseAPIController
         }
 
         try {
-            $activity = Activity::find($id);
-            if((!isset($activity))){
-                return $this->success([], 'No activity record found to update', [], Response::HTTP_NOT_FOUND);
-            }
-            $old_value = Activity::findOrFail($id);
-            $new_value = $request->all();
-
-            if ($activity->updateOrFail($request->all()) === false) {
-                throw new \RuntimeException('Could not update activity');
-            }
+            $this->schemaService->update($request, $id);
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'There was an error trying to update the activity', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success([], 'activity successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success([], 'activity successfully updated', $request->all(), Response::HTTP_OK, [], []);
     }
 
     /**
@@ -180,7 +186,7 @@ class ActivityController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    public function delete($id) : Response
+    public function delete(int $id) : Response
     {
         try {
             $activity = Activity::find($id);

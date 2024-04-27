@@ -12,18 +12,48 @@ use Illuminate\Support\Facades\Validator;
 class ProcessCategoryController extends BaseAPIController
 {
     /**
-     * Get process category(s) resource(s).
+     * Get process categor(y)(ies)
+     *
+     * @OA\Get(
+     *       path="/{tenant}/process-category/{id}",
+     *       summary="Get a Process Category",
+     *       operationId="getProcessCategory",
+     *       tags={"Process Category"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Parameter(name="id", description="Process Category Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  ),
+     *
+     * @OA\Get(
+     *       path="/{tenant}/process-category",
+     *       summary="Get Process Categories",
+     *       operationId="getProcessCategories",
+     *       tags={"Process Category"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  )
+     *
+     * @param Request $request
+     * @param Request $id
+     * @return Response
+     * @throws Exception
      */
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? ProcessCategory::find($id) : ProcessCategory::query();
+            $query = isset($id) ? ProcessCategory::where('id', $id) : ProcessCategory::query();
 
             if ($request->has('with')) {
                 $query = $query->with($request->with);
             }
 
-            $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query->first() : $query->get();
 
             if ((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)) {
                 return $this->success([], 'No process category record(s) found', [], Response::HTTP_NOT_FOUND);
@@ -36,7 +66,23 @@ class ProcessCategoryController extends BaseAPIController
     }
 
     /**
-     * Store a newly created process category
+     * Create a new process category.
+     *
+     * @OA\Post(
+     *        path="/{tenant}/process-category/create",
+     *        summary="Create a new process category",
+     *        operationId="createProcessCategory",
+     *        tags={"Process Category"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=500,description="Internal server error")
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     * @throws Exception
      */
     public function create(Request $request) : Response
     {
@@ -63,7 +109,24 @@ class ProcessCategoryController extends BaseAPIController
     }
 
     /**
-     * Update the the process category
+     * Update a process category BY ID.
+     *
+     * @OA\Put(
+     *        path="/{tenant}/process-category/update/{id}",
+     *        summary="Update a ProcessCategory",
+     *        operationId="updateProcessCategory",
+     *        tags={"Process Category"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Parameter(name="id", description="Process Category Id", required=true, in="path", @OA\Schema( type="string" )),
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=404,description="Not found")
+     *   ),
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
     public function update(Request $request, $id) : Response
     {
@@ -95,7 +158,22 @@ class ProcessCategoryController extends BaseAPIController
     }
 
     /**
-     * Delete the process category
+     * Delete a Process Category by ID.
+     *
+     * @OA\Delete(
+     *      path="/{tenant}/process-category/delete/{id}",
+     *      operationId="deleteProcessCategoryById",
+     *      tags={"Process Category"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @param String $id
+     * @return Response
+     * @throws Exception
      */
     public function delete($id) : Response
     {

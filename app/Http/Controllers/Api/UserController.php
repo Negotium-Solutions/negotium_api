@@ -45,9 +45,9 @@ class UserController extends BaseAPIController
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? User::find($id) : User::query();
+            $query = isset($id) ? User::where('id', $id) : User::query();
 
-            $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No user record(s) found', [], Response::HTTP_NOT_FOUND);

@@ -18,9 +18,9 @@ class TenantController extends BaseAPIController
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Tenant::find($id) : Tenant::query();
+            $query = isset($id) ? Tenant::where('id', $id) : Tenant::query();
 
-            $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No tenant record(s) found', [], Response::HTTP_NOT_FOUND);

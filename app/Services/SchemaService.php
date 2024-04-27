@@ -22,12 +22,12 @@ class SchemaService
         return $this->schemaRepositoryInterface->create($request);
     }
 
-    public function update(Request $request, int $id) : Response
+    public function update(Request $request, int $id) : Array
     {
         return $this->schemaRepositoryInterface->update($request, $id);
     }
 
-    public function delete(int $id) : Response
+    public function delete(int $id) : Array
     {
         return $this->schemaRepositoryInterface->delete($id);
     }

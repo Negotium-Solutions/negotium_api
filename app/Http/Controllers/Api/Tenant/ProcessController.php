@@ -12,14 +12,44 @@ use Illuminate\Support\Facades\Validator;
 class ProcessController extends BaseAPIController
 {
     /**
-     * Get process(s) resource(s).
+     * Get process categor(y)(ies)
+     *
+     * @OA\Get(
+     *       path="/{tenant}/process/{id}",
+     *       summary="Get a Process",
+     *       operationId="getProcess",
+     *       tags={"Process"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Parameter(name="id", description="Process Category Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  ),
+     *
+     * @OA\Get(
+     *       path="/{tenant}/process",
+     *       summary="Get Processes",
+     *       operationId="getProcesses",
+     *       tags={"Process"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  )
+     *
+     * @param Request $request
+     * @param Request $id
+     * @return Response
+     * @throws Exception
      */
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Process::find($id) : Process::query();
+            $query = isset($id) ? Process::where('id', $id) : Process::query();
 
-            $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No process record(s) found', [], Response::HTTP_NOT_FOUND);
@@ -32,7 +62,23 @@ class ProcessController extends BaseAPIController
     }
 
     /**
-     * Store a newly created process
+     * Create a new process category.
+     *
+     * @OA\Post(
+     *        path="/{tenant}/process/create",
+     *        summary="Create a new process",
+     *        operationId="createProcess",
+     *        tags={"Process"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=500,description="Internal server error")
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     * @throws Exception
      */
     public function create(Request $request) : Response
     {
@@ -61,7 +107,24 @@ class ProcessController extends BaseAPIController
     }
 
     /**
-     * Update the the process
+     * Update a process category BY ID.
+     *
+     * @OA\Put(
+     *        path="/{tenant}/process/update/{id}",
+     *        summary="Update a Process",
+     *        operationId="updateProcess",
+     *        tags={"Process"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Parameter(name="id", description="Process Id", required=true, in="path", @OA\Schema( type="string" )),
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=404,description="Not found")
+     *   ),
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
     public function update(Request $request, $id) : Response
     {
@@ -93,7 +156,22 @@ class ProcessController extends BaseAPIController
     }
 
     /**
-     * Delete the process
+     * Delete a Process by ID.
+     *
+     * @OA\Delete(
+     *      path="/{tenant}/process/delete/{id}",
+     *      operationId="deleteProcessById",
+     *      tags={"Process"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @param String $id
+     * @return Response
+     * @throws Exception
      */
     public function delete($id) : Response
     {

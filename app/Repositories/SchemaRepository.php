@@ -47,6 +47,8 @@ class SchemaRepository implements SchemaRepositoryInterface
 
             Schema::create($schema->name, function (Blueprint $table) use ($columns) {
                 $table->bigIncrements('id');
+                $table->integer('schema_id')->nullable();
+                $table->integer('data_owner_id')->nullable();
                 foreach ($columns as $column) {
                     $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column['attributes']));
                 }
@@ -63,26 +65,14 @@ class SchemaRepository implements SchemaRepositoryInterface
     /**
      * Update a schema
      */
-    public function update(Request $request, int $id) : Response
+    public function update(Request $request, int $id) : Array
     {
         $request_data = json_decode($request->getContent(), true);
-
-        $validator = Validator::make($request_data,
-            ['columns' => 'required']
-        );
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
 
         $columns = $request_data['columns'];
 
         try {
             $schema = CRMSchema::find($id);
-            if((!isset($tenant))){
-                return $this->success([], 'No schema record found to update', [], Response::HTTP_NOT_FOUND);
-            }
-
             $schema->columns = json_encode($columns);
             $schema->save();
 
@@ -104,16 +94,16 @@ class SchemaRepository implements SchemaRepositoryInterface
                 }
             });
 
-            return $this->success(['table' => $schema->name], 'Schema successfully updated.', $request->all(), Response::HTTP_OK);
+            return ['message' => 'Schema successfully updated.', 'request' => $request->all()];
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to update schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ['error' => $exception->getMessage()];
         }
     }
 
     /**
      * Delete the schema
      */
-    public function delete(int $id) : Response
+    public function delete(int $id) : Array
     {
         try {
             $schema = CRMSchema::find($id);
@@ -134,7 +124,7 @@ class SchemaRepository implements SchemaRepositoryInterface
     /**
      * Get columns.
      */
-    public function getColumns(int $id) : Response
+    public function getColumns(int $id) : Array
     {
         try{
             $schema = CRMSchema::find($id);
@@ -142,12 +132,12 @@ class SchemaRepository implements SchemaRepositoryInterface
             $data = $schema->getColumns();
 
             if((!isset($data)) || (!isset($data['data']))){
-                return $this->success([], 'No tenant record(s) found', [], Response::HTTP_NOT_FOUND);
+                return ['message' => 'No tenant record(s) found'];
             }
 
-            return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
+            return ['message' => 'schemas successfully retrieved'];
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ['message' => 'An error occurred while trying to retrieve tenant.'];
         }
     }
 

@@ -18,9 +18,9 @@ class SchemaController extends BaseApiController
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? CRMSchema::find($id) : CRMSchema::query();
+            $query = isset($id) ? CRMSchema::where('id', $id) : CRMSchema::query();
 
-            $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No schema record(s) found', [], Response::HTTP_NOT_FOUND);

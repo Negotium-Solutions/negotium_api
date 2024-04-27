@@ -11,7 +11,7 @@ interface SchemaRepositoryInterface
 
     public function create(Request $request) : Array;
 
-    public function update(Request $request, int $id) : Response;
+    public function update(Request $request, int $id) : Array;
 
-    public function delete(int $id) : Response;
+    public function delete(int $id) : Array;
 }

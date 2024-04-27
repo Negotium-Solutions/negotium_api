@@ -34,4 +34,9 @@ class Schema extends Model
 
         return $columns;
     }
+
+    public function data()
+    {
+        return $this->hasOne(SchemaDataStore::class, 'schema_id');
+    }
 }
