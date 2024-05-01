@@ -18,6 +18,7 @@ class ProcessCategoryFactory extends Factory
     {
         return [
             'name' => fake()->name,
+            'color' => fake()->colorName
         ];
     }
 }
