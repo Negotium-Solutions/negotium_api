@@ -10,5 +10,5 @@ class SchemaDataStore extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = '';
+    protected $table = 'activity_1';
 }

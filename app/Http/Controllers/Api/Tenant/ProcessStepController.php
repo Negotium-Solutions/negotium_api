@@ -12,18 +12,48 @@ use Throwable;
 class ProcessStepController extends BaseAPIController
 {
     /**
-     * Get process step(s) resource(s).
+     * Get process step(s)
+     *
+     * @OA\Get(
+     *       path="/{tenant}/process-step/{id}",
+     *       summary="Get a Process Step",
+     *       operationId="getProcessStep",
+     *       tags={"Process Step"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Parameter(name="id", description="Process Category Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  ),
+     *
+     * @OA\Get(
+     *       path="/{tenant}/process-step",
+     *       summary="Get Process Steps",
+     *       operationId="getProcessSteps",
+     *       tags={"Process Step"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  )
+     *
+     * @param Request $request
+     * @param Request $id
+     * @return Response
+     * @throws Exception
      */
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? ProcessStep::find($id) : ProcessStep::query();
+            $query = isset($id) ? ProcessStep::where('id', $id) : ProcessStep::query();
 
             if ($request->has('with') && ($request->input('with') != '')) {
                 $query = $query->with($request->with);
             }
 
-            $data = isset($id) ? $query : $query->get();
+            $data = isset($id) ? $query->first() : $query->get();
 
             if ((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)) {
                 return $this->success([], 'No process step record(s) found', [], Response::HTTP_NOT_FOUND);
@@ -36,7 +66,23 @@ class ProcessStepController extends BaseAPIController
     }
 
     /**
-     * Store a newly created process step
+     * Create a new process step.
+     *
+     * @OA\Post(
+     *        path="/{tenant}/process-step/create",
+     *        summary="Create a new process step",
+     *        operationId="createProcessStep",
+     *        tags={"Process Step"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=500,description="Internal server error")
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     * @throws Exception
      */
     public function create(Request $request) : Response
     {
@@ -65,7 +111,24 @@ class ProcessStepController extends BaseAPIController
     }
 
     /**
-     * Update the the process step
+     * Update a process step BY ID.
+     *
+     * @OA\Put(
+     *        path="/{tenant}/process-step/update/{id}",
+     *        summary="Update a ProcessStep",
+     *        operationId="updateProcessStep",
+     *        tags={"Process Step"},
+     *        security = {{"BearerAuth": {}}},
+     *        description="Authenticate using a bearer token",
+     *        @OA\Parameter(name="id", description="Process Step Id", required=true, in="path", @OA\Schema( type="string" )),
+     *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *        @OA\Response(response=422,description="Input validation error"),
+     *        @OA\Response(response=404,description="Not found")
+     *   ),
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
     public function update(Request $request, $id) : Response
     {
@@ -97,7 +160,22 @@ class ProcessStepController extends BaseAPIController
     }
 
     /**
-     * Delete the process step
+     * Delete a Process Step by ID.
+     *
+     * @OA\Delete(
+     *      path="/{tenant}/process-step/delete/{id}",
+     *      operationId="deleteProcessStepById",
+     *      tags={"Process Step"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @param String $id
+     * @return Response
+     * @throws Exception
      */
     public function delete($id) : Response
     {

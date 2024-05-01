@@ -1,52 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Api\Tenant;
+namespace App\Repositories;
 
 use App\Models\Tenant\Schema as CRMSchema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
-use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 use Illuminate\Support\Facades\Validator;
 
-class SchemaController extends BaseApiController
+class SchemaRepository implements SchemaRepositoryInterface
 {
-    /**
-     * Get schema(s) resource(s).
-     */
-    public function get(Request $request, $id = null) : Response
+    public function get(Request $request, int $id = null): Array
     {
-        try{
-            $query = isset($id) ? CRMSchema::where('id', $id) : CRMSchema::query();
+        $query = isset($id) ? CRMSchema::find($id) : CRMSchema::query();
 
-            $data = isset($id) ? $query->first() : $query->get();
+        $data = isset($id) ? $query : $query->get();
 
-            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
-                return $this->success([], 'No schema record(s) found', [], Response::HTTP_NOT_FOUND);
-            }
-
-            return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
-        } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return  $data->toArray();
     }
 
     /**
      * Store a newly created schema
      */
-    public function create(Request $request) : Response
+    public function create(Request $request) : Array
     {
         $request_data = json_decode($request->getContent(), true);
-
-        $validator = Validator::make($request_data,
-            ['name' => 'string|required'],
-            ['columns' => 'required']
-        );
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
 
         try {
             $table = $this->toCleanString($request_data['name']);
@@ -68,6 +47,8 @@ class SchemaController extends BaseApiController
 
             Schema::create($schema->name, function (Blueprint $table) use ($columns) {
                 $table->bigIncrements('id');
+                $table->integer('schema_id')->nullable();
+                $table->integer('data_owner_id')->nullable();
                 foreach ($columns as $column) {
                     $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column['attributes']));
                 }
@@ -75,35 +56,23 @@ class SchemaController extends BaseApiController
                 $table->softDeletes();
             });
 
-            return $this->success(['table' => $table], 'Schema successfully created.', $request->all(), Response::HTTP_CREATED);
+            return [['table' => $table], 'message' => 'Schema successfully created.', 'request' => $request->all()];
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ['error' => $exception->getMessage()];
         }
     }
 
     /**
      * Update a schema
      */
-    public function update(Request $request, $id) : Response
+    public function update(Request $request, int $id) : Array
     {
         $request_data = json_decode($request->getContent(), true);
-
-        $validator = Validator::make($request_data,
-            ['columns' => 'required']
-        );
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
 
         $columns = $request_data['columns'];
 
         try {
             $schema = CRMSchema::find($id);
-            if((!isset($tenant))){
-                return $this->success([], 'No schema record found to update', [], Response::HTTP_NOT_FOUND);
-            }
-
             $schema->columns = json_encode($columns);
             $schema->save();
 
@@ -125,16 +94,16 @@ class SchemaController extends BaseApiController
                 }
             });
 
-            return $this->success(['table' => $schema->name], 'Schema successfully updated.', $request->all(), Response::HTTP_OK);
+            return ['message' => 'Schema successfully updated.', 'request' => $request->all()];
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to update schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ['error' => $exception->getMessage()];
         }
     }
 
     /**
      * Delete the schema
      */
-    public function delete($id) : Response
+    public function delete(int $id) : Array
     {
         try {
             $schema = CRMSchema::find($id);
@@ -155,7 +124,7 @@ class SchemaController extends BaseApiController
     /**
      * Get columns.
      */
-    public function getColumns($id) : Response
+    public function getColumns(int $id) : Array
     {
         try{
             $schema = CRMSchema::find($id);
@@ -163,16 +132,16 @@ class SchemaController extends BaseApiController
             $data = $schema->getColumns();
 
             if((!isset($data)) || (!isset($data['data']))){
-                return $this->success([], 'No tenant record(s) found', [], Response::HTTP_NOT_FOUND);
+                return ['message' => 'No tenant record(s) found'];
             }
 
-            return $this->success($data, 'schemas successfully retrieved', [], Response::HTTP_OK);
+            return ['message' => 'schemas successfully retrieved'];
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ['message' => 'An error occurred while trying to retrieve tenant.'];
         }
     }
 
-    public function toCleanString($fieldName): string
+    public function toCleanString(string $fieldName): string
     {
         $fieldName = trim($fieldName);
         $fieldName = str_replace(' ', 'abcba', $fieldName); // placeholder

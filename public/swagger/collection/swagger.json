@@ -16,6 +16,252 @@
         }
     ],
     "paths": {
+        "/{tenant}/activity/{id}": {
+            "get": {
+                "tags": [
+                    "Activity"
+                ],
+                "summary": "Get a activity",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getActivity",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Activity Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/activity": {
+            "get": {
+                "tags": [
+                    "Activity"
+                ],
+                "summary": "Get Activities",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getActivities",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/activity/create": {
+            "post": {
+                "tags": [
+                    "Activity"
+                ],
+                "summary": "Create a new activity",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createActivity",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "process_step_id": 2,
+                                    "name": "activity",
+                                    "columns": [
+                                        {
+                                            "name": "name",
+                                            "type": "string",
+                                            "attributes": {
+                                                "required": 1,
+                                                "indent": 0,
+                                                "is_id": 0,
+                                                "is_passport": 0
+                                            }
+                                        },
+                                        {
+                                            "name": "email",
+                                            "type": "string",
+                                            "attributes": {
+                                                "required": 1,
+                                                "indent": 0,
+                                                "is_id": 0,
+                                                "is_passport": 0
+                                            }
+                                        },
+                                        {
+                                            "name": "age",
+                                            "type": "integer",
+                                            "attributes": {
+                                                "required": 1,
+                                                "indent": 0,
+                                                "is_id": 0,
+                                                "is_passport": 0
+                                            }
+                                        },
+                                        {
+                                            "name": "biography",
+                                            "type": "text",
+                                            "attributes": {
+                                                "required": 1,
+                                                "indent": 0,
+                                                "is_id": 0,
+                                                "is_passport": 0
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "example": {
+                                                "code": 201,
+                                                "message": "Activity successfully created.",
+                                                "data": {
+                                                    "id": 7
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/activity/update/{id}": {
+            "put": {
+                "tags": [
+                    "Activity"
+                ],
+                "summary": "Update a activity",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateActivity",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Activity Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/activity/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Activity"
+                ],
+                "summary": "Delete a activity by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteActivityById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/client/{id}": {
             "get": {
                 "tags": [
@@ -170,6 +416,540 @@
                 "summary": "Delete a Client by ID.",
                 "description": "Authenticate using a bearer token",
                 "operationId": "deleteClientById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-category/{id}": {
+            "get": {
+                "tags": [
+                    "Process Category"
+                ],
+                "summary": "Get a Process Category",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcessCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Process Category Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-category": {
+            "get": {
+                "tags": [
+                    "Process Category"
+                ],
+                "summary": "Get Process Categories",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcessCategories",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-category/create": {
+            "post": {
+                "tags": [
+                    "Process Category"
+                ],
+                "summary": "Create a new process category",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createProcessCategory",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-category/update/{id}": {
+            "put": {
+                "tags": [
+                    "Process Category"
+                ],
+                "summary": "Update a ProcessCategory",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateProcessCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Process Category Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-category/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Process Category"
+                ],
+                "summary": "Delete a Process Category by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteProcessCategoryById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process/{id}": {
+            "get": {
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Get a Process",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcess",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Process Category Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process": {
+            "get": {
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Get Processes",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcesses",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process/create": {
+            "post": {
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Create a new process",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createProcess",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process/update/{id}": {
+            "put": {
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Update a Process",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateProcess",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Process Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Delete a Process by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteProcessById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-step/{id}": {
+            "get": {
+                "tags": [
+                    "Process Step"
+                ],
+                "summary": "Get a Process Step",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcessStep",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Process Category Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-step": {
+            "get": {
+                "tags": [
+                    "Process Step"
+                ],
+                "summary": "Get Process Steps",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcessSteps",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-step/create": {
+            "post": {
+                "tags": [
+                    "Process Step"
+                ],
+                "summary": "Create a new process step",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createProcessStep",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-step/update/{id}": {
+            "put": {
+                "tags": [
+                    "Process Step"
+                ],
+                "summary": "Update a ProcessStep",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateProcessStep",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Process Step Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/process-step/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Process Step"
+                ],
+                "summary": "Delete a Process Step by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteProcessStepById",
                 "parameters": [
                     {
                         "name": "id",
