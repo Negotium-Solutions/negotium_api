@@ -440,6 +440,184 @@
                 ]
             }
         },
+        "/{tenant}/document/{id}": {
+            "get": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get a document",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getDocument",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Document Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/document": {
+            "get": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get documents",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getDocuments",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/document/create": {
+            "post": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Create a new document",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createDocument",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/document/update/{id}": {
+            "put": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Update a Document",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateDocument",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Document Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/document/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Delete a Document by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteDocumentById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/process-category/{id}": {
             "get": {
                 "tags": [
