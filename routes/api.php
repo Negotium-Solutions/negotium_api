@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Tenant\ProcessCategoryController;
 use App\Http\Controllers\Api\Tenant\ProcessController;
 use App\Http\Controllers\Api\Tenant\ProcessStepController;
 use App\Http\Controllers\Api\Tenant\ActivityController;
+use App\Http\Controllers\Api\Tenant\DocumentController;
 use App\Http\Controllers\Api\Tenant\SchemaController;
 use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
 use App\Http\Controllers\Api\Tenant\ClientController;
@@ -67,6 +68,12 @@ Route::group([
     Route::post('/activity/create', [ActivityController::class, 'create'])->name('api.activity.create');
     Route::put('/activity/update/{id}', [ActivityController::class, 'update'])->name('api.activity.update');
     Route::delete('/activity/delete/{id?}', [ActivityController::class, 'delete'])->name('api.activity.delete');
+
+    // Documents routes
+    Route::get('/document/{id?}', [DocumentController::class, 'get'])->name('api.document');
+    Route::post('/document/create', [DocumentController::class, 'create'])->name('api.document.create');
+    Route::put('/document/update/{id}', [DocumentController::class, 'update'])->name('api.document.update');
+    Route::delete('/document/delete/{id?}', [DocumentController::class, 'delete'])->name('api.document.delete');
 
     // Schema routes
     Route::get('/schema/{id?}', [SchemaController::class, 'get'])->name('api.schema');

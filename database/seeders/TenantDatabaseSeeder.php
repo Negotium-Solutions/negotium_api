@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Database\Seeders\tenant\ClientSeeder;
+use Database\Seeders\tenant\DocumentSeeder;
 use Database\Seeders\tenant\ProcessCategorySeeder;
 use Database\Seeders\tenant\ProcessSeeder;
 use Database\Seeders\tenant\ProcessStepSeeder;
@@ -13,12 +14,13 @@ class TenantDatabaseSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run($domain = 'negotium-solutions.co.za'): void
+    public function run($domain = 'negotium-solutions.com'): void
     {
         $this->call(UserSeeder::class, false, ['domain' => $domain]);
         $this->call(ProcessCategorySeeder::class);
         $this->call(ProcessSeeder::class);
         $this->call(ProcessStepSeeder::class);
         $this->call(ClientSeeder::class);
+        $this->call(DocumentSeeder::class);
     }
 }

@@ -14,6 +14,6 @@ class TenantSeeder extends Seeder
     {
         $tenant = new Tenant();
         $tenant->save();
-        $tenant->domains()->create(['domain' => 'negotium-solutions.co.za']);
+        $tenant->domains()->create(['domain' => 'negotium-solutions.com']);
     }
 }
