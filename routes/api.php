@@ -72,7 +72,7 @@ Route::group([
     // Documents routes
     Route::get('/document/{id?}', [DocumentController::class, 'get'])->name('api.document');
     Route::post('/document/create', [DocumentController::class, 'create'])->name('api.document.create');
-    Route::put('/document/update/{id}', [DocumentController::class, 'update'])->name('api.document.update');
+    Route::post('/document/update/{id}', [DocumentController::class, 'update'])->name('api.document.update');
     Route::delete('/document/delete/{id?}', [DocumentController::class, 'delete'])->name('api.document.delete');
 
     // Schema routes

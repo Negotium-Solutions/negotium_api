@@ -7,6 +7,7 @@ use App\Models\Tenant\Document;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\File;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
 class DocumentController extends BaseAPIController implements ApiInterface
@@ -47,7 +48,7 @@ class DocumentController extends BaseAPIController implements ApiInterface
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Document::where('id', $id) : Document::query();
+            $query = isset($id) ? Document::with(['user'])->where('id', $id) : Document::with(['user']);
 
             $data = isset($id) ? $query->first() : $query->get();
 
@@ -84,10 +85,22 @@ class DocumentController extends BaseAPIController implements ApiInterface
     {
         $validator = \Validator::make($request->all(),
             ['name' => 'string|required'],
-            ['file' => 'required|file|mimes:pdf,docx,doc,txt,jpg,jpeg,png|max:8192']
+            ['file' => ['required|file', File::types(['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'png', 'txt'])]]
         );
 
-        if ($validator->fails()) {
+        $hasFileErrors = false;
+        $errorFileMessages = [];
+        if ( !$request->hasFile('file') ) {
+            $hasFileErrors = true;
+            $errorFileMessages[] = 'The file field is required.';
+        }
+
+        if ($validator->fails() || $hasFileErrors) {
+            if($hasFileErrors) {
+                foreach ($errorFileMessages as $errorFileMessage) {
+                    $validator->errors()->add('file', $errorFileMessage);
+                }
+            }
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -136,10 +149,22 @@ class DocumentController extends BaseAPIController implements ApiInterface
     {
         $validator = \Validator::make($request->all(),
             ['name' => 'string|required'],
-            ['file' => 'required|file|mimes:pdf,docx,doc,txt,jpg,jpeg,png|max:8192']
+            ['file' => ['required|file', File::types(['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'png', 'txt'])]]
         );
 
-        if ($validator->fails()) {
+        $hasFileErrors = false;
+        $errorFileMessages = [];
+        if ( !$request->hasFile('file') ) {
+            $hasFileErrors = true;
+            $errorFileMessages[] = 'The file field is required.';
+        }
+
+        if ($validator->fails() || $hasFileErrors) {
+            if($hasFileErrors) {
+                foreach ($errorFileMessages as $errorFileMessage) {
+                    $validator->errors()->add('file', $errorFileMessage);
+                }
+            }
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
