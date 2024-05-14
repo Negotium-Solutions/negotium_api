@@ -440,6 +440,184 @@
                 ]
             }
         },
+        "/{tenant}/client-type/{id}": {
+            "get": {
+                "tags": [
+                    "ClientType"
+                ],
+                "summary": "Get a Client Type",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getClientType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Client Type Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/client-type": {
+            "get": {
+                "tags": [
+                    "Client Type"
+                ],
+                "summary": "Get client types",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getClientTypes",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/client-type/create": {
+            "post": {
+                "tags": [
+                    "Client Type"
+                ],
+                "summary": "Create a new client type",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createClientType",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/client-type/update/{id}": {
+            "put": {
+                "tags": [
+                    "Client Type"
+                ],
+                "summary": "Update a ClientType",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateClientType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ClientType Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/client-type/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Client Type"
+                ],
+                "summary": "Delete a Client Type by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteClientTypeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/document/{id}": {
             "get": {
                 "tags": [

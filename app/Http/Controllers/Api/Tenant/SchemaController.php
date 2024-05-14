@@ -69,7 +69,7 @@ class SchemaController extends BaseApiController
             Schema::create($schema->name, function (Blueprint $table) use ($columns) {
                 $table->bigIncrements('id');
                 foreach ($columns as $column) {
-                    $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column['attributes']));
+                    $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column));
                 }
                 $table->timestamps();
                 $table->softDeletes();

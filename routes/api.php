@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Tenant\DocumentController;
 use App\Http\Controllers\Api\Tenant\SchemaController;
 use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
 use App\Http\Controllers\Api\Tenant\ClientController;
+use App\Http\Controllers\Api\Tenant\ClientTypeController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
@@ -44,6 +45,12 @@ Route::group([
     Route::post('/client/create', [ClientController::class, 'create'])->name('api.client.create');
     Route::put('/client/update/{id}', [ClientController::class, 'update'])->name('api.client.update');
     Route::delete('/client/delete/{id?}', [ClientController::class, 'delete'])->name('api.client.delete');
+
+    // Client Type routes
+    Route::get('/client-type/{id?}', [ClientTypeController::class, 'get'])->name('api.client-type');
+    Route::post('/client-type/create', [ClientTypeController::class, 'create'])->name('api.client-type.create');
+    Route::put('/client-type/update/{id}', [ClientTypeController::class, 'update'])->name('api.client-type.update');
+    Route::delete('/client-type/delete/{id?}', [ClientTypeController::class, 'delete'])->name('api.client-type.delete');
 
     // Process Category routes
     Route::get('/process-category/{id?}', [ProcessCategoryController::class, 'get'])->name('api.process-category');

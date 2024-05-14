@@ -1,0 +1,39 @@
+{
+    "name": "Business Lines",
+    "model": "ClientType",
+    "columns": [
+        {
+            "name": "company",
+            "title": "Company Name",
+            "type": "string",
+            "attributes": {
+                "required": 1,
+                "indent": 0,
+                "is_id": 0,
+                "is_passport": 0
+            }
+        },
+        {
+            "name": "phone",
+            "title": "Phone Number",
+            "type": "string",
+            "attributes": {
+                "required": 1,
+                "indent": 0,
+                "is_id": 0,
+                "is_passport": 0
+            }
+        },
+        {
+            "name": "number_of_employees",
+            "title": "Number of Employees",
+            "type": "string",
+            "attributes": {
+                "required": 1,
+                "indent": 0,
+                "is_id": 0,
+                "is_passport": 0
+            }
+        }
+    ]
+}

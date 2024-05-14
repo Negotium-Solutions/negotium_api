@@ -50,7 +50,7 @@ class SchemaRepository implements SchemaRepositoryInterface
                 $table->integer('schema_id')->nullable();
                 $table->integer('data_owner_id')->nullable();
                 foreach ($columns as $column) {
-                    $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column['attributes']));
+                    $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column));
                 }
                 $table->timestamps();
                 $table->softDeletes();
