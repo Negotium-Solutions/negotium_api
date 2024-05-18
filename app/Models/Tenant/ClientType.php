@@ -19,8 +19,8 @@ class ClientType extends Model
         'name'
     ];
 
-    public function schema()
+    public function steps()
     {
-        return $this->hasOne(Schema::class, 'parent_id');
+        return $this->hasMany(Step::class, 'parent_id');
     }
 }

@@ -2,11 +2,15 @@
 
 namespace Database\Seeders\tenant;
 
+use App\Models\Tenant\Activity;
+use App\Models\Tenant\ActivityType;
 use App\Models\Tenant\ClientType;
 use App\Models\Tenant\Schema as CRMSchema;
+use App\Models\Tenant\Step;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use SebastianBergmann\Type\VoidType;
 
 class ClientTypeSeeder extends Seeder
 {
@@ -15,35 +19,56 @@ class ClientTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $request = json_decode(file_get_contents('database/data/client_type_personal_lines.json'));
+        $clientType = new ClientType();
+        $clientType->name = 'Personal Lines';
+        $clientType->save();
+        $request = json_decode(file_get_contents('database/data/client_type_step1_personal_lines.json'));
         $this->addClientType($request);
-        $request = json_decode(file_get_contents('database/data/client_type_business_lines.json'));
+        $request = json_decode(file_get_contents('database/data/client_type_step2_personal_lines.json'));
+        $this->addClientType($request);
+
+        $clientType = new ClientType();
+        $clientType->name = 'Business Lines';
+        $clientType->save();
+        $request = json_decode(file_get_contents('database/data/client_type_step1_business_lines.json'));
+        $this->addClientType($request);
+        $request = json_decode(file_get_contents('database/data/client_type_step2_business_lines.json'));
         $this->addClientType($request);
     }
 
-    public function addClientType(Object $request)
+    public function addClientType(Object $request) : void
     {
-        $clientType = new ClientType();
-        $clientType->name = $request->name;
-        $clientType->save();
-
-        $table = $this->toCleanString($request->name);
+        $step = new Step();
+        $step->id = $request->step->id;
+        $step->name = $request->step->name;
+        $step->parent_id = $request->step->parent_id;
+        $step->order = $request->step->order;
+        $step->model_id = $request->step->model_id;
+        $step->save();
 
         $schema = new CRMSchema();
-        $schema->name = $table;
-        $schema->model = $request->model;
-        $schema->parent_id = $clientType->id;
-        $schema->columns = json_encode($request->columns);
+        $schema->name = $request->step->schema->name;
+        $schema->step_id = $request->step->schema->step_id;
         $schema->save();
 
-        $columns = $request->columns;
+        $columns = $request->step->activities;
+
+        foreach ($request->step->activities as $_activity) {
+            $activity = new Activity();
+            $activity->name = $_activity->name;
+            $activity->label = $_activity->label;
+            $activity->attributes = $_activity->attributes;
+            $activity->type_id = $_activity->type_id;
+            $activity->step_id = $_activity->step_id;
+            $activity->save();
+        }
 
         Schema::create($schema->name, function (Blueprint $table) use ($columns) {
             $table->bigIncrements('id');
-            $table->integer('schema_id')->nullable();
             $table->integer('data_owner_id')->nullable();
             foreach ($columns as $column) {
-                $table->{$column->type}($this->toCleanString($column->name))->nullable()->comment(json_encode($column));
+                $activityType = ActivityType::find($column->type_id);
+                $table->{$activityType->schema_data_type}($this->toCleanString($column->name))->nullable()->comment(json_encode($column));
             }
             $table->timestamps();
             $table->softDeletes();

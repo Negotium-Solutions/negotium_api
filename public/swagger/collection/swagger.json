@@ -16,7 +16,7 @@
         }
     ],
     "paths": {
-        "/{tenant}/activity/{id}": {
+        "/{tenant}/activity/{schema_id}/{id}": {
             "get": {
                 "tags": [
                     "Activity"
@@ -58,7 +58,7 @@
                 ]
             }
         },
-        "/{tenant}/activity": {
+        "/{tenant}/activity/{schema_id}": {
             "get": {
                 "tags": [
                     "Activity"
@@ -89,7 +89,7 @@
                 ]
             }
         },
-        "/{tenant}/activity/create": {
+        "/{tenant}/activity/create/{schema_id}": {
             "post": {
                 "tags": [
                     "Activity"
@@ -1306,6 +1306,184 @@
                 "summary": "Delete a Process Step by ID.",
                 "description": "Authenticate using a bearer token",
                 "operationId": "deleteProcessStepById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/step/{id}": {
+            "get": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Get a Step",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getStep",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Step Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/step": {
+            "get": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Get Steps",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getSteps",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/step/create": {
+            "post": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Create a new step",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createStep",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/step/update/{id}": {
+            "put": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Update aStep",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateStep",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Step Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/step/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Delete a Step by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteStepById",
                 "parameters": [
                     {
                         "name": "id",

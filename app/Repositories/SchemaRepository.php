@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Models\Tenant\Activity;
 use App\Models\Tenant\Schema as CRMSchema;
+use App\Models\Tenant\Step;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Validator;
 
 class SchemaRepository implements SchemaRepositoryInterface
 {
@@ -20,50 +20,47 @@ class SchemaRepository implements SchemaRepositoryInterface
         return  $data->toArray();
     }
 
-    /**
-     * Store a newly created schema
-     */
-    public function create(Request $request) : Array
+    public function create(Step $step) : Array
     {
-        $request_data = json_decode($request->getContent(), true);
-
         try {
-            $table = $this->toCleanString($request_data['name']);
-            $columns = $request_data['columns'];
+            $tableName = $this->toCleanString($step->name);
 
             $schema = new CRMSchema();
-            $schema->name = $table;
-            if($request->has('model')) {
-                $schema->model = $request->input('model');
-            }
-            if($request->has('parent_id')) {
-                $schema->parent_id = $request->input('parent_id');
-            }
-            $schema->columns = json_encode($columns);
+            $schema->name = $tableName;
+            $schema->step_id = $step->id;
             $schema->save();
 
             $schema->name = $schema->name.'_'.$schema->id;
             $schema->save();
 
-            Schema::create($schema->name, function (Blueprint $table) use ($columns) {
+            Schema::create($schema->name, function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->integer('schema_id')->nullable();
-                $table->integer('data_owner_id')->nullable();
-                foreach ($columns as $column) {
-                    $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column));
-                }
+                $table->integer('owner_id')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
             });
 
-            return [['table' => $table], 'message' => 'Schema successfully created.', 'request' => $request->all()];
+            return ['status' => 'success', 'message' => 'Schema successfully created.'];
         } catch (\Throwable $exception) {
-            return ['error' => $exception->getMessage()];
+            return ['status' => 'error', 'message' => $exception->getMessage()];
+        }
+    }
+
+    public function addColumn(Activity $activity) : Array
+    {
+        try {
+            Schema::table($activity->step->schema->name, function (Blueprint $table) use ($activity) {
+                $table->{$activity->type->schema_data_type}($this->toCleanString($activity->name))->nullable()->comment($activity->attributes);
+            });
+
+            return ['status' => 'success', 'message' => 'Schema column successfully added'];
+        } catch (\Throwable $exception) {
+            return ['status' => 'error', 'message' => $exception->getMessage()];
         }
     }
 
     /**
-     * Update a schema
+     * Update a schema with multiple columns
      */
     public function update(Request $request, int $id) : Array
     {
@@ -108,16 +105,59 @@ class SchemaRepository implements SchemaRepositoryInterface
         try {
             $schema = CRMSchema::find($id);
             if((!isset($schema))){
-                return $this->success([], 'No schema record found to delete', [], Response::HTTP_NOT_FOUND);
+                return ['status' => 'error', 'message' => 'No schema record found to delete'];
             }
 
             if ($schema->delete() === false) {
                 throw new \RuntimeException('Could not delete the schema');
+                return ['status' => 'error', 'message' => 'Could not delete the schema'];
             }
 
-            return response()->noContent();
+            return ['status' => 'success', 'message' => 'Item deleted successfully'];
         } catch (\Throwable $exception) {
-            return $this->error([$exception->getMessage()], 'There was an error trying to delete the the schema', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ['status' => 'error', 'message' => 'There was an error trying to delete the the schema'];
+        }
+    }
+
+    /**
+     * Store a newly created schema with multiple columns
+     */
+    public function createMultipleColumns(Request $request) : Array
+    {
+        $request_data = json_decode($request->getContent(), true);
+
+        try {
+            $table = $this->toCleanString($request_data['name']);
+            $columns = $request_data['columns'];
+
+            $schema = new CRMSchema();
+            $schema->name = $table;
+            if($request->has('model')) {
+                $schema->model = $request->input('model');
+            }
+            if($request->has('parent_id')) {
+                $schema->parent_id = $request->input('parent_id');
+            }
+            $schema->columns = json_encode($columns);
+            $schema->save();
+
+            $schema->name = $schema->name.'_'.$schema->id;
+            $schema->save();
+
+            Schema::create($schema->name, function (Blueprint $table) use ($columns) {
+                $table->bigIncrements('id');
+                $table->integer('schema_id')->nullable();
+                $table->integer('data_owner_id')->nullable();
+                foreach ($columns as $column) {
+                    $table->{$column['type']}($this->toCleanString($column['name']))->nullable()->comment(json_encode($column));
+                }
+                $table->timestamps();
+                $table->softDeletes();
+            });
+
+            return [['table' => $table], 'message' => 'Schema successfully created.', 'request' => $request->all()];
+        } catch (\Throwable $exception) {
+            return ['error' => $exception->getMessage()];
         }
     }
 

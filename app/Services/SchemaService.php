@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Tenant\Activity;
+use App\Models\Tenant\Step;
 use App\Repositories\SchemaRepositoryInterface;
 
 use Illuminate\Http\Request;
@@ -17,9 +19,14 @@ class SchemaService
         return $this->schemaRepositoryInterface->get($request, $id);
     }
 
-    public function create(Request $request) : Array
+    public function create(Step $step) : Array
     {
-        return $this->schemaRepositoryInterface->create($request);
+        return $this->schemaRepositoryInterface->create($step);
+    }
+
+    public function addColumn(Activity $activity) : Array
+    {
+        return $this->schemaRepositoryInterface->addColumn($activity);
     }
 
     public function update(Request $request, int $id) : Array

@@ -1,0 +1,38 @@
+{
+    "id": 2,
+    "name": "Business Lines",
+    "step": {
+        "id": 3,
+        "name": "Company Information",
+        "parent_id": 2,
+        "order": 3,
+        "model_id": 2,
+        "activities": [
+            {
+                "name": "company",
+                "label": "Company Name",
+                "step_id": 3,
+                "type_id": 2,
+                "attributes": "1"
+            },
+            {
+                "name": "phone",
+                "label": "Phone Number",
+                "step_id": 3,
+                "type_id": 2,
+                "attributes": "1"
+            },
+            {
+                "name": "number_of_employees",
+                "label": "Number of Employees",
+                "step_id": 3,
+                "type_id": 2,
+                "attributes": "1"
+            }
+        ],
+        "schema": {
+            "name": "company_information_3",
+            "step_id": 3
+        }
+    }
+}

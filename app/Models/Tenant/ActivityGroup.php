@@ -6,17 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Activity extends Model
+class ActivityGroup extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function step()
+    public function activity_type()
     {
-        return $this->belongsTo(Step::class);
-    }
-
-    public function type()
-    {
-        return $this->belongsTo(ActivityType::class);
+        return $this->hasMany(ActivityType::class, 'activity_group_id');
     }
 }

@@ -72,7 +72,8 @@ Route::group([
 
     // Activities routes
     Route::get('/activity/{id?}', [ActivityController::class, 'get'])->name('api.activity');
-    Route::post('/activity/create', [ActivityController::class, 'create'])->name('api.activity.create');
+    Route::post('/activity/create/{step}', [ActivityController::class, 'create'])->name('api.activity.create');
+    Route::post('/activity/create-schema/{model}', [ActivityController::class, 'createSchema'])->name('api.activity.create-schema');
     Route::put('/activity/update/{id}', [ActivityController::class, 'update'])->name('api.activity.update');
     Route::delete('/activity/delete/{id?}', [ActivityController::class, 'delete'])->name('api.activity.delete');
 

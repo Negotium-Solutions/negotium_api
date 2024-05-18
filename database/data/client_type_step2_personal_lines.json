@@ -1,0 +1,38 @@
+{
+    "id": 1,
+    "name": "Personal Lines",
+    "step": {
+        "id": 2,
+        "name": "Medical Information",
+        "parent_id": 1,
+        "order": 2,
+        "model_id": 2,
+        "activities": [
+            {
+                "name": "medical_aid_name",
+                "label": "Medical Aid Name",
+                "step_id": 2,
+                "type_id": 2,
+                "attributes": "1"
+            },
+            {
+                "name": "medical_aid_number",
+                "label": "Medical Aid Number",
+                "step_id": 2,
+                "type_id": 2,
+                "attributes": "1"
+            },
+            {
+                "name": "number_of_dependants",
+                "label": "Number of Dependants",
+                "step_id": 2,
+                "type_id": 2,
+                "attributes": "1"
+            }
+        ],
+        "schema": {
+            "name": "medical_information_2",
+            "step_id": 2
+        }
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "id": 2,
+    "name": "Business Lines",
+    "step": {
+        "id": 4,
+        "name": "Physical Address",
+        "parent_id": 2,
+        "order": 4,
+        "model_id": 2,
+        "activities": [
+            {
+                "name": "street_address",
+                "label": "Street Address",
+                "step_id": 4,
+                "type_id": 2,
+                "attributes": "1"
+            },
+            {
+                "name": "city",
+                "label": "City",
+                "step_id": 4,
+                "type_id": 2,
+                "attributes": "1"
+            },
+            {
+                "name": "province",
+                "label": "Province",
+                "step_id": 4,
+                "type_id": 2,
+                "attributes": "1"
+            }
+        ],
+        "schema": {
+            "name": "physical_address_4",
+            "step_id": 4
+        }
+    }
+}

@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Http\Controllers\Api\ApiInterface;
 use App\Models\Tenant\Activity;
+use App\Models\Tenant\ModelType;
+use App\Models\Tenant\ClientType;
+use App\Models\Tenant\Step;
 use App\Services\SchemaService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class ActivityController extends BaseAPIController implements ApiInterface
+class ActivityController extends BaseAPIController
 {
     public function __construct(protected SchemaService $schemaService)
     {
@@ -19,7 +21,7 @@ class ActivityController extends BaseAPIController implements ApiInterface
      * Get activit(y)/(ies)
      *
      * @OA\Get(
-     *       path="/{tenant}/activity/{id}",
+     *       path="/{tenant}/activity/{schema_id}/{id}",
      *       summary="Get a activity",
      *       operationId="getActivity",
      *       tags={"Activity"},
@@ -32,7 +34,7 @@ class ActivityController extends BaseAPIController implements ApiInterface
      *  ),
      *
      * @OA\Get(
-     *       path="/{tenant}/activity",
+     *       path="/{tenant}/activity/{schema_id}",
      *       summary="Get Activities",
      *       operationId="getActivities",
      *       tags={"Activity"},
@@ -44,14 +46,15 @@ class ActivityController extends BaseAPIController implements ApiInterface
      *  )
      *
      * @param Request $request
-     * @param Request $id
+     * @param integer $schema_id
+     * @param integer $id
      * @return Response
      * @throws Exception
      */
-    public function get(Request $request, int $id = null) : Response
+    public function get(Request $request, int $schema_id = null, int $id = null) : Response
     {
         try{
-            $query = isset($id) ? Activity::where('id', $id) : Activity::query();
+            $query = isset($id) ? Activity::where('schema_id', $schema_id)->where('id', $id) : Activity::where('schema_id', $schema_id);
 
             if ($request->has('with') && ($request->input('with') != '')) {
                 $query = $query->with($request->with);
@@ -73,7 +76,7 @@ class ActivityController extends BaseAPIController implements ApiInterface
      * Create a new activity.
      *
      * @OA\Post(
-     *        path="/{tenant}/activity/create",
+     *        path="/{tenant}/activity/create/{schema_id}",
      *        summary="Create a new activity",
      *        operationId="createActivity",
      *        tags={"Activity"},
@@ -95,15 +98,18 @@ class ActivityController extends BaseAPIController implements ApiInterface
      * )
      *
      * @param Request $request
+     * @param integer $request
      * @return Response
      * @throws Exception
      */
-    public function create(Request $request) : Response
+    // public function create(Request $request, ModelType $modelType = null, $model_id = null) : Response
+    public function create(Request $request, Step $step) : Response
     {
         $validator = \Validator::make($request->all(),
-            ['process_step_id' => 'integer|required'],
             ['name' => 'string|required'],
-            ['columns' => 'required']
+            ['label' => 'string|required'],
+            ['type_id' => 'integer|required'],
+            ['attributes' => 'string'],
         );
 
         if ($validator->fails()) {
@@ -112,16 +118,24 @@ class ActivityController extends BaseAPIController implements ApiInterface
 
         try {
             $activity = new Activity();
-            $activity->process_step_id = $request->process_step_id;
+            $activity->name = $request->input('name');
+            $activity->label = $request->input('label');
+            $activity->type_id = $request->input('type_id');
+            $activity->step_id = $step->id;
+            $activity->attributes = $request->input('attributes');
 
             if ($activity->save() === false) {
                 throw new \RuntimeException('Could not save activity');
             }
 
-            // Create the schema here and link it to the activity
-            $request->merge(['model' => 'Activity']);
-            $request->merge(['parent_id' => $activity->id]);
-            $this->schemaService->create($request);
+            $activity->name .= '_'.$activity->id;
+            $activity->save();
+
+            if (!isset($step->schema->id)) {
+                $this->schemaService->create($step);
+            }
+
+            $this->schemaService->addColumn($activity);
 
             return $this->success(['id' => $activity->id], 'Activity successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
