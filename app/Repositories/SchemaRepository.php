@@ -50,7 +50,20 @@ class SchemaRepository implements SchemaRepositoryInterface
     {
         try {
             Schema::table($activity->step->schema->name, function (Blueprint $table) use ($activity) {
-                $table->{$activity->type->schema_data_type}($this->toCleanString($activity->name))->nullable()->comment($activity->attributes);
+                $table->{$activity->type->schema_data_type}($this->toCleanString($activity->name))->nullable()->comment(json_encode(['name' => $activity->name, 'label' => $activity->label, 'type_id' => $activity->type_id, 'attributes' => $activity->attributes]));
+            });
+
+            return ['status' => 'success', 'message' => 'Schema column successfully added'];
+        } catch (\Throwable $exception) {
+            return ['status' => 'error', 'message' => $exception->getMessage()];
+        }
+    }
+
+    public function updateColumn(Activity $activity) : Array
+    {
+        try {
+            Schema::table($activity->step->schema->name, function (Blueprint $table) use ($activity) {
+                $table->{$activity->type->schema_data_type}($this->toCleanString($activity->name))->nullable()->comment(json_encode(['name' => $activity->name, 'label' => $activity->label, 'type_id' => $activity->type_id, 'attributes' => $activity->attributes]))->change();
             });
 
             return ['status' => 'success', 'message' => 'Schema column successfully added'];

@@ -14,6 +14,8 @@ interface SchemaRepositoryInterface
 
     public function addColumn(Activity $activity) : Array;
 
+    public function updateColumn(Activity $activity) : Array;
+
     public function update(Request $request, int $id) : Array;
 
     public function delete(int $id) : Array;

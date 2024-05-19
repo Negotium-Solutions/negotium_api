@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Models\Tenant\Activity;
-use App\Models\Tenant\ModelType;
-use App\Models\Tenant\ClientType;
 use App\Models\Tenant\Step;
 use App\Services\SchemaService;
 use Illuminate\Http\Request;
@@ -51,10 +49,10 @@ class ActivityController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    public function get(Request $request, int $schema_id = null, int $id = null) : Response
+    public function get(Request $request, int $step_id, int $id = null) : Response
     {
         try{
-            $query = isset($id) ? Activity::where('schema_id', $schema_id)->where('id', $id) : Activity::where('schema_id', $schema_id);
+            $query = isset($id) ? Activity::where('step_id', $step_id)->where('id', $id) : Activity::where('step_id', $step_id);
 
             if ($request->has('with') && ($request->input('with') != '')) {
                 $query = $query->with($request->with);
@@ -76,7 +74,7 @@ class ActivityController extends BaseAPIController
      * Create a new activity.
      *
      * @OA\Post(
-     *        path="/{tenant}/activity/create/{schema_id}",
+     *        path="/{tenant}/activity/create/{step}",
      *        summary="Create a new activity",
      *        operationId="createActivity",
      *        tags={"Activity"},
@@ -102,15 +100,14 @@ class ActivityController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    // public function create(Request $request, ModelType $modelType = null, $model_id = null) : Response
     public function create(Request $request, Step $step) : Response
     {
-        $validator = \Validator::make($request->all(),
-            ['name' => 'string|required'],
-            ['label' => 'string|required'],
-            ['type_id' => 'integer|required'],
-            ['attributes' => 'string'],
-        );
+        $validator = \Validator::make($request->all(), [
+            'name' => 'string|required',
+            'label' => 'string|required',
+            'type_id' => 'integer|required',
+            'attributes' => 'string'
+        ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -165,16 +162,22 @@ class ActivityController extends BaseAPIController
      */
     public function update(Request $request, int $id) : Response
     {
-        $validator = \Validator::make($request->all(),
-            ['columns' => 'required']
-        );
+        $validator = \Validator::make($request->all(), [
+            'label' => 'string|required',
+            'attributes' => 'string'
+        ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
-            $this->schemaService->update($request, $id);
+            $activity = Activity::find($id);
+            $activity->label = $request->input('label');
+            $activity->attributes = $request->input('attributes');
+            $activity->save();
+
+            $this->schemaService->updateColumn($activity);
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'There was an error trying to update the activity', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -7,7 +7,6 @@ use App\Models\Tenant\Step;
 use App\Repositories\SchemaRepositoryInterface;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 class SchemaService
 {
     public function __construct(protected SchemaRepositoryInterface $schemaRepositoryInterface)
@@ -27,6 +26,11 @@ class SchemaService
     public function addColumn(Activity $activity) : Array
     {
         return $this->schemaRepositoryInterface->addColumn($activity);
+    }
+
+    public function updateColumn(Activity $activity) : Array
+    {
+        return $this->schemaRepositoryInterface->updateColumn($activity);
     }
 
     public function update(Request $request, int $id) : Array

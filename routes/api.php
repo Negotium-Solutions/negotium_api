@@ -71,7 +71,7 @@ Route::group([
     Route::delete('/process-step/delete/{id?}', [ProcessStepController::class, 'delete'])->name('api.process-step.delete');
 
     // Activities routes
-    Route::get('/activity/{id?}', [ActivityController::class, 'get'])->name('api.activity');
+    Route::get('/activity/{step_id}/{id?}', [ActivityController::class, 'get'])->name('api.activity');
     Route::post('/activity/create/{step}', [ActivityController::class, 'create'])->name('api.activity.create');
     Route::post('/activity/create-schema/{model}', [ActivityController::class, 'createSchema'])->name('api.activity.create-schema');
     Route::put('/activity/update/{id}', [ActivityController::class, 'update'])->name('api.activity.update');
