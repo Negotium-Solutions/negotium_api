@@ -89,7 +89,7 @@
                 ]
             }
         },
-        "/{tenant}/activity/create/{schema_id}": {
+        "/{tenant}/activity/create/{step}": {
             "post": {
                 "tags": [
                     "Activity"
