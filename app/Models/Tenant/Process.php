@@ -20,6 +20,6 @@ class Process extends Model
 
     public function steps()
     {
-        return $this->hasMany(ProcessStep::class, 'process_id');
+        return $this->hasMany(Step::class, 'parent_id');
     }
 }

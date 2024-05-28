@@ -49,6 +49,10 @@ class ProcessController extends BaseAPIController
         try{
             $query = isset($id) ? Process::where('id', $id) : Process::query();
 
+            if ($request->has('with')) {
+                $query = $query->with($request->with);
+            }
+
             $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
