@@ -23,7 +23,6 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(UserSeeder::class, false, ['domain' => $domain]);
         $this->call(ProcessCategorySeeder::class);
         $this->call(ProcessSeeder::class);
-        $this->call(ProcessStepSeeder::class);
         $this->call(ActivityTypeSeeder::class);
         $this->call(ClientSeeder::class);
         $this->call(ClientTypeSeeder::class);
@@ -31,5 +30,6 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(ActivityGroupSeeder::class);
         $this->call(AttributeSeeder::class);
         $this->call(ModelTypeSeeder::class);
+        $this->call(StepSeeder::class);
     }
 }

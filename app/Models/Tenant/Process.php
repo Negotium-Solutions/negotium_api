@@ -2,8 +2,10 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\definitions\ModelTypeDefinitions;
 
 class Process extends Model
 {
@@ -20,6 +22,6 @@ class Process extends Model
 
     public function steps()
     {
-        return $this->hasMany(Step::class, 'parent_id');
+        return $this->hasMany(Step::class, 'parent_id')->where('model_id', ModelTypeDefinitions::PROCESS);
     }
 }
