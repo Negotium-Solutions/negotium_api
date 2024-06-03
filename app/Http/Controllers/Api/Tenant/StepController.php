@@ -46,13 +46,18 @@ class StepController extends BaseApiController
      * @return Response
      * @throws Exception
      */
-    public function get(Request $request, $parent_id, $id = null) : Response
+    public function get(Request $request, $parent_id, $id = null, $model_id = null) : Response
     {
         try{
             $query = isset($id) ? Step::where('parent_id', $parent_id)->where('id', $id) : Step::where('parent_id', $parent_id);
 
-            if ($request->has('with') && ($request->input('with') != '')) {
-                $query = $query->with($request->with);
+            if($model_id !== null) {
+                $query = $query->where('model_id', $model_id);
+            }
+
+            if ($request->has('with')) {
+                $with_array = explode(',', $request->with);
+                $query = $query->with($with_array);
             }
 
             $data = isset($id) ? $query->first() : $query->get();

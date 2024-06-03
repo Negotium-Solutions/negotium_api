@@ -72,7 +72,7 @@ Route::group([
     Route::delete('/process-step/delete/{id?}', [ProcessStepController::class, 'delete'])->name('api.process-step.delete');
 
     // Steps routes
-    Route::get('/step/{parent_id}/{id?}', [StepController::class, 'get'])->name('api.step');
+    Route::get('/step/{parent_id}/{id?}/{model_id?}', [StepController::class, 'get'])->name('api.step');
     Route::post('/step/create/{parent_id}', [StepController::class, 'create'])->name('api.step.create');
     Route::put('/step/update/{id}', [StepController::class, 'update'])->name('api.step.update');
     Route::delete('/step/delete/{id?}', [StepController::class, 'delete'])->name('api.step.delete');
