@@ -65,15 +65,9 @@ Route::group([
     Route::put('/process/update/{id}', [ProcessController::class, 'update'])->name('api.process.update');
     Route::delete('/process/delete/{id?}', [ProcessController::class, 'delete'])->name('api.process.delete');
 
-    // Process Steps routes
-    Route::get('/process-step/{id?}', [ProcessStepController::class, 'get'])->name('api.process-step');
-    Route::post('/process-step/create', [ProcessStepController::class, 'create'])->name('api.process-step.create');
-    Route::put('/process-step/update/{id}', [ProcessStepController::class, 'update'])->name('api.process-step.update');
-    Route::delete('/process-step/delete/{id?}', [ProcessStepController::class, 'delete'])->name('api.process-step.delete');
-
     // Steps routes
     Route::get('/step/{parent_id}/{id?}/{model_id?}', [StepController::class, 'get'])->name('api.step');
-    Route::post('/step/create/{parent_id}', [StepController::class, 'create'])->name('api.step.create');
+    Route::post('/step/create', [StepController::class, 'create'])->name('api.step.create');
     Route::put('/step/update/{id}', [StepController::class, 'update'])->name('api.step.update');
     Route::delete('/step/delete/{id?}', [StepController::class, 'delete'])->name('api.step.delete');
 
