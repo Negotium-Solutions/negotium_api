@@ -14,7 +14,7 @@ class ProcessCategorySeeder extends Seeder
     {
         ProcessCategory::factory(['name' => 'Category 01'])->create();
         ProcessCategory::factory(['name' => 'Category 02'])->create();
-        ProcessCategory::factory(['name' => 'Category 04'])->create();
+        ProcessCategory::factory(['name' => 'Category 03'])->create();
         ProcessCategory::factory(['name' => 'Category 04'])->create();
         ProcessCategory::factory(['name' => 'Category 05'])->create();
     }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Exception;
 use App\Http\Controllers\Throwable;
 use App\Models\Tenant\Step;
@@ -95,7 +94,8 @@ class StepController extends BaseApiController
     {
         $validator = Validator::make($request->all(),
             ['name' => 'string|required'],
-            ['parent_id' => 'integer|required']
+            ['parent_id' => 'integer|required'],
+            ['model_id' => 'integer|required'],
         );
 
         if ($validator->fails()) {
@@ -103,14 +103,15 @@ class StepController extends BaseApiController
         }
 
         try {
-            $step = Step();
+            $step = new Step();
             $step->name = $request->name;
             $step->parent_id = $request->parent_id;
+            $step->model_id = $request->model_id;
 
             if ($step->save() === false) {
                 throw new \RuntimeException('Could not save step');
             }
-            $step->oder = $step->id;
+            $step->order = $step->id;
             $step->save();
 
             return $this->success(['id' => $step->id], 'Step successfully created.', $request->all(), Response::HTTP_CREATED);
