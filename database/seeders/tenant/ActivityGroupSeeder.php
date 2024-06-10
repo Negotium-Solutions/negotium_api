@@ -15,7 +15,8 @@ class ActivityGroupSeeder extends Seeder
         ActivityGroup::insert([
             ['name' => 'User Input'],
             ['name' => 'Select'],
-            ['name' => 'Uploads']
+            ['name' => 'Uploads'],
+            ['name' => 'Other']
         ]);
     }
 }
