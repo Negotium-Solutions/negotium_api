@@ -10,7 +10,7 @@ class ActivityGroup extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function activity_type()
+    public function activity_types()
     {
         return $this->hasMany(ActivityType::class, 'activity_group_id');
     }
