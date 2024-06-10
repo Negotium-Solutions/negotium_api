@@ -66,7 +66,7 @@ class ActivityController extends BaseAPIController
 
             return $this->success($data, 'Activities successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve activities.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

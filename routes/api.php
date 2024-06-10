@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Tenant\ProcessController;
 use App\Http\Controllers\Api\Tenant\ProcessStepController;
 use App\Http\Controllers\Api\Tenant\StepController;
 use App\Http\Controllers\Api\Tenant\ActivityController;
+use App\Http\Controllers\Api\Tenant\ActivityGroupController;
 use App\Http\Controllers\Api\Tenant\DocumentController;
 use App\Http\Controllers\Api\Tenant\SchemaController;
 use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
@@ -77,6 +78,9 @@ Route::group([
     Route::post('/activity/create-schema/{model}', [ActivityController::class, 'createSchema'])->name('api.activity.create-schema');
     Route::put('/activity/update/{id}', [ActivityController::class, 'update'])->name('api.activity.update');
     Route::delete('/activity/delete/{id?}', [ActivityController::class, 'delete'])->name('api.activity.delete');
+
+    // Activity Group routes
+    Route::get('/activity-group/{id?}', [ActivityGroupController::class, 'get'])->name('api.activity-group');
 
     // Documents routes
     Route::get('/document/{id?}', [DocumentController::class, 'get'])->name('api.document');
