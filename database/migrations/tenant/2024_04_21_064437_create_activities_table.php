@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->string('label')->nullable();
+            $table->longText('guidance_note')->nullable();
             $table->string('attributes')->nullable();
             $table->integer('type_id')->nullable();
             $table->integer('step_id')->nullable();
