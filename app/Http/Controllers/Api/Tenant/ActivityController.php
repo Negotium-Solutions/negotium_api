@@ -106,7 +106,7 @@ class ActivityController extends BaseAPIController
             'name' => 'string|required',
             'label' => 'string|required',
             'type_id' => 'integer|required',
-            'attributes' => 'string'
+            // 'attributes' => 'string'
         ]);
 
         if ($validator->fails()) {
