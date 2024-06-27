@@ -90,10 +90,10 @@ class ClientTypeController extends BaseAPIController implements ApiInterface
      */
     public function create(Request $request) : Response
     {
-        $validator = \Validator::make($request->all(),
-            ['name' => 'string|required'],
-            ['columns' => 'required']
-        );
+        $validator = \Validator::make($request->all(), [
+            'name' => 'string|required',
+            'columns' => 'required'
+        ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);

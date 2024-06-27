@@ -87,10 +87,10 @@ class ProcessController extends BaseAPIController
      */
     public function create(Request $request) : Response
     {
-        $validator = Validator::make($request->all(),
-            ['name' => 'string|required'],
-            ['process_category_id' => 'integer|required']
-        );
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|required',
+            'process_category_id' => 'integer|required'
+        ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(),  Response::HTTP_UNPROCESSABLE_ENTITY);

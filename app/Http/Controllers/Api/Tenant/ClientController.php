@@ -80,10 +80,10 @@ class ClientController extends BaseAPIController
      */
     public function create(Request $request) : Response
     {
-        $validator = \Validator::make($request->all(),
-            ['first_name' => 'string|required'],
-            ['last_name' => 'string|required']
-        );
+        $validator = \Validator::make($request->all(), [
+            'first_name' => 'string|required',
+            'last_name' => 'string|required'
+        ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -126,10 +126,10 @@ class ClientController extends BaseAPIController
      */
     public function update(Request $request, $id) : Response
     {
-        $validator = \Validator::make($request->all(),
-            ['first_name' => 'string'],
-            ['last_name' => 'string']
-        );
+        $validator = \Validator::make($request->all(), [
+            'first_name' => 'string',
+            'last_name' => 'string'
+        ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
