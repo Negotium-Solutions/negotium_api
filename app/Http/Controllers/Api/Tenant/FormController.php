@@ -46,7 +46,7 @@ class FormController extends BaseAPIController implements ApiInterface
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Form::where('id', $id) : Form::query();
+            $query = isset($id) ? Form::where('id', $id) : Form::whereIn('id', explode('|', $request->has('forms') ? $request->forms : ''));
 
             if ($request->has('with') && $request->input('with') != '') {
                 $with_array = explode(',', $request->with);
