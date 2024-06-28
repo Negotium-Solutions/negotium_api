@@ -20,7 +20,7 @@ class ProcessCategory extends Model
         'process_category_id'
     ];
 
-    public function process()
+    public function processes()
     {
         return $this->hasMany(Process::class, 'id');
     }

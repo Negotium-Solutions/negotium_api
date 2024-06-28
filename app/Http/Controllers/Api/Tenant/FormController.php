@@ -2,34 +2,35 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\Tenant\Client;
+use App\Http\Controllers\Api\ApiInterface;
+use App\Models\Tenant\Form;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class ClientController extends BaseAPIController
+class FormController extends BaseAPIController implements ApiInterface
 {
     /**
-     * Get client(s)
+     * Get form(s)
      *
      * @OA\Get(
-     *       path="/{tenant}/client/{id}",
-     *       summary="Get a Client",
-     *       operationId="getClient",
-     *       tags={"Client"},
+     *       path="/{tenant}/form/{id}",
+     *       summary="Get a form",
+     *       operationId="getForm",
+     *       tags={"Form"},
      *       security = {{"BearerAuth": {}}},
      *       description="Authenticate using a bearer token",
-     *       @OA\Parameter(name="id", description="Client Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Parameter(name="id", description="Form Id", required=false, in="path", @OA\Schema( type="string" )),
      *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
      *       @OA\Response(response=401,description="Unauthenticated"),
      *       @OA\Response(response=500,description="Internal server error")
      *  ),
      *
      * @OA\Get(
-     *       path="/{tenant}/client",
-     *       summary="Get clients",
-     *       operationId="getClients",
-     *       tags={"Client"},
+     *       path="/{tenant}/form",
+     *       summary="Get forms",
+     *       operationId="getForms",
+     *       tags={"Form"},
      *       security = {{"BearerAuth": {}}},
      *       description="Authenticate using a bearer token",
      *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
@@ -45,28 +46,28 @@ class ClientController extends BaseAPIController
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Client::where('id', $id) : Client::query();
+            $query = isset($id) ? Form::where('id', $id) : Form::query();
 
             $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
-                return $this->success([], 'No client record(s) found', [], Response::HTTP_NOT_FOUND);
+                return $this->success([], 'No form record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
-            return $this->success($data, 'clients successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($data, 'forms successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Create a new client.
+     * Create a new form.
      *
      * @OA\Post(
-     *        path="/{tenant}/client/create",
-     *        summary="Create a new client",
-     *        operationId="createClient",
-     *        tags={"Client"},
+     *        path="/{tenant}/form/create",
+     *        summary="Create a new form",
+     *        operationId="createForm",
+     *        tags={"Form"},
      *        security = {{"BearerAuth": {}}},
      *        description="Authenticate using a bearer token",
      *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
@@ -81,8 +82,7 @@ class ClientController extends BaseAPIController
     public function create(Request $request) : Response
     {
         $validator = \Validator::make($request->all(), [
-            'first_name' => 'string|required',
-            'last_name' => 'string|required'
+            'name' => 'string|required'
         ]);
 
         if ($validator->fails()) {
@@ -90,31 +90,30 @@ class ClientController extends BaseAPIController
         }
 
         try {
-            $client = new Client();
-            $client->first_name = $request->first_name;
-            $client->last_name = $request->last_name;
+            $form = new Form();
+            $form->name = $request->name;
 
-            if ($client->save() === false) {
-                throw new \RuntimeException('Could not save client');
+            if ($form->save() === false) {
+                throw new \RuntimeException('Could not save form');
             }
 
-            return $this->success(['id' => $client->id], 'client successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $form->id], 'form successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create client.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create form.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Update a client BY ID.
+     * Update a form BY ID.
      *
      * @OA\Put(
-     *        path="/{tenant}/client/update/{id}",
-     *        summary="Update a Client",
-     *        operationId="updateClient",
-     *        tags={"Client"},
+     *        path="/{tenant}/form/update/{id}",
+     *        summary="Update a Form",
+     *        operationId="updateForm",
+     *        tags={"Form"},
      *        security = {{"BearerAuth": {}}},
      *        description="Authenticate using a bearer token",
-     *        @OA\Parameter(name="id", description="Client Id", required=true, in="path", @OA\Schema( type="string" )),
+     *        @OA\Parameter(name="id", description="Form Id", required=true, in="path", @OA\Schema( type="string" )),
      *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
      *        @OA\Response(response=422,description="Input validation error"),
      *        @OA\Response(response=404,description="Not found")
@@ -127,8 +126,7 @@ class ClientController extends BaseAPIController
     public function update(Request $request, $id) : Response
     {
         $validator = \Validator::make($request->all(), [
-            'first_name' => 'string',
-            'last_name' => 'string'
+            'name' => 'string|required'
         ]);
 
         if ($validator->fails()) {
@@ -136,30 +134,32 @@ class ClientController extends BaseAPIController
         }
 
         try {
-            $client = Client::find($id);
-            if((!isset($client))){
-                return $this->success([], 'No client record found to update', [], Response::HTTP_NOT_FOUND);
+            $form = Form::find($id);
+            if((!isset($form))){
+                return $this->success([], 'No form record found to update', [], Response::HTTP_NOT_FOUND);
             }
-            $old_value = Client::findOrFail($id);
+            $old_value = Form::findOrFail($id);
             $new_value = $request->all();
 
-            if ($client->updateOrFail($request->all()) === false) {
-                throw new \RuntimeException('Could not update client');
+            $form->name = $request->name;
+
+            if ($form->save() === false) {
+                throw new \RuntimeException('Could not update form');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the client', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'There was an error trying to update the form', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success([], 'client successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success([], 'form successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**
-     * Delete a Client by ID.
+     * Delete a Form by ID.
      *
      * @OA\Delete(
-     *      path="/{tenant}/client/delete/{id}",
-     *      operationId="deleteClientById",
-     *      tags={"Client"},
+     *      path="/{tenant}/form/delete/{id}",
+     *      operationId="deleteFormById",
+     *      tags={"Form"},
      *      security = {{"BearerAuth": {}}},
      *      description="Authenticate using a bearer token",
      *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
@@ -174,18 +174,18 @@ class ClientController extends BaseAPIController
     public function delete($id) : Response
     {
         try {
-            $client = Client::find($id);
-            if((!isset($client))){
-                return $this->success([], 'No client record found to delete', [], Response::HTTP_NOT_FOUND);
+            $form = Form::find($id);
+            if((!isset($form))){
+                return $this->success([], 'No form record found to delete', [], Response::HTTP_NOT_FOUND);
             }
 
-            if ($client->delete() === false) {
-                throw new \RuntimeException('Could not delete the client');
+            if ($form->delete() === false) {
+                throw new \RuntimeException('Could not delete the form');
             }
 
             return response()->noContent();
         } catch (\Throwable $exception) {
-            return $this->error([$exception->getMessage()], 'There was an error trying to delete the client', ['client_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error([$exception->getMessage()], 'There was an error trying to delete the form', ['form_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

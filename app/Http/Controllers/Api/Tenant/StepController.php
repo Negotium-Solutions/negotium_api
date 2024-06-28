@@ -92,14 +92,14 @@ class StepController extends BaseApiController
      */
     public function create(Request $request) : Response
     {
-        $validator = Validator::make($request->all(),
-            ['name' => 'string|required'],
-            ['parent_id' => 'integer|required'],
-            ['model_id' => 'integer|required'],
-        );
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|required',
+            'parent_id' => 'integer|required',
+            'model_id' => 'integer|required',
+        ]);
 
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNABLE_ENTITY);
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {

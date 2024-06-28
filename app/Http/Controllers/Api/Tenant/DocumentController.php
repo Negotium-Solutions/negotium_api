@@ -83,10 +83,10 @@ class DocumentController extends BaseAPIController implements ApiInterface
      */
     public function create(Request $request) : Response
     {
-        $validator = \Validator::make($request->all(),
-            ['name' => 'string|required'],
-            ['file' => ['required|file', File::types(['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'png', 'txt'])]]
-        );
+        $validator = \Validator::make($request->all(), [
+            'name' => 'string|required',
+            'file' => ['required|file', File::types(['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'png', 'txt'])]
+        ]);
 
         $hasFileErrors = false;
         $errorFileMessages = [];
@@ -147,10 +147,10 @@ class DocumentController extends BaseAPIController implements ApiInterface
      */
     public function update(Request $request, $id) : Response
     {
-        $validator = \Validator::make($request->all(),
-            ['name' => 'string|required'],
-            ['file' => ['required|file', File::types(['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'png', 'txt'])]]
-        );
+        $validator = \Validator::make($request->all(), [
+            'name' => 'string|required',
+            'file' => ['required|file', File::types(['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'png', 'txt'])]
+        ]);
 
         $hasFileErrors = false;
         $errorFileMessages = [];
