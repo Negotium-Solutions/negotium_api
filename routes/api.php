@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Tenant\FormController;
 use App\Http\Controllers\Api\Tenant\ProcessCategoryController;
 use App\Http\Controllers\Api\Tenant\ProcessController;
 use App\Http\Controllers\Api\Tenant\ProcessStepController;
@@ -100,4 +101,10 @@ Route::group([
     Route::post('/schema-data-store/create', [SchemaDataStoreController::class, 'create'])->name('api.schema-data-store.create');
     Route::put('/schema-data-store/update/{id}', [SchemaDataStoreController::class, 'update'])->name('api.schema-data-store.update');
     Route::delete('/schema-data-store/delete/{id?}', [SchemaDataStoreController::class, 'delete'])->name('api.schema-data-store.delete');
+
+    // Form routes
+    Route::get('/form/{id?}', [FormController::class, 'get'])->name('api.form');
+    Route::post('/form/create', [FormController::class, 'create'])->name('api.form.create');
+    Route::put('/form/update/{id}', [FormController::class, 'update'])->name('api.form.update');
+    Route::delete('/form/delete/{id?}', [FormController::class, 'delete'])->name('api.form.delete');
 });
