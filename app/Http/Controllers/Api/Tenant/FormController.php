@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Controllers\Api\ApiInterface;
+use App\Models\Tenant\Attribute;
 use App\Models\Tenant\Form;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -46,22 +47,18 @@ class FormController extends BaseAPIController implements ApiInterface
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Form::where('id', $id) : Form::whereIn('id', explode('|', $request->has('forms') ? $request->forms : ''));
+            $form = Form::with('steps.activities')->where('id', $id)->first();
 
-            if ($request->has('with') && $request->input('with') != '') {
-                $with_array = explode(',', $request->with);
-                $query = $query->with($with_array);
-            }
+            $data['form'] = $form->steps[0]->activities;
+            $data['attributes'] = Attribute::orderBy('id')->get();
 
-            $data = isset($id) ? $query->first() : $query->get();
-
-            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+            if(count($data['form']) == 0){
                 return $this->success([], 'No form record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
             return $this->success($data, 'forms successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve forms.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
