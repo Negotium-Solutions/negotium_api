@@ -47,26 +47,12 @@ class FormController extends BaseAPIController implements ApiInterface
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Form::where('id', $id) : Form::where('id', -1);
+            $form = Form::with('steps.activities')->where('id', $id)->first();
 
-            if ($request->has('with') && $request->input('with') != '') {
-                $with_array = explode(',', $request->with);
-                $query = $query->with($with_array);
-            }
+            $data['form'] = $form->steps[0]->activities;
+            $data['attributes'] = Attribute::orderBy('id')->get();
 
-            $forms = isset($id) ? $query->first() : $query->get();
-
-            if(isset($id)) {
-                $data['form'] = $forms->steps[0]->activities;
-            } else {
-                $data['form'] = $forms;
-            }
-
-            if($request->has('attributes') && $request->get('attributes') === 1){} {
-                $data['attributes'] = Attribute::orderBy('id')->get();
-            }
-
-            if((isset($id) && !isset($data['form'])) || (!isset($id) && count($data['form']) == 0)){
+            if(count($data['form']) == 0){
                 return $this->success([], 'No form record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
