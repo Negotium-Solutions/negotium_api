@@ -262,19 +262,19 @@
                 ]
             }
         },
-        "/{tenant}/client/{id}": {
+        "/{tenant}/activity-group/{id}": {
             "get": {
                 "tags": [
-                    "Client"
+                    "ActivityGroup"
                 ],
-                "summary": "Get a Client",
+                "summary": "Get a activity group",
                 "description": "Authenticate using a bearer token",
-                "operationId": "getClient",
+                "operationId": "getActivityGroup",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Client Id",
+                        "description": "Activity Group Id",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -304,14 +304,14 @@
                 ]
             }
         },
-        "/{tenant}/client": {
+        "/{tenant}/activity-groups": {
             "get": {
                 "tags": [
-                    "Client"
+                    "ActivityGroup"
                 ],
-                "summary": "Get clients",
+                "summary": "Get Activity Groups",
                 "description": "Authenticate using a bearer token",
-                "operationId": "getClients",
+                "operationId": "getActivityGroups",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -326,289 +326,6 @@
                     },
                     "500": {
                         "description": "Internal server error"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client/create": {
-            "post": {
-                "tags": [
-                    "Client"
-                ],
-                "summary": "Create a new client",
-                "description": "Authenticate using a bearer token",
-                "operationId": "createClient",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Input validation error"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client/update/{id}": {
-            "put": {
-                "tags": [
-                    "Client"
-                ],
-                "summary": "Update a Client",
-                "description": "Authenticate using a bearer token",
-                "operationId": "updateClient",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Client Id",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Input validation error"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client/delete/{id}": {
-            "delete": {
-                "tags": [
-                    "Client"
-                ],
-                "summary": "Delete a Client by ID.",
-                "description": "Authenticate using a bearer token",
-                "operationId": "deleteClientById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No content"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client-type/{id}": {
-            "get": {
-                "tags": [
-                    "ClientType"
-                ],
-                "summary": "Get a Client Type",
-                "description": "Authenticate using a bearer token",
-                "operationId": "getClientType",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Client Type Id",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client-type": {
-            "get": {
-                "tags": [
-                    "Client Type"
-                ],
-                "summary": "Get client types",
-                "description": "Authenticate using a bearer token",
-                "operationId": "getClientTypes",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client-type/create": {
-            "post": {
-                "tags": [
-                    "Client Type"
-                ],
-                "summary": "Create a new client type",
-                "description": "Authenticate using a bearer token",
-                "operationId": "createClientType",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Input validation error"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client-type/update/{id}": {
-            "put": {
-                "tags": [
-                    "Client Type"
-                ],
-                "summary": "Update a ClientType",
-                "description": "Authenticate using a bearer token",
-                "operationId": "updateClientType",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ClientType Id",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Input validation error"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/client-type/delete/{id}": {
-            "delete": {
-                "tags": [
-                    "Client Type"
-                ],
-                "summary": "Delete a Client Type by ID.",
-                "description": "Authenticate using a bearer token",
-                "operationId": "deleteClientTypeById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No content"
-                    },
-                    "404": {
-                        "description": "Not found"
                     }
                 },
                 "security": [
@@ -772,6 +489,184 @@
                 "summary": "Delete a Document by ID.",
                 "description": "Authenticate using a bearer token",
                 "operationId": "deleteDocumentById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/form/{id}": {
+            "get": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Get a form",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getForm",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Form Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/form": {
+            "get": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Get forms",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getForms",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/form/create": {
+            "post": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Create a new form",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createForm",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/form/update/{id}": {
+            "put": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Update a Form",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateForm",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Form Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/form/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Form"
+                ],
+                "summary": "Delete a Form by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteFormById",
                 "parameters": [
                     {
                         "name": "id",
@@ -1128,6 +1023,362 @@
                 "summary": "Delete a Process by ID.",
                 "description": "Authenticate using a bearer token",
                 "operationId": "deleteProcessById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile/{id}": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get a Profile",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProfile",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Profile Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get profiles",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProfiles",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile/create": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Create a new profile",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createProfile",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile/update/{id}": {
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update a Profile",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateProfile",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Profile Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Delete a Profile by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteProfileById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile-type/{id}": {
+            "get": {
+                "tags": [
+                    "ProfileType"
+                ],
+                "summary": "Get a Profile Type",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProfileType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Profile Type Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile-type": {
+            "get": {
+                "tags": [
+                    "ProfileType"
+                ],
+                "summary": "Get profile types",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProfileTypes",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile-type/create": {
+            "post": {
+                "tags": [
+                    "ProfileType"
+                ],
+                "summary": "Create a new profile type",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createProfileType",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile-type/update/{id}": {
+            "put": {
+                "tags": [
+                    "ProfileType"
+                ],
+                "summary": "Update a ProfileType",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateProfileType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ProfileType Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/profile-type/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "ProfileType"
+                ],
+                "summary": "Delete a Profile Type by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteProfileTypeById",
                 "parameters": [
                     {
                         "name": "id",

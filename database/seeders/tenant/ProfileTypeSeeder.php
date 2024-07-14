@@ -4,7 +4,7 @@ namespace Database\Seeders\tenant;
 
 use App\Models\Tenant\Activity;
 use App\Models\Tenant\ActivityType;
-use App\Models\Tenant\ClientType;
+use App\Models\Tenant\ProfileType;
 use App\Models\Tenant\Schema as CRMSchema;
 use App\Models\Tenant\Step;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,28 +12,32 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 use SebastianBergmann\Type\VoidType;
 
-class ClientTypeSeeder extends Seeder
+class ProfileTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $clientType = new ClientType();
-        $clientType->name = 'Personal Lines';
+        $clientType = new ProfileType();
+        $clientType->name = 'Individual';
         $clientType->save();
+        /*
         $request = json_decode(file_get_contents('database/data/client_type_step1_personal_lines.json'));
         $this->addClientType($request);
         $request = json_decode(file_get_contents('database/data/client_type_step2_personal_lines.json'));
         $this->addClientType($request);
+        */
 
-        $clientType = new ClientType();
-        $clientType->name = 'Business Lines';
+        $clientType = new ProfileType();
+        $clientType->name = 'Business';
         $clientType->save();
+        /*
         $request = json_decode(file_get_contents('database/data/client_type_step1_business_lines.json'));
         $this->addClientType($request);
         $request = json_decode(file_get_contents('database/data/client_type_step2_business_lines.json'));
         $this->addClientType($request);
+        */
     }
 
     public function addClientType(Object $request) : void

@@ -49,10 +49,10 @@ class FormController extends BaseAPIController implements ApiInterface
         try{
             $form = Form::with('steps.activities')->where('id', $id)->first();
 
-            $data['form'] = $form->steps[0]->activities;
+            $data['activities'] = $form->steps[0]->activities;
             $data['attributes'] = Attribute::orderBy('id')->get();
 
-            if(count($data['form']) == 0){
+            if(count($data['activities']) == 0){
                 return $this->success([], 'No form record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 

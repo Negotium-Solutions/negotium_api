@@ -16,9 +16,9 @@ class Step extends Model
         return $this->belongsTo(Process::class, 'parent_id');
     }
 
-    public function client_type()
+    public function profile_type()
     {
-        return $this->belongsTo(ClientType::class, 'parent_id');
+        return $this->belongsTo(ProfileType::class, 'parent_id');
     }
 
     public function activities()
@@ -29,6 +29,11 @@ class Step extends Model
     public function schema()
     {
         return $this->hasOne(Schema::class, 'step_id');
+    }
+
+    public function data()
+    {
+        return $this->hasMany(SchemaDataStore::class, 'data_owner_id', 'id'); // Data_Owner_ID --> Step_ID
     }
 
     public function model()

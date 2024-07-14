@@ -3,39 +3,39 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Controllers\Api\ApiInterface;
-use App\Models\Tenant\ClientType;
+use App\Models\Tenant\ProfileType;
 use App\Services\SchemaService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class ClientTypeController extends BaseAPIController implements ApiInterface
+class ProfileTypeController extends BaseAPIController implements ApiInterface
 {
     public function __construct(protected SchemaService $schemaService)
     {
     }
 
     /**
-     * Get client type(s)
+     * Get profile type(s)
      *
      * @OA\Get(
-     *       path="/{tenant}/client-type/{id}",
-     *       summary="Get a Client Type",
-     *       operationId="getClientType",
-     *       tags={"ClientType"},
+     *       path="/{tenant}/profile-type/{id}",
+     *       summary="Get a Profile Type",
+     *       operationId="getProfileType",
+     *       tags={"ProfileType"},
      *       security = {{"BearerAuth": {}}},
      *       description="Authenticate using a bearer token",
-     *       @OA\Parameter(name="id", description="Client Type Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Parameter(name="id", description="Profile Type Id", required=false, in="path", @OA\Schema( type="string" )),
      *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
      *       @OA\Response(response=401,description="Unauthenticated"),
      *       @OA\Response(response=500,description="Internal server error")
      *  ),
      *
      * @OA\Get(
-     *       path="/{tenant}/client-type",
-     *       summary="Get client types",
-     *       operationId="getClientTypes",
-     *       tags={"Client Type"},
+     *       path="/{tenant}/profile-type",
+     *       summary="Get profile types",
+     *       operationId="getProfileTypes",
+     *       tags={"ProfileType"},
      *       security = {{"BearerAuth": {}}},
      *       description="Authenticate using a bearer token",
      *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
@@ -51,7 +51,7 @@ class ClientTypeController extends BaseAPIController implements ApiInterface
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? ClientType::where('id', $id) : ClientType::query();
+            $query = isset($id) ? ProfileType::where('id', $id) : ProfileType::query();
 
             if ($request->has('with') && ($request->input('with') != '')) {
                 $query = $query->with($request->with);
@@ -60,23 +60,23 @@ class ClientTypeController extends BaseAPIController implements ApiInterface
             $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
-                return $this->success([], 'No client type record(s) found', [], Response::HTTP_NOT_FOUND);
+                return $this->success([], 'No profile type record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
-            return $this->success($data, 'client types successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($data, 'profile types successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Create a new client type.
+     * Create a new profile type.
      *
      * @OA\Post(
-     *        path="/{tenant}/client-type/create",
-     *        summary="Create a new client type",
-     *        operationId="createClientType",
-     *        tags={"Client Type"},
+     *        path="/{tenant}/profile-type/create",
+     *        summary="Create a new profile type",
+     *        operationId="createProfileType",
+     *        tags={"ProfileType"},
      *        security = {{"BearerAuth": {}}},
      *        description="Authenticate using a bearer token",
      *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
@@ -100,35 +100,35 @@ class ClientTypeController extends BaseAPIController implements ApiInterface
         }
 
         try {
-            $clientType = new ClientType();
-            $clientType->name = $request->name;
+            $profileType = new ProfileType();
+            $profileType->name = $request->name;
 
-            if ($clientType->save() === false) {
-                throw new \RuntimeException('Could not save client type');
+            if ($profileType->save() === false) {
+                throw new \RuntimeException('Could not save profile type');
             }
 
             // Create the schema here and link it to the activity
-            $request->merge(['model' => 'ClientType']);
-            $request->merge(['parent_id' => $clientType->id]);
+            $request->merge(['model' => 'ProfileType']);
+            $request->merge(['parent_id' => $profileType->id]);
             $this->schemaService->create($request);
 
-            return $this->success(['id' => $clientType->id], 'Client type successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $profileType->id], 'Profile type successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create client type.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create profile type.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Update a client type BY ID.
+     * Update a profile type BY ID.
      *
      * @OA\Put(
-     *        path="/{tenant}/client-type/update/{id}",
-     *        summary="Update a ClientType",
-     *        operationId="updateClientType",
-     *        tags={"Client Type"},
+     *        path="/{tenant}/profile-type/update/{id}",
+     *        summary="Update a ProfileType",
+     *        operationId="updateProfileType",
+     *        tags={"ProfileType"},
      *        security = {{"BearerAuth": {}}},
      *        description="Authenticate using a bearer token",
-     *        @OA\Parameter(name="id", description="ClientType Id", required=true, in="path", @OA\Schema( type="string" )),
+     *        @OA\Parameter(name="id", description="ProfileType Id", required=true, in="path", @OA\Schema( type="string" )),
      *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
      *        @OA\Response(response=422,description="Input validation error"),
      *        @OA\Response(response=404,description="Not found")
@@ -149,30 +149,30 @@ class ClientTypeController extends BaseAPIController implements ApiInterface
         }
 
         try {
-            $clientType = ClientType::find($id);
-            if((!isset($clientType))){
-                return $this->success([], 'No client type record found to update', [], Response::HTTP_NOT_FOUND);
+            $profileType = ProfileType::find($id);
+            if((!isset($profileType))){
+                return $this->success([], 'No profile type record found to update', [], Response::HTTP_NOT_FOUND);
             }
-            $old_value = ClientType::findOrFail($id);
+            $old_value = ProfileType::findOrFail($id);
             $new_value = $request->all();
 
-            if ($clientType->updateOrFail($request->all()) === false) {
-                throw new \RuntimeException('Could not update client type');
+            if ($profileType->updateOrFail($request->all()) === false) {
+                throw new \RuntimeException('Could not update profile type');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the client type', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'There was an error trying to update the profile type', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success([], 'client type successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success([], 'profile type successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**
-     * Delete a Client Type by ID.
+     * Delete a Profile Type by ID.
      *
      * @OA\Delete(
-     *      path="/{tenant}/client-type/delete/{id}",
-     *      operationId="deleteClientTypeById",
-     *      tags={"Client Type"},
+     *      path="/{tenant}/profile-type/delete/{id}",
+     *      operationId="deleteProfileTypeById",
+     *      tags={"ProfileType"},
      *      security = {{"BearerAuth": {}}},
      *      description="Authenticate using a bearer token",
      *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
@@ -187,18 +187,18 @@ class ClientTypeController extends BaseAPIController implements ApiInterface
     public function delete($id) : Response
     {
         try {
-            $clientType = ClientType::find($id);
-            if((!isset($clientType))){
-                return $this->success([], 'No client type type record found to delete', [], Response::HTTP_NOT_FOUND);
+            $profileType = ProfileType::find($id);
+            if((!isset($profileType))){
+                return $this->success([], 'No profile type type record found to delete', [], Response::HTTP_NOT_FOUND);
             }
 
-            if ($clientType->delete() === false) {
-                throw new \RuntimeException('Could not delete the client type');
+            if ($profileType->delete() === false) {
+                throw new \RuntimeException('Could not delete the profile type');
             }
 
             return response()->noContent();
         } catch (\Throwable $exception) {
-            return $this->error([$exception->getMessage()], 'There was an error trying to delete the client type', ['client_type_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error([$exception->getMessage()], 'There was an error trying to delete the profile type', ['profile_type_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

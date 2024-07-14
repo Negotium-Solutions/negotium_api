@@ -37,6 +37,6 @@ class Schema extends Model
 
     public function data()
     {
-        return $this->hasOne(SchemaDataStore::class, 'schema_id');
+        return $this->hasMany(SchemaDataStore::class, 'data_owner_id');
     }
 }

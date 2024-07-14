@@ -15,7 +15,7 @@ class ModelTypeSeeder extends Seeder
     {
         ModelType::insert([
             ['name' => 'Process'],
-            ['name' => 'ClientType']
+            ['name' => 'ProfileType']
         ]);
     }
 }

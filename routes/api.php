@@ -11,8 +11,8 @@ use App\Http\Controllers\Api\Tenant\ActivityGroupController;
 use App\Http\Controllers\Api\Tenant\DocumentController;
 use App\Http\Controllers\Api\Tenant\SchemaController;
 use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
-use App\Http\Controllers\Api\Tenant\ClientController;
-use App\Http\Controllers\Api\Tenant\ClientTypeController;
+use App\Http\Controllers\Api\Tenant\ProfileController;
+use App\Http\Controllers\Api\Tenant\ProfileTypeController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
@@ -43,17 +43,17 @@ Route::group([
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('api.user.update');
     Route::delete('/user/delete/{id?}', [UserController::class, 'delete'])->name('api.user.delete');
 
-    // Clients routes
-    Route::get('/client/{id?}', [ClientController::class, 'get'])->name('api.client');
-    Route::post('/client/create', [ClientController::class, 'create'])->name('api.client.create');
-    Route::put('/client/update/{id}', [ClientController::class, 'update'])->name('api.client.update');
-    Route::delete('/client/delete/{id?}', [ClientController::class, 'delete'])->name('api.client.delete');
+    // Profiles routes
+    Route::get('/profile/{id?}', [ProfileController::class, 'get'])->name('api.profile');
+    Route::post('/profile/create', [ProfileController::class, 'create'])->name('api.profile.create');
+    Route::put('/profile/update/{id}', [ProfileController::class, 'update'])->name('api.profile.update');
+    Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');
 
-    // Client Type routes
-    Route::get('/client-type/{id?}', [ClientTypeController::class, 'get'])->name('api.client-type');
-    Route::post('/client-type/create', [ClientTypeController::class, 'create'])->name('api.client-type.create');
-    Route::put('/client-type/update/{id}', [ClientTypeController::class, 'update'])->name('api.client-type.update');
-    Route::delete('/client-type/delete/{id?}', [ClientTypeController::class, 'delete'])->name('api.client-type.delete');
+    // Profile Type routes
+    Route::get('/profile-type/{id?}', [ProfileTypeController::class, 'get'])->name('api.profile-type');
+    Route::post('/profile-type/create', [ProfileTypeController::class, 'create'])->name('api.profile-type.create');
+    Route::put('/profile-type/update/{id}', [ProfileTypeController::class, 'update'])->name('api.profile-type.update');
+    Route::delete('/profile-type/delete/{id?}', [ProfileTypeController::class, 'delete'])->name('api.profile-type.delete');
 
     // Process Category routes
     Route::get('/process-category/{id?}', [ProcessCategoryController::class, 'get'])->name('api.process-category');

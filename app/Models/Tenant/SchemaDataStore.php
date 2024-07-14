@@ -10,5 +10,11 @@ class SchemaDataStore extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'activity_1';
+    protected $table = ''; // Set this on when initialising the instance of this model
+
+    public function getFullName() {
+        switch (Step::class) {
+
+        }
+    }
 }

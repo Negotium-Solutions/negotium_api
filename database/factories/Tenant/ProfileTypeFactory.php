@@ -5,9 +5,9 @@ namespace Database\Factories\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tenant\ClientType>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tenant\ProfileType>
  */
-class ClientTypeFactory extends Factory
+class ProfileTypeFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,8 +16,6 @@ class ClientTypeFactory extends Factory
      */
     public function definition(): array
     {
-        $categories = ['Personal', 'Business'];
-
         return [
             'name' => fake()->word
         ];
