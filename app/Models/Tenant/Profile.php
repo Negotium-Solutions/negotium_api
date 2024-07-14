@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClientType extends Model
+class Profile extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,11 +16,13 @@ class ClientType extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'first_name',
+        'last_name',
+        'company_name'
     ];
 
-    public function steps()
+    public function profile_type()
     {
-        return $this->hasMany(Step::class, 'parent_id');
+        return $this->belongsTo(ProfileType::class);
     }
 }

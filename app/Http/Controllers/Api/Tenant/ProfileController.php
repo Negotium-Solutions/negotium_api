@@ -2,34 +2,34 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\Tenant\Client;
+use App\Models\Tenant\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class ClientController extends BaseAPIController
+class ProfileController extends BaseAPIController
 {
     /**
-     * Get client(s)
+     * Get profile(s)
      *
      * @OA\Get(
-     *       path="/{tenant}/client/{id}",
-     *       summary="Get a Client",
-     *       operationId="getClient",
-     *       tags={"Client"},
+     *       path="/{tenant}/profile/{id}",
+     *       summary="Get a Profile",
+     *       operationId="getProfile",
+     *       tags={"Profile"},
      *       security = {{"BearerAuth": {}}},
      *       description="Authenticate using a bearer token",
-     *       @OA\Parameter(name="id", description="Client Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Parameter(name="id", description="Profile Id", required=false, in="path", @OA\Schema( type="string" )),
      *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
      *       @OA\Response(response=401,description="Unauthenticated"),
      *       @OA\Response(response=500,description="Internal server error")
      *  ),
      *
      * @OA\Get(
-     *       path="/{tenant}/client",
-     *       summary="Get clients",
-     *       operationId="getClients",
-     *       tags={"Client"},
+     *       path="/{tenant}/profile",
+     *       summary="Get profiles",
+     *       operationId="getProfiles",
+     *       tags={"Profile"},
      *       security = {{"BearerAuth": {}}},
      *       description="Authenticate using a bearer token",
      *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
@@ -45,28 +45,28 @@ class ClientController extends BaseAPIController
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Client::where('id', $id) : Client::query();
+            $query = isset($id) ? Profile::where('id', $id) : Profile::query();
 
             $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
-                return $this->success([], 'No client record(s) found', [], Response::HTTP_NOT_FOUND);
+                return $this->success([], 'No profile record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
-            return $this->success($data, 'clients successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($data, 'profiles successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Create a new client.
+     * Create a new profile.
      *
      * @OA\Post(
-     *        path="/{tenant}/client/create",
-     *        summary="Create a new client",
-     *        operationId="createClient",
-     *        tags={"Client"},
+     *        path="/{tenant}/profile/create",
+     *        summary="Create a new profile",
+     *        operationId="createProfile",
+     *        tags={"Profile"},
      *        security = {{"BearerAuth": {}}},
      *        description="Authenticate using a bearer token",
      *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
@@ -90,31 +90,31 @@ class ClientController extends BaseAPIController
         }
 
         try {
-            $client = new Client();
-            $client->first_name = $request->first_name;
-            $client->last_name = $request->last_name;
+            $profile = new Profile();
+            $profile->first_name = $request->first_name;
+            $profile->last_name = $request->last_name;
 
-            if ($client->save() === false) {
-                throw new \RuntimeException('Could not save client');
+            if ($profile->save() === false) {
+                throw new \RuntimeException('Could not save profile');
             }
 
-            return $this->success(['id' => $client->id], 'client successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $profile->id], 'profile successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create client.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create profile.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Update a client BY ID.
+     * Update a profile BY ID.
      *
      * @OA\Put(
-     *        path="/{tenant}/client/update/{id}",
-     *        summary="Update a Client",
-     *        operationId="updateClient",
-     *        tags={"Client"},
+     *        path="/{tenant}/profile/update/{id}",
+     *        summary="Update a Profile",
+     *        operationId="updateProfile",
+     *        tags={"Profile"},
      *        security = {{"BearerAuth": {}}},
      *        description="Authenticate using a bearer token",
-     *        @OA\Parameter(name="id", description="Client Id", required=true, in="path", @OA\Schema( type="string" )),
+     *        @OA\Parameter(name="id", description="Profile Id", required=true, in="path", @OA\Schema( type="string" )),
      *        @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
      *        @OA\Response(response=422,description="Input validation error"),
      *        @OA\Response(response=404,description="Not found")
@@ -136,30 +136,30 @@ class ClientController extends BaseAPIController
         }
 
         try {
-            $client = Client::find($id);
-            if((!isset($client))){
-                return $this->success([], 'No client record found to update', [], Response::HTTP_NOT_FOUND);
+            $profile = Profile::find($id);
+            if((!isset($profile))){
+                return $this->success([], 'No profile record found to update', [], Response::HTTP_NOT_FOUND);
             }
-            $old_value = Client::findOrFail($id);
+            $old_value = Profile::findOrFail($id);
             $new_value = $request->all();
 
-            if ($client->updateOrFail($request->all()) === false) {
-                throw new \RuntimeException('Could not update client');
+            if ($profile->updateOrFail($request->all()) === false) {
+                throw new \RuntimeException('Could not update profile');
             }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the client', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'There was an error trying to update the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success([], 'client successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success([], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**
-     * Delete a Client by ID.
+     * Delete a Profile by ID.
      *
      * @OA\Delete(
-     *      path="/{tenant}/client/delete/{id}",
-     *      operationId="deleteClientById",
-     *      tags={"Client"},
+     *      path="/{tenant}/profile/delete/{id}",
+     *      operationId="deleteProfileById",
+     *      tags={"Profile"},
      *      security = {{"BearerAuth": {}}},
      *      description="Authenticate using a bearer token",
      *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
@@ -174,18 +174,18 @@ class ClientController extends BaseAPIController
     public function delete($id) : Response
     {
         try {
-            $client = Client::find($id);
-            if((!isset($client))){
-                return $this->success([], 'No client record found to delete', [], Response::HTTP_NOT_FOUND);
+            $profile = Profile::find($id);
+            if((!isset($profile))){
+                return $this->success([], 'No profile record found to delete', [], Response::HTTP_NOT_FOUND);
             }
 
-            if ($client->delete() === false) {
-                throw new \RuntimeException('Could not delete the client');
+            if ($profile->delete() === false) {
+                throw new \RuntimeException('Could not delete the profile');
             }
 
             return response()->noContent();
         } catch (\Throwable $exception) {
-            return $this->error([$exception->getMessage()], 'There was an error trying to delete the client', ['client_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error([$exception->getMessage()], 'There was an error trying to delete the profile', ['profile_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
