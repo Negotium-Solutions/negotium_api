@@ -6,6 +6,7 @@ use Database\Seeders\tenant\ActivityGroupSeeder;
 use Database\Seeders\tenant\ActivitySeeder;
 use Database\Seeders\tenant\ActivityTypeSeeder;
 use Database\Seeders\tenant\AttributeSeeder;
+use Database\Seeders\tenant\ProfileProcessSeeder;
 use Database\Seeders\tenant\ProfileSeeder;
 use Database\Seeders\tenant\ProfileTypeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
@@ -26,6 +27,7 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(ProcessSeeder::class);
         $this->call(ActivityTypeSeeder::class);
         $this->call(ProfileSeeder::class);
+        $this->call(ProfileProcessSeeder::class);
         $this->call(ProfileTypeSeeder::class);
         $this->call(DocumentSeeder::class);
         $this->call(ActivityGroupSeeder::class);
