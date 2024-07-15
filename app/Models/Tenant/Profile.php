@@ -25,4 +25,15 @@ class Profile extends Model
     {
         return $this->belongsTo(ProfileType::class);
     }
+
+    public function processes() {
+        return $this->hasManyThrough(
+            Process::class,
+            ProfileProcess::class,
+            'profile_id',
+            'id',
+            'id',
+            'process_id'
+        );
+    }
 }
