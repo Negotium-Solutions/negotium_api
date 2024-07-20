@@ -54,7 +54,8 @@ class ProfileTypeController extends BaseAPIController implements ApiInterface
             $query = isset($id) ? ProfileType::where('id', $id) : ProfileType::query();
 
             if ($request->has('with') && ($request->input('with') != '')) {
-                $query = $query->with($request->with);
+                $_with = explode(',', $request->input('with'));
+                $query = $query->with($_with);
             }
 
             $data = isset($id) ? $query->first() : $query->get();

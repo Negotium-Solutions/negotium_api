@@ -23,7 +23,8 @@ class DocumentFactory extends Factory
             'type' => $documentType[rand(1, 6)],
             'path' => "documents/",
             'size' => rand(1, 10000),
-            'user_id' => rand(1, 5)
+            'user_id' => rand(1, 5),
+            'profile_id' => rand(1, 5)
         ];
     }
 }

@@ -22,14 +22,16 @@ class ProfileFactory extends Factory
             $factoryData = [
                 'first_name' => fake()->firstName(),
                 'last_name' => fake()->lastName(),
-                'profile_type_id' => $profileType
+                'profile_type_id' => $profileType,
+                'avatar' => '/images/individual/avatar'.rand(1, 5).'.png'
             ];
         }
 
         if($profileType === 2) {
             $factoryData = [
                 'company_name' => fake()->company(),
-                'profile_type_id' => $profileType
+                'profile_type_id' => $profileType,
+                'avatar' => '/images/business/avatar'.rand(1, 5).'.png'
             ];
         }
 

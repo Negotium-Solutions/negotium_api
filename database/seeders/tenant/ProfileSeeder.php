@@ -15,12 +15,14 @@ class ProfileSeeder extends Seeder
         Profile::factory([
             'first_name' => 'Nico',
             'last_name' => 'Vermeulen',
-            'profile_type_id' => 1
+            'profile_type_id' => 1,
+            'avatar' => '/images/individual/avatar'.rand(1, 5).'.png'
         ])->create();
 
         Profile::factory([
             'company_name' => 'Negotium Solutions',
-            'profile_type_id' => 2
+            'profile_type_id' => 2,
+            'avatar' => '/images/business/avatar'.rand(1, 5).'.png'
         ])->create();
 
         Profile::factory(20)->create();

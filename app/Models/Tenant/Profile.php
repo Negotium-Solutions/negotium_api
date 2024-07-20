@@ -36,4 +36,8 @@ class Profile extends Model
             'process_id'
         );
     }
+
+    public function documents() {
+        return $this->hasMany(Document::class);
+    }
 }
