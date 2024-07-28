@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Models\Tenant\Profile;
+use App\Models\Tenant\ProfileProcess;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
@@ -186,6 +187,53 @@ class ProfileController extends BaseAPIController
             return response()->noContent();
         } catch (\Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the profile', ['profile_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Delete a Profile by ID.
+     *
+     * @OA\AssignProcess(
+     *      path="/{tenant}/profile/assign-process",
+     *      operationId="assignProcess",
+     *      tags={"Profile"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="profile_id", in="path", @OA\Schema(type="string")),
+     *      @OA\Parameter(name="process_id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @return Response
+     * @throws Exception
+     */
+    public function assignProcess(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'profile_id' => 'integer|required',
+            'process_id' => 'integer|required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
+            if(!isset($profileProcess->id) || !($profileProcess->id > 0)) {
+                $profileProcess = new ProfileProcess();
+                $profileProcess->profile_id = $request->profile_id;
+                $profileProcess->process_id = $request->process_id;
+
+                if ($profileProcess->save() === false) {
+                    throw new \RuntimeException('Could not assign process to profile');
+                }
+            }
+
+            return $this->success(['id' => $profileProcess->id], 'process successfully assigned to profile.', $request->all(), Response::HTTP_CREATED);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
