@@ -208,11 +208,10 @@ class ProfileController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    public function assignProcess(Request $request)
+    public function assignProcesses(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'profile_id' => 'integer|required',
-            'process_id' => 'integer|required'
+            'data' => 'array|required'
         ]);
 
         if ($validator->fails()) {
@@ -220,14 +219,16 @@ class ProfileController extends BaseAPIController
         }
 
         try {
-            $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
-            if(!isset($profileProcess->id) || !($profileProcess->id > 0)) {
-                $profileProcess = new ProfileProcess();
-                $profileProcess->profile_id = $request->profile_id;
-                $profileProcess->process_id = $request->process_id;
+            foreach($request->input('data') as $data) {
+                $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
+                if (!isset($profileProcess->id) || !($profileProcess->id > 0)) {
+                    $profileProcess = new ProfileProcess();
+                    $profileProcess->profile_id = $data["profile_id"];
+                    $profileProcess->process_id = $data["process_id"];
 
-                if ($profileProcess->save() === false) {
-                    throw new \RuntimeException('Could not assign process to profile');
+                    if ($profileProcess->save() === false) {
+                        throw new \RuntimeException('Could not assign process to profile');
+                    }
                 }
             }
 
