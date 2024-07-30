@@ -221,7 +221,7 @@ class ProfileController extends BaseAPIController
         try {
             foreach($request->input('data') as $data) {
                 $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
-                if (!isset($profileProcess->id) || !($profileProcess->id > 0)) {
+                if (!isset($profileProcess->id)) {
                     $profileProcess = new ProfileProcess();
                     $profileProcess->profile_id = $data["profile_id"];
                     $profileProcess->process_id = $data["process_id"];
