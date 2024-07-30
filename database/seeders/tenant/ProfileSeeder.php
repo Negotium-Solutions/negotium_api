@@ -14,7 +14,7 @@ class ProfileSeeder extends Seeder
     {
         Profile::factory([
             'first_name' => 'Nico',
-            'last_name' => 'Vermeulen',
+            'last_name' => 'Van Der Meulen',
             'profile_type_id' => 1,
             'avatar' => '/images/individual/avatar'.rand(1, 5).'.png'
         ])->create();

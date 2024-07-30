@@ -48,7 +48,7 @@ Route::group([
     Route::post('/profile/create', [ProfileController::class, 'create'])->name('api.profile.create');
     Route::put('/profile/update/{id}', [ProfileController::class, 'update'])->name('api.profile.update');
     Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');
-    Route::post('/profile/assign-process', [ProfileController::class, 'assignProcess'])->name('api.profile.assign-process');
+    Route::post('/profile/assign-processes', [ProfileController::class, 'assignProcesses'])->name('api.profile.assign-processes');
 
     // Profile Type routes
     Route::get('/profile-type/{id?}', [ProfileTypeController::class, 'get'])->name('api.profile-type');
