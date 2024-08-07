@@ -10,11 +10,10 @@ class ProcessStatus extends Model
 {
     use HasFactory, SoftDeletes;
 
-    const START_PROCESS = 'started';
-    const OPEN_PROCESS = 'opened';
-    const STOP_PROCESS = 'stopped';
-    const PAUSE_PROCESS = 'paused';
-    const RESUME_PROCESS = 'resumed';
-    const COMPLETE_PROCESS = 'completed';
-    const ARCHIVE_PROCESS = 'archived';
+    const ASSIGNED = 'assigned';
+    const ACTIVE = 'active';
+    const COMPLETED = 'completed';
+    const STOPPED = 'stopped';
+    const RESUMED = 'resumed';
+    const ARCHIVED = 'archived';
 }

@@ -15,9 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->integer('process_id')->nullable();
             $table->integer('profile_id')->nullable();
-            $table->integer('user_id')->nullable();
             $table->integer('step_id')->nullable();
-            $table->integer('activity_id')->nullable();
             $table->integer('process_status_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

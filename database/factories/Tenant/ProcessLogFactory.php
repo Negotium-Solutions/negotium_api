@@ -17,13 +17,12 @@ class ProcessLogFactory extends Factory
     public function definition(): array
     {
         return [
-            'process_id' => rand(1, 20),
+            'process_id' => rand(1, 25),
             'profile_id' => rand(1, 10),
-            'process_status_id' => rand(1, 7),
-            'user_id' => rand(1, 5),
+            'process_status_id' => rand(1, 6),
             'step_id' => rand(1, 10),
-            'activity_id' => rand(1, 10),
-            'created_at' => $this->faker->dateTimeBetween('-1 months', 'now'),
+            'created_at' => $this->faker->dateTimeBetween('-6 months', '-2 months'),
+            'updated_at' => $this->faker->dateTimeBetween('-2 months', 'now'),
         ];
     }
 }
