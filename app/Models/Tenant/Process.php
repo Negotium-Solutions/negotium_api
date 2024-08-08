@@ -20,6 +20,16 @@ class Process extends Model
         'name'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     public function category() : BelongsTo
     {
         return $this->belongsTo(ProcessCategory::class, 'process_category_id');

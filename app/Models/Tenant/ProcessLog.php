@@ -22,4 +22,8 @@ class ProcessLog extends Model
     public function step() : BelongsTo {
         return $this->belongsTo(Step::class);
     }
+
+    public function status() : BelongsTo {
+        return $this->belongsTo(ProcessStatus::class, 'process_status_id');
+    }
 }
