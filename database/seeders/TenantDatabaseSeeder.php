@@ -6,13 +6,16 @@ use Database\Seeders\tenant\ActivityGroupSeeder;
 use Database\Seeders\tenant\ActivitySeeder;
 use Database\Seeders\tenant\ActivityTypeSeeder;
 use Database\Seeders\tenant\AttributeSeeder;
-use Database\Seeders\tenant\ProfileProcessSeeder;
-use Database\Seeders\tenant\ProfileSeeder;
-use Database\Seeders\tenant\ProfileTypeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
 use Database\Seeders\tenant\FormSeeder;
 use Database\Seeders\tenant\ProcessCategorySeeder;
+use Database\Seeders\tenant\ProcessLogSeeder;
 use Database\Seeders\tenant\ProcessSeeder;
+use Database\Seeders\tenant\ProcessStatusSeeder;
+use Database\Seeders\tenant\ProfileProcessSeeder;
+use Database\Seeders\tenant\ProfileSeeder;
+use Database\Seeders\tenant\ProfileTypeSeeder;
+use Database\Seeders\tenant\StepSeeder;
 use Illuminate\Database\Seeder;
 
 class TenantDatabaseSeeder extends Seeder
@@ -36,5 +39,7 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(StepSeeder::class);
         $this->call(ActivitySeeder::class);
         $this->call(FormSeeder::class);
+        $this->call(ProcessStatusSeeder::class);
+        $this->call(ProcessLogSeeder::class);
     }
 }

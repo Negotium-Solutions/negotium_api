@@ -1786,10 +1786,77 @@
             }
         }
     },
+    "components": {
+        "responses": {
+            "204": {
+                "description": "No content"
+            },
+            "404": {
+                "description": "Not found"
+            }
+        },
+        "parameters": {
+            "profile_id": {
+                "name": "profile_id",
+                "in": "path",
+                "description": "Delete a Profile by ID.",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "process_id": {
+                "name": "process_id",
+                "in": "path",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        }
+    },
     "tags": [
         {
             "name": "User",
             "description": "User related operations"
+        },
+        {
+            "name": "Activity",
+            "description": "Activity"
+        },
+        {
+            "name": "ActivityGroup",
+            "description": "ActivityGroup"
+        },
+        {
+            "name": "Document",
+            "description": "Document"
+        },
+        {
+            "name": "Form",
+            "description": "Form"
+        },
+        {
+            "name": "Process Category",
+            "description": "Process Category"
+        },
+        {
+            "name": "Process",
+            "description": "Process"
+        },
+        {
+            "name": "Profile",
+            "description": "Profile"
+        },
+        {
+            "name": "ProfileType",
+            "description": "ProfileType"
+        },
+        {
+            "name": "Step",
+            "description": "Step"
+        },
+        {
+            "name": "Example",
+            "description": "Example"
         }
     ]
 }

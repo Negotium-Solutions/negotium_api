@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Models\Tenant\ProcessLog;
 use Throwable;
 use App\Models\Tenant\Process;
 use Illuminate\Http\Request;
@@ -194,5 +195,28 @@ class ProcessController extends BaseAPIController
         } catch (Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the the process', ['id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function updateProcessLogStatus(Request $request) : Response
+    {
+        try {
+            $processLog = ProcessLog::find($request->process_log_id);
+            if((!isset($processLog))){
+                return $this->success([], 'No process status record found to update', [], Response::HTTP_NOT_FOUND);
+            }
+
+            $old_value = ProcessLog::findOrFail($request->process_log_id);
+            $new_value = $request->all();
+
+            $processLog->process_status_id = $request->process_status_id;
+
+            if ($processLog->save() === false) {
+                throw new \RuntimeException('Could not update the process status');
+            }
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'There was an error trying to update the process status', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->success([], 'process status successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 }
