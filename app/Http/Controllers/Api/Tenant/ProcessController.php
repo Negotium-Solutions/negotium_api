@@ -202,7 +202,7 @@ class ProcessController extends BaseAPIController
         try {
             $processLog = ProcessLog::find($request->process_log_id);
             if((!isset($processLog))){
-                return $this->success([], 'No process status record found to update', [], Response::HTTP_NOT_FOUND);
+                return $this->success([], 'No process status record found to update', [], Response::HTTP_NO_CONTENT);
             }
 
             $old_value = ProcessLog::findOrFail($request->process_log_id);

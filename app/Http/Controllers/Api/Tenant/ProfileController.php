@@ -139,7 +139,7 @@ class ProfileController extends BaseAPIController
         try {
             $profile = Profile::find($id);
             if((!isset($profile))){
-                return $this->success([], 'No profile record found to update', [], Response::HTTP_NOT_FOUND);
+                return $this->success([], 'No profile record found to update', [], Response::HTTP_NO_CONTENT);
             }
             $old_value = Profile::findOrFail($id);
             $new_value = $request->all();
