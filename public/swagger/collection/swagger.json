@@ -1817,6 +1817,46 @@
         {
             "name": "User",
             "description": "User related operations"
+        },
+        {
+            "name": "Activity",
+            "description": "Activity"
+        },
+        {
+            "name": "ActivityGroup",
+            "description": "ActivityGroup"
+        },
+        {
+            "name": "Document",
+            "description": "Document"
+        },
+        {
+            "name": "Form",
+            "description": "Form"
+        },
+        {
+            "name": "Process Category",
+            "description": "Process Category"
+        },
+        {
+            "name": "Process",
+            "description": "Process"
+        },
+        {
+            "name": "Profile",
+            "description": "Profile"
+        },
+        {
+            "name": "ProfileType",
+            "description": "ProfileType"
+        },
+        {
+            "name": "Step",
+            "description": "Step"
+        },
+        {
+            "name": "Example",
+            "description": "Example"
         }
     ]
 }
