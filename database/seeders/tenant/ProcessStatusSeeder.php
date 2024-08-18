@@ -13,12 +13,12 @@ class ProcessStatusSeeder extends Seeder
     public function run(): void
     {
         ProcessStatus::insert([
-           ['name' => ProcessStatus::ASSIGNED, 'created_at' => now()],
-           ['name' => ProcessStatus::ACTIVE, 'created_at' => now()],
-           ['name' => ProcessStatus::COMPLETED, 'created_at' => now()],
-           ['name' => ProcessStatus::STOPPED, 'created_at' => now()],
-           ['name' => ProcessStatus::RESUMED, 'created_at' => now()],
-           ['name' => ProcessStatus::ARCHIVED, 'created_at' => now()]
+           ['name' => ProcessStatus::ASSIGNED_NAME, 'created_at' => now()],
+           ['name' => ProcessStatus::ACTIVE_NAME, 'created_at' => now()],
+           ['name' => ProcessStatus::COMPLETED_NAME, 'created_at' => now()],
+           ['name' => ProcessStatus::STOPPED_NAME, 'created_at' => now()],
+           ['name' => ProcessStatus::RESUMED_NAME, 'created_at' => now()],
+           ['name' => ProcessStatus::ARCHIVED_NAME, 'created_at' => now()]
         ]);
     }
 }

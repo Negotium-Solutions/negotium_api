@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Models\Tenant\ProcessLog;
+use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\Profile;
 use App\Models\Tenant\ProfileProcess;
 use Illuminate\Http\Request;
@@ -47,6 +49,15 @@ class ProfileController extends BaseAPIController
     {
         try{
             $query = isset($id) ? Profile::where('id', $id) : Profile::query();
+
+            if ($request->has('pt_id') && ($request->input('pt_id') > 0)) {
+                $query = $query->where('profile_type_id', $request->input('pt_id'));
+            }
+
+            if ($request->has('with') && ($request->input('with') != '')) {
+                $_with = explode(',', $request->input('with'));
+                $query = $query->with($_with);
+            }
 
             $data = isset($id) ? $query->first() : $query->get();
 
@@ -229,6 +240,13 @@ class ProfileController extends BaseAPIController
                     if ($profileProcess->save() === false) {
                         throw new \RuntimeException('Could not assign process to profile');
                     }
+
+                    $processLog = new ProcessLog();
+                    $processLog->profile_id = $data["profile_id"];
+                    $processLog->process_id = $data["process_id"];
+                    $processLog->process_status_id = ProcessStatus::ASSIGNED;
+                    $processLog->step_id = 1;
+                    $processLog->save();
                 }
             }
 
