@@ -3435,7 +3435,7 @@
         },
         {
             "name": "rikscss/base-api",
-            "version": "dev-feature/profile-communications",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/rikscss/base-api",
@@ -8984,5 +8984,5 @@
         "php": "^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
