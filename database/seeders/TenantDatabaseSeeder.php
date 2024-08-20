@@ -8,6 +8,7 @@ use Database\Seeders\tenant\ActivityTypeSeeder;
 use Database\Seeders\tenant\AttributeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
 use Database\Seeders\tenant\FormSeeder;
+use Database\Seeders\tenant\NoteSeeder;
 use Database\Seeders\tenant\ProcessCategorySeeder;
 use Database\Seeders\tenant\ProcessLogSeeder;
 use Database\Seeders\tenant\ProcessSeeder;
@@ -41,5 +42,6 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(FormSeeder::class);
         $this->call(ProcessStatusSeeder::class);
         $this->call(ProcessLogSeeder::class);
+        $this->call(NoteSeeder::class);
     }
 }

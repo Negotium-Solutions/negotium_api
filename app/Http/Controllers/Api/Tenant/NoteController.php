@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\Note;
+use App\Models\Tenant\Note;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class NoteController extends Controller
+class NoteController extends BaseApiController
 {
     /**
      * Get note(s)

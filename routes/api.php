@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
 use App\Http\Controllers\Api\Tenant\ProfileController;
 use App\Http\Controllers\Api\Tenant\ProfileTypeController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\Tenant\NoteController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 
@@ -90,6 +91,12 @@ Route::group([
     Route::post('/document/create', [DocumentController::class, 'create'])->name('api.document.create');
     Route::post('/document/update/{id}', [DocumentController::class, 'update'])->name('api.document.update');
     Route::delete('/document/delete/{id?}', [DocumentController::class, 'delete'])->name('api.document.delete');
+
+    // Documents routes
+    Route::get('/note/{id?}', [NoteController::class, 'get'])->name('api.note');
+    Route::post('/note/create', [NoteController::class, 'create'])->name('api.note.create');
+    Route::post('/note/update/{id}', [NoteController::class, 'update'])->name('api.note.update');
+    Route::delete('/note/delete/{id?}', [NoteController::class, 'delete'])->name('api.note.delete');
 
     // Schema routes
     Route::get('/schema/{id?}', [SchemaController::class, 'get'])->name('api.schema');

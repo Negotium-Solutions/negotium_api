@@ -4,6 +4,8 @@ namespace App\Models\Tenant;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model
@@ -26,7 +28,8 @@ class Profile extends Model
         return $this->belongsTo(ProfileType::class);
     }
 
-    public function processes() {
+    public function processes() : HasManyThrough
+    {
         return $this->hasManyThrough(
             Process::class,
             ProfileProcess::class,
@@ -37,7 +40,13 @@ class Profile extends Model
         );
     }
 
-    public function documents() {
+    public function documents() : HasMany
+    {
         return $this->hasMany(Document::class);
+    }
+
+    public function notes() : HasMany
+    {
+        return $this->hasMany(Note::class);
     }
 }

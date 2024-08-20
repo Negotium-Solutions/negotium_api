@@ -691,6 +691,184 @@
                 ]
             }
         },
+        "/{tenant}/note/{id}": {
+            "get": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Get a Note",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getNote",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Note Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/Note": {
+            "get": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Get notes",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getNotes",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/note/create": {
+            "post": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Create a new note",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createNote",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/note/update/{id}": {
+            "put": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Update a Note",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateNote",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Note Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/note/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Delete a Note by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteNoteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/process-category/{id}": {
             "get": {
                 "tags": [
@@ -1833,6 +2011,10 @@
         {
             "name": "Form",
             "description": "Form"
+        },
+        {
+            "name": "Note",
+            "description": "Note"
         },
         {
             "name": "Process Category",
