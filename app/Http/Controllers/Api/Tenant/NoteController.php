@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Models\Tenant\Note;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
@@ -86,18 +87,25 @@ class NoteController extends BaseApiController
     public function create(Request $request) : Response
     {
         $validator = \Validator::make($request->all(), [
-            'first_name' => 'string|required',
-            'last_name' => 'string|required'
+            'subject' => 'string|required',
+            'note' => 'string|required',
+            'user_email' => 'email|required',
+            'profile_id' => 'integer|required'
         ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        $user = User::where('email', $request->user_email)->first();
         try {
+            $reminder_datetime = date('Y-m-d H:i', strtotime($request->reminder_date.' '.$request->reminder_time));
             $note = new Note();
-            $note->first_name = $request->first_name;
-            $note->last_name = $request->last_name;
+            $note->subject = $request->subject;
+            $note->note = $request->note;
+            $note->user_id = $user->id;
+            $note->profile_id = $request->profile_id;
+            $note->reminder_datetime = $reminder_datetime;
 
             if ($note->save() === false) {
                 throw new \RuntimeException('Could not save note');

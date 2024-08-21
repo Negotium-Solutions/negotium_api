@@ -47,6 +47,8 @@ class Profile extends Model
 
     public function notes() : HasMany
     {
-        return $this->hasMany(Note::class);
+        return $this->hasMany(Note::class)
+            ->orderBy('reminder_datetime', 'desc')
+            ->orderBy('created_at', 'desc');
     }
 }
