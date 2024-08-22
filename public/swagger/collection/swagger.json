@@ -335,6 +335,184 @@
                 ]
             }
         },
+        "/{tenant}/communication/{id}": {
+            "get": {
+                "tags": [
+                    "Communication"
+                ],
+                "summary": "Get a Communication",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getCommunication",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Communication Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/Communication": {
+            "get": {
+                "tags": [
+                    "Communication"
+                ],
+                "summary": "Get communications",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getCommunications",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/communication/create": {
+            "post": {
+                "tags": [
+                    "Communication"
+                ],
+                "summary": "Create a new communication",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createCommunication",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/communication/update/{id}": {
+            "put": {
+                "tags": [
+                    "Communication"
+                ],
+                "summary": "Update a Communication",
+                "description": "Authenticate using a bearer token",
+                "operationId": "updateCommunication",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Communication Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/communication/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Communication"
+                ],
+                "summary": "Delete a Communication by ID.",
+                "description": "Authenticate using a bearer token",
+                "operationId": "deleteCommunicationById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/document/{id}": {
             "get": {
                 "tags": [
@@ -682,6 +860,48 @@
                     },
                     "404": {
                         "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/lookup": {
+            "get": {
+                "tags": [
+                    "Lookup"
+                ],
+                "summary": "Get a Lookup",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getLookUp",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Communication Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 },
                 "security": [
@@ -2005,12 +2225,20 @@
             "description": "ActivityGroup"
         },
         {
+            "name": "Communication",
+            "description": "Communication"
+        },
+        {
             "name": "Document",
             "description": "Document"
         },
         {
             "name": "Form",
             "description": "Form"
+        },
+        {
+            "name": "Lookup",
+            "description": "Lookup"
         },
         {
             "name": "Note",

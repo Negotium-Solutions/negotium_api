@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Tenant\FormController;
 use App\Http\Controllers\Api\Tenant\ProcessCategoryController;
 use App\Http\Controllers\Api\Tenant\ProcessController;
-use App\Http\Controllers\Api\Tenant\ProcessStepController;
 use App\Http\Controllers\Api\Tenant\StepController;
 use App\Http\Controllers\Api\Tenant\ActivityController;
 use App\Http\Controllers\Api\Tenant\ActivityGroupController;
@@ -15,6 +14,8 @@ use App\Http\Controllers\Api\Tenant\ProfileController;
 use App\Http\Controllers\Api\Tenant\ProfileTypeController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\Tenant\NoteController;
+use App\Http\Controllers\Api\Tenant\CommunicationController;
+use App\Http\Controllers\Api\Tenant\LookUpController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 
@@ -92,11 +93,17 @@ Route::group([
     Route::post('/document/update/{id}', [DocumentController::class, 'update'])->name('api.document.update');
     Route::delete('/document/delete/{id?}', [DocumentController::class, 'delete'])->name('api.document.delete');
 
-    // Documents routes
+    // Notes routes
     Route::get('/note/{id?}', [NoteController::class, 'get'])->name('api.note');
     Route::post('/note/create', [NoteController::class, 'create'])->name('api.note.create');
     Route::post('/note/update/{id}', [NoteController::class, 'update'])->name('api.note.update');
     Route::delete('/note/delete/{id?}', [NoteController::class, 'delete'])->name('api.note.delete');
+
+    // Communications routes
+    Route::get('/communication/{id?}', [CommunicationController::class, 'get'])->name('api.communication');
+    Route::post('/communication/create', [CommunicationController::class, 'create'])->name('api.communication.create');
+    Route::post('/communication/update/{id}', [CommunicationController::class, 'update'])->name('api.communication.update');
+    Route::delete('/communication/delete/{id?}', [CommunicationController::class, 'delete'])->name('api.communication.delete');
 
     // Schema routes
     Route::get('/schema/{id?}', [SchemaController::class, 'get'])->name('api.schema');
@@ -116,4 +123,7 @@ Route::group([
     Route::post('/form/create', [FormController::class, 'create'])->name('api.form.create');
     Route::put('/form/update/{id}', [FormController::class, 'update'])->name('api.form.update');
     Route::delete('/form/delete/{id?}', [FormController::class, 'delete'])->name('api.form.delete');
+
+    // Lookup routes
+    Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');
 });
