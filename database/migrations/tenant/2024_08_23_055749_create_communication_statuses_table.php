@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('communications', function (Blueprint $table) {
+        Schema::create('communication_statuses', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('subject')->nullable();
-            $table->longText('message')->nullable();
-            $table->uuid('user_id')->nullable();
-            $table->integer('profile_id')->nullable();
-            $table->integer('communication_type_id')->nullable();
-            $table->integer('status_id')->nullable();
+            $table->string('name')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('communications');
+        Schema::dropIfExists('communication_statuses');
     }
 };

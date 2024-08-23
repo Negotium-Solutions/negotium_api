@@ -56,7 +56,7 @@ class Profile extends Model
 
     public function communications() : HasMany
     {
-        return $this->hasMany(Note::class)
+        return $this->hasMany(Communication::class)
             ->orderBy('created_at', 'desc');
     }
 
