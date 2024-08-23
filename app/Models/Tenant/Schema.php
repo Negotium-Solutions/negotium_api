@@ -11,11 +11,6 @@ class Schema extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function schema()
-    {
-        return $this->belongsTo(Schema::class, 'parent_id');
-    }
-
     public function getColumns()
     {
         $raw_columns = DB::select("SELECT column_name as name, column_type as type, column_comment as attributes FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$this->name."'");
