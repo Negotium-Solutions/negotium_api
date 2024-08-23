@@ -6,6 +6,7 @@ use App\Models\Tenant\Note;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
 class NoteController extends BaseApiController
@@ -89,7 +90,6 @@ class NoteController extends BaseApiController
         $validator = \Validator::make($request->all(), [
             'subject' => 'string|required',
             'note' => 'string|required',
-            'user_email' => 'email|required',
             'profile_id' => 'integer|required'
         ]);
 
@@ -97,13 +97,12 @@ class NoteController extends BaseApiController
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $user = User::where('email', $request->user_email)->first();
         try {
             $reminder_datetime = date('Y-m-d H:i', strtotime($request->reminder_date.' '.$request->reminder_time));
             $note = new Note();
             $note->subject = $request->subject;
             $note->note = $request->note;
-            $note->user_id = $user->id;
+            $note->user_id = Auth::user()->id;
             $note->profile_id = $request->profile_id;
             $note->reminder_datetime = $reminder_datetime;
 
