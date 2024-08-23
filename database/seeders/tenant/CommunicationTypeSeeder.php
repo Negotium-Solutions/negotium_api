@@ -13,10 +13,10 @@ class CommunicationTypeSeeder extends Seeder
     public function run(): void
     {
         CommunicationType::insert([
-            ['name' => 'Email'],
-            ['name' => 'WhatsApp'],
-            ['name' => 'SMS'],
-            ['name' => 'In-System'],
+            ['name' => 'Email', 'color' => fake()->colorName],
+            ['name' => 'WhatsApp', 'color' => fake()->colorName],
+            ['name' => 'SMS', 'color' => fake()->colorName],
+            ['name' => 'In-System', 'color' => fake()->colorName]
         ]);
     }
 }
