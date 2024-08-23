@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Models\Tenant\Note;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
