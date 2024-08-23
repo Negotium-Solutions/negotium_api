@@ -51,4 +51,10 @@ class Profile extends Model
             ->orderBy('reminder_datetime', 'desc')
             ->orderBy('created_at', 'desc');
     }
+
+    public function communications() : HasMany
+    {
+        return $this->hasMany(Note::class)
+            ->orderBy('created_at', 'desc');
+    }
 }
