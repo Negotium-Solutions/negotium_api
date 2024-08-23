@@ -51,7 +51,7 @@ class LookUpController extends BaseApiController
 
             $query = $model::orderBy('name');
 
-            $data = isset($request->object) && $request->object === 1 ? $query->get() : $query->pluck('name', 'id');
+            $data = isset($request->object) && (int)$request->object === 1 ? $query->get() : $query->pluck('name', 'id');
 
             if (count($data) == 0) {
                 return $this->success([], "No lookup record(s) found", [], Response::HTTP_NOT_FOUND);
