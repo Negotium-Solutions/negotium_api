@@ -6,6 +6,9 @@ use Database\Seeders\tenant\ActivityGroupSeeder;
 use Database\Seeders\tenant\ActivitySeeder;
 use Database\Seeders\tenant\ActivityTypeSeeder;
 use Database\Seeders\tenant\AttributeSeeder;
+use Database\Seeders\tenant\CommunicationSeeder;
+use Database\Seeders\tenant\CommunicationStatusSeeder;
+use Database\Seeders\tenant\CommunicationTypeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
 use Database\Seeders\tenant\FormSeeder;
 use Database\Seeders\tenant\NoteSeeder;
@@ -45,5 +48,6 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(NoteSeeder::class);
         $this->call(CommunicationSeeder::class);
         $this->call(CommunicationTypeSeeder::class);
+        $this->call(CommunicationStatusSeeder::class);
     }
 }

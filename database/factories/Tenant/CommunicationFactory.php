@@ -21,10 +21,11 @@ class CommunicationFactory extends Factory
 
         return [
             'subject' => fake()->realTextBetween(5, 15),
-            'note' => fake()->realText,
+            'message' => fake()->realText,
             'profile_id' => rand(1, 22),
             'user_id' => $userIds[rand(0, count($userIds) - 1)],
-            'communication_type_id' => rand(1, 4)
+            'communication_type_id' => rand(1, 4),
+            'status_id' => rand(1, 2)
         ];
     }
 }
