@@ -104,6 +104,7 @@ class NoteController extends BaseApiController
             $note->user_id = Auth::user()->id;
             $note->profile_id = $request->profile_id;
             $note->reminder_datetime = $reminder_datetime;
+            $note->reminder_datetime = empty($request->reminder_date) || empty($request->reminder_time) ? null : $reminder_datetime;
 
             if ($note->save() === false) {
                 throw new \RuntimeException('Could not save note');
