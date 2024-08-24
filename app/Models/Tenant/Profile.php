@@ -60,12 +60,22 @@ class Profile extends Model
             ->orderBy('created_at', 'desc');
     }
 
-    public function extraData($table) : HasOne
+    public function dynamicData($table) : HasOne
     {
         return $this->hasOne($table::class, 'parent_id');
     }
 
-    public function storeExtraDate($table, $data) : bool {
+    public function storeDynamicData($table, $data) : bool {
         return true;
+    }
+
+    public function dynamicModel()
+    {
+        return $this->hasOne(DynamicModel::class, 'parent_id');
+    }
+
+    public function schema()
+    {
+        return $this->hasOne(Schema::class);
     }
 }

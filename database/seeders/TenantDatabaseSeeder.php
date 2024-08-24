@@ -11,6 +11,7 @@ use Database\Seeders\tenant\CommunicationStatusSeeder;
 use Database\Seeders\tenant\CommunicationTypeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
 use Database\Seeders\tenant\FormSeeder;
+use Database\Seeders\tenant\DynamicModelSchemaSeeder;
 use Database\Seeders\tenant\NoteSeeder;
 use Database\Seeders\tenant\ProcessCategorySeeder;
 use Database\Seeders\tenant\ProcessLogSeeder;
@@ -19,6 +20,7 @@ use Database\Seeders\tenant\ProcessStatusSeeder;
 use Database\Seeders\tenant\ProfileProcessSeeder;
 use Database\Seeders\tenant\ProfileSeeder;
 use Database\Seeders\tenant\ProfileTypeSeeder;
+use Database\Seeders\tenant\SchemaSeeder;
 use Database\Seeders\tenant\StepSeeder;
 use Illuminate\Database\Seeder;
 
@@ -49,5 +51,8 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(CommunicationSeeder::class);
         $this->call(CommunicationTypeSeeder::class);
         $this->call(CommunicationStatusSeeder::class);
+        $this->call(SchemaSeeder::class);
+        $this->call(DynamicModelSchemaSeeder::class);
+        $this->call(DynamicModelSeeder::class);
     }
 }

@@ -54,13 +54,6 @@ class SchemaController extends BaseApiController
 
             $schema = new CRMSchema();
             $schema->name = $table;
-            if($request->has('model')) {
-                $schema->model = $request->input('model');
-            }
-            if($request->has('parent_id')) {
-                $schema->parent_id = $request->input('parent_id');
-            }
-            $schema->columns = json_encode($columns);
             $schema->save();
 
             $schema->name = $schema->name.'_'.$schema->id;
