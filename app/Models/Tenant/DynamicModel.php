@@ -10,10 +10,11 @@ class DynamicModel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'business_1';
+    protected $table;
 
-    public function setDynamicTable(string $tableName): void
+    public function __construct(array $attributes = [])
     {
-        $this->setTable($tableName);
+        parent::__construct($attributes);
+        $this->table = session('dynamic_table');
     }
 }

@@ -17,15 +17,15 @@ class DynamicModelSeeder extends Seeder
         $profiles = Profile::orderBy('id')->get();
 
         foreach ($profiles as $profile) {
+            $tableName = 'individual_1';
+            if ($profile->profile_type_id == 2) {
+                $tableName = 'business_1';
+            }
+
             $individual  = new DynamicModel();
-            $individual->setDynamicTable('individual_1');
+            $individual->setDynamicTable($tableName);
             $individual->parent_id = $profile->id;
             $individual->save();
-
-            $business  = new DynamicModel();
-            $business->setDynamicTable('business_1');
-            $business->parent_id = $profile->id;
-            $business->save();
         }
     }
 }

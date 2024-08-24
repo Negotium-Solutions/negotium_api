@@ -14,7 +14,9 @@ class DynamicModelSchemaSeeder extends Seeder
     {
         DynamicModelSchema::insert([
            ['dynamic_model_id' => 1, 'schema_id' => 1],
-           ['dynamic_model_id' => 2, 'schema_id' => 2]
+           ['dynamic_model_id' => 2, 'schema_id' => 2],
+           ['dynamic_model_id' => 3, 'schema_id' => 2],
+           ['dynamic_model_id' => 4, 'schema_id' => 1]
         ]);
     }
 }

@@ -71,6 +71,19 @@ class ProfileController extends BaseAPIController
         }
     }
 
+    public function getDynamicModel($id)
+    {
+        try {
+            $profile = Profile::find($id);
+
+            $data = $profile->dynamicModel();
+
+            return $this->success($data, 'dynamic model successfully retrieved', [], Response::HTTP_OK);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve dynamic model.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     /**
      * Create a new profile.
      *
