@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Tenant\DynamicModelField;
 
 return new class extends Migration
 {
@@ -12,9 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('individual_1', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
             $table->string('id_number')->nullable();
-            $table->string('mainden_name')->nullable();
+            $table->string('maiden_name')->nullable();
             $table->string('mobile_number')->nullable();
             $table->string('work_number')->nullable();
             $table->string('home_number')->nullable();

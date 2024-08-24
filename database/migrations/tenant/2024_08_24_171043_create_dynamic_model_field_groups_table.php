@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schemas', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name')->nullable();
+        Schema::create('dynamic_model_field_groups', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schemas');
+        Schema::dropIfExists('dynamic_model_field_groups');
     }
 };

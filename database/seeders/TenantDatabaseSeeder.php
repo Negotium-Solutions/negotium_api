@@ -10,6 +10,8 @@ use Database\Seeders\tenant\CommunicationSeeder;
 use Database\Seeders\tenant\CommunicationStatusSeeder;
 use Database\Seeders\tenant\CommunicationTypeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
+use Database\Seeders\tenant\DynamicModelFieldGroupSeeder;
+use Database\Seeders\tenant\DynamicModelFieldSeeder;
 use Database\Seeders\tenant\FormSeeder;
 use Database\Seeders\tenant\DynamicModelSchemaSeeder;
 use Database\Seeders\tenant\NoteSeeder;
@@ -35,6 +37,7 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(ProcessCategorySeeder::class);
         $this->call(ProcessSeeder::class);
         $this->call(ActivityTypeSeeder::class);
+        $this->call(SchemaSeeder::class);
         $this->call(ProfileSeeder::class);
         $this->call(ProfileProcessSeeder::class);
         $this->call(ProfileTypeSeeder::class);
@@ -51,8 +54,9 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(CommunicationSeeder::class);
         $this->call(CommunicationTypeSeeder::class);
         $this->call(CommunicationStatusSeeder::class);
-        $this->call(SchemaSeeder::class);
         $this->call(DynamicModelSchemaSeeder::class);
         $this->call(DynamicModelSeeder::class);
+        $this->call(DynamicModelFieldSeeder::class);
+        $this->call(DynamicModelFieldGroupSeeder::class);
     }
 }

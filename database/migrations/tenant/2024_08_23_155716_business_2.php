@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('business_1', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('business_2', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->string('company_registration_number')->nullable();
             $table->string('building_name')->nullable();
             $table->string('unit_number')->nullable();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('business_1');
+        Schema::dropIfExists('business_2');
     }
 };

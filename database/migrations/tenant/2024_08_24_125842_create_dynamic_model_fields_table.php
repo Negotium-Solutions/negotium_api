@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('dynamic_model_fields', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('avatar')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('company_name')->nullable();
-            $table->string('email')->nullable();
-            $table->string('profile_type_id')->nullable();
             $table->uuid('schema_id')->nullable();
+            $table->string('label')->nullable();
+            $table->string('field')->nullable();
+            $table->string('dynamic_model_field_group_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('dynamic_model_fields');
     }
 };

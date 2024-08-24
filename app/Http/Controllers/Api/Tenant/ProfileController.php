@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Models\Tenant\DynamicModelField;
 use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\Profile;
@@ -76,7 +77,10 @@ class ProfileController extends BaseAPIController
         try {
             $profile = Profile::find($id);
 
-            $data = $profile->dynamicModel();
+            $data = Profile::find($id)->dynamicModel()->toArray();
+            $data['fields'] = DynamicModelField::with('dynamicModelFieldGroup')
+                ->where('schema_id', $profile->schema_id)
+                ->orderBy('dynamic_model_field_group_id')->get();
 
             return $this->success($data, 'dynamic model successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {

@@ -4,6 +4,7 @@ namespace App\Models\Tenant;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -60,6 +61,7 @@ class Profile extends Model
             ->orderBy('created_at', 'desc');
     }
 
+    /*
     public function schema() : HasOneThrough
     {
         return $this->hasOneThrough(
@@ -70,6 +72,12 @@ class Profile extends Model
             'id',
             'schema_id'
         );
+    }
+    */
+
+    public function schema() : BelongsTo
+    {
+        return $this->belongsTo(Schema::class);
     }
 
     public function dynamicModel()

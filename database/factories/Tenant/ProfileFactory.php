@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Tenant;
 
+use App\Models\Tenant\Schema;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,8 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
         $profileType = rand(1, 2);
+        $individual = Schema::where('name', 'individual_1')->first();
+        $business = Schema::where('name', 'business_2')->first();
 
         if($profileType === 1) {
             $factoryData = [
@@ -24,7 +27,8 @@ class ProfileFactory extends Factory
                 'last_name' => fake()->lastName(),
                 'email' => fake()->email(),
                 'profile_type_id' => $profileType,
-                'avatar' => '/images/individual/avatar'.rand(1, 5).'.png'
+                'avatar' => '/images/individual/avatar'.rand(1, 5).'.png',
+                'schema_id' => $individual
             ];
         }
 
@@ -33,7 +37,8 @@ class ProfileFactory extends Factory
                 'company_name' => fake()->company(),
                 'email' => fake()->email(),
                 'profile_type_id' => $profileType,
-                'avatar' => '/images/business/avatar'.rand(1, 5).'.png'
+                'avatar' => '/images/business/avatar'.rand(1, 5).'.png',
+                'schema_id' => $business
             ];
         }
 
