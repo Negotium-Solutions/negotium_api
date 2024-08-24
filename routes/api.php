@@ -47,6 +47,7 @@ Route::group([
 
     // Profiles routes
     Route::get('/profile/{id?}', [ProfileController::class, 'get'])->name('api.profile');
+    Route::get('/profile/dynamic-model/{id}', [ProfileController::class, 'getDynamicModel'])->name('api.dynamic-model');
     Route::post('/profile/create', [ProfileController::class, 'create'])->name('api.profile.create');
     Route::put('/profile/update/{id}', [ProfileController::class, 'update'])->name('api.profile.update');
     Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');

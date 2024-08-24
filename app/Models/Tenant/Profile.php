@@ -60,22 +60,24 @@ class Profile extends Model
             ->orderBy('created_at', 'desc');
     }
 
-    public function dynamicData($table) : HasOne
+    public function schema() : HasOneThrough
     {
-        return $this->hasOne($table::class, 'parent_id');
-    }
-
-    public function storeDynamicData($table, $data) : bool {
-        return true;
+        return $this->hasOneThrough(
+            Schema::class,
+            DynamicModelSchema::class,
+            'dynamic_model_id',
+            'id',
+            'id',
+            'schema_id'
+        );
     }
 
     public function dynamicModel()
     {
-        return $this->hasOne(DynamicModel::class, 'parent_id');
-    }
+        $this->schema->name;
+        $dynamicModel = new DynamicModel();
+        $dynamicModel->setTable($this->schema->name);
 
-    public function schema()
-    {
-        return $this->hasOne(Schema::class);
+        return $dynamicModel->where('parent_id', $this->id)->first();
     }
 }
