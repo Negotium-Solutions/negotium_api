@@ -19,11 +19,11 @@ class DynamicModelSeeder extends Seeder
         foreach ($profiles as $profile) {
             $tableName = 'individual_1';
             if ($profile->profile_type_id == 2) {
-                $tableName = 'business_1';
+                $tableName = 'business_2';
             }
 
-            $individual  = new DynamicModel();
-            $individual->setDynamicTable($tableName);
+            $individual = new DynamicModel();
+            $individual->setTable($tableName);
             $individual->parent_id = $profile->id;
             $individual->save();
         }

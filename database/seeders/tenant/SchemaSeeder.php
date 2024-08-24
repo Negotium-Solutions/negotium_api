@@ -12,9 +12,12 @@ class SchemaSeeder extends Seeder
      */
     public function run(): void
     {
-        Schema::insert([
-           ['name' => 'individual_1'],
-           ['name' => 'business_2']
-        ]);
+        $schema = new Schema();
+        $schema->name = 'individual_1';
+        $schema->save();
+
+        $schema = new Schema();
+        $schema->name = 'business_2';
+        $schema->save();
     }
 }
