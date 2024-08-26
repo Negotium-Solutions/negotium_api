@@ -88,4 +88,44 @@ class Profile extends Model
 
         return $dynamicModel->where('parent_id', $this->id)->first();
     }
+
+    public function dynamicModelFields()
+    {
+        $dynamicModelFields = DynamicModelField::with('dynamicModelFieldGroup')
+                            ->where('schema_id', $this->schema_id)
+                            ->orderBy('dynamic_model_field_group_id')->get();
+
+        $_dynamicModelFields = [];
+        foreach ($dynamicModelFields as $key => $dynamicModelField) {
+            $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $dynamicModelField;
+            if( $key === 0 ) {
+
+                $field["schema_id"] = $dynamicModelField->scheme_id;
+                $field["dynamic_model_field_group_id"] = $dynamicModelField->dynamic_model_field_group_id;
+                $field["dynamic_model_field_group"]["id"] = $dynamicModelField->dynamicModelFieldGroup->id;
+                $field["dynamic_model_field_group"]["name"] = $dynamicModelField->dynamicModelFieldGroup->name;
+
+                if( $this->profile_type_id == 1 ) {
+					$field["label"] = "First Name";
+					$field["field"] = "first_name";
+                    $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
+                    $field["label"] = "Last Name";
+                    $field["field"] = "last_name";
+                    $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
+                }
+
+                if( $this->profile_type_id == 2 ) {
+                    $field["label"] = "Company Name";
+                    $field["field"] = "company_name";
+                    $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
+                }
+
+                $field["label"] = "Email";
+                $field["field"] = "email";
+                $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
+            }
+        }
+
+        return $_dynamicModelFields;
+    }
 }

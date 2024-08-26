@@ -2197,7 +2197,7 @@
             "profile_id": {
                 "name": "profile_id",
                 "in": "path",
-                "description": "Delete a Profile by ID.",
+                "description": "Assign processes to a profile.",
                 "schema": {
                     "type": "string"
                 }

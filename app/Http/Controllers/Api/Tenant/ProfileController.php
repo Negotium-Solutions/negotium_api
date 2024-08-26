@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\DynamicModelField;
 use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
@@ -55,12 +56,28 @@ class ProfileController extends BaseAPIController
                 $query = $query->where('profile_type_id', $request->input('pt_id'));
             }
 
+            $hasDynamicModel = false;
             if ($request->has('with') && ($request->input('with') != '')) {
                 $_with = explode(',', $request->input('with'));
+
+                if (in_array('dynamicModel', $_with)) {
+                    $hasDynamicModel = true;
+                    $index = array_search('dynamicModel', $_with);
+                    unset($_with[$index]);
+                }
                 $query = $query->with($_with);
             }
 
             $data = isset($id) ? $query->first() : $query->get();
+
+            if (isset($id) && $hasDynamicModel) {
+                $profile = Profile::find($id);
+                $data['dynamicModel'] = $profile->dynamicModel()->toArray();
+                $data['dynamicModelFields'] = $profile->dynamicModelFields();
+                /*$data['dynamicModelFields'] = DynamicModelField::with('dynamicModelFieldGroup')
+                    ->where('schema_id', $profile->schema_id)
+                    ->orderBy('dynamic_model_field_group_id')->get();*/
+            }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No profile record(s) found', [], Response::HTTP_NOT_FOUND);
@@ -69,22 +86,6 @@ class ProfileController extends BaseAPIController
             return $this->success($data, 'profiles successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function getDynamicModel($id)
-    {
-        try {
-            $profile = Profile::find($id);
-
-            $data = Profile::find($id)->dynamicModel()->toArray();
-            $data['fields'] = DynamicModelField::with('dynamicModelFieldGroup')
-                ->where('schema_id', $profile->schema_id)
-                ->orderBy('dynamic_model_field_group_id')->get();
-
-            return $this->success($data, 'dynamic model successfully retrieved', [], Response::HTTP_OK);
-        } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve dynamic model.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -156,8 +157,7 @@ class ProfileController extends BaseAPIController
     public function update(Request $request, $id) : Response
     {
         $validator = \Validator::make($request->all(), [
-            'first_name' => 'string',
-            'last_name' => 'string'
+            // Todo: implement dynamic validation from field assigned attributes
         ]);
 
         if ($validator->fails()) {
@@ -175,11 +175,26 @@ class ProfileController extends BaseAPIController
             if ($profile->updateOrFail($request->all()) === false) {
                 throw new \RuntimeException('Could not update profile');
             }
+
+            $_dynamicModelRequest = $request->input('dynamicModel');
+            $dynamicModel = new DynamicModel();
+            $dynamicModel->setTable($profile->schema->name);
+            $dynamicModel = $dynamicModel->where('id', $_dynamicModelRequest['id'])->first();
+            foreach ($_dynamicModelRequest as $key => $value) {
+                if ($key != 'id') {
+                    $dynamicModel->{$key} = $value;
+                }
+            }
+            $dynamicModel->updated_at = now();
+
+            if ($dynamicModel->save() === false) {
+                throw new \RuntimeException('Could not update profile dynamic model');
+            }
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'There was an error trying to update the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success([], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success(['id' => $dynamicModel->id], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**
@@ -219,7 +234,7 @@ class ProfileController extends BaseAPIController
     }
 
     /**
-     * Delete a Profile by ID.
+     * Assign processes to a profile.
      *
      * @OA\AssignProcess(
      *      path="/{tenant}/profile/assign-process",
