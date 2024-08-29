@@ -302,7 +302,7 @@ class ProfileController extends BaseAPIController
                         if( $attribute['name'] === 'sa_id_number') {
                             $rule = new SouthAfricanIdNumber;
                         }
-                        elseif( $attribute['name'] === 'sa_phone_number') {
+                        elseif( $attribute['name'] === 'sa_mobile_number') {
                             $rule = new SouthAfricanPhoneNumber;
                         }
                         array_push($validationRules, $rule);

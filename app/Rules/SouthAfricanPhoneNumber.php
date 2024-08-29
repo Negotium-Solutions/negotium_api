@@ -14,31 +14,31 @@ class SouthAfricanPhoneNumber implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        // Remove any spaces or non-numeric characters except '+'
         $cleanedNumber = preg_replace('/[^\d+]/', '', $value);
 
-        // Remove the +27 prefix if present
-        if (strpos($cleanedNumber, '+27') === 0) {
-            $cleanedNumber = '0' . substr($cleanedNumber, 3); // Remove the '+27' prefix
-        } elseif (strpos($cleanedNumber, '27') === 0) {
-            // Handle cases where the number starts with '27' instead of '+27'
-            $cleanedNumber = '0' . substr($cleanedNumber, 2); // Remove the '27' prefix
+        if (str_starts_with($cleanedNumber, '+27')) {
+            $cleanedNumber = '0' . substr($cleanedNumber, 3);
+        } elseif (str_starts_with($cleanedNumber, '27')) {
+            $cleanedNumber = '0' . substr($cleanedNumber, 2);
         }
 
-        // Ensure the phone number is at least 10 digits long
-        if (strlen($value) !== 10 || !ctype_digit($value)) {
-            $fail('The :attribute must have at least 10 digits.');
+        if (strlen($cleanedNumber) !== 10 || !ctype_digit($cleanedNumber)) {
+            $fail('The :attribute must have exactly 10 digits.');
             return;
         }
 
-        if (preg_match('/^0[1-9][0-9]\d{7}$/', $cleanedNumber)) {
-            $fail('The :attribute must have a valid landline number.');
-            return;
+        if ($attribute === 'sa_phone_number') {
+            if (!preg_match('/^0[1-9][0-9]\d{7}$/', $cleanedNumber)) {
+                $fail('The :attribute must be a valid South African phone/landline number.');
+                return;
+            }
         }
 
-        if (preg_match('/^0[6-9]\d{9}$/', $cleanedNumber)) {
-            $fail('The :attribute must have a valid mobile number.');
-            return;
+        if ($attribute !== 'sa_mobile_number') {
+            if (!preg_match('/^0[6-9]\d{9}$/', $cleanedNumber)) {
+                $fail('The :attribute must be a valid South African mobile/cellphone number.');
+                return;
+            }
         }
     }
 }
