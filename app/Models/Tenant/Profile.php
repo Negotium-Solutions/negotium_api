@@ -91,7 +91,7 @@ class Profile extends Model
 
     public function dynamicModelFields()
     {
-        $dynamicModelFields = DynamicModelField::with('dynamicModelFieldGroup')
+        $dynamicModelFields = DynamicModelField::with(['dynamicModelFieldGroup', 'attributes'])
                             ->where('schema_id', $this->schema_id)
                             ->orderBy('dynamic_model_field_group_id')->get();
 

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Models\Tenant\DynamicModel;
-use App\Models\Tenant\DynamicModelField;
 use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\Profile;
 use App\Models\Tenant\ProfileProcess;
+use App\Rules\SouthAfricanIdNumber;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
@@ -74,9 +74,6 @@ class ProfileController extends BaseAPIController
                 $profile = Profile::find($id);
                 $data['dynamicModel'] = $profile->dynamicModel()->toArray();
                 $data['dynamicModelFields'] = $profile->dynamicModelFields();
-                /*$data['dynamicModelFields'] = DynamicModelField::with('dynamicModelFieldGroup')
-                    ->where('schema_id', $profile->schema_id)
-                    ->orderBy('dynamic_model_field_group_id')->get();*/
             }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
@@ -156,9 +153,11 @@ class ProfileController extends BaseAPIController
      */
     public function update(Request $request, $id) : Response
     {
-        $validator = \Validator::make($request->all(), [
-            // Todo: implement dynamic validation from field assigned attributes
-        ]);
+        $validatorRules = $this->validatorRules($request->input('dynamicModelFields'));
+
+        $validator = \Validator::make($request->input('dynamicModel'),
+            $validatorRules
+        );
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -286,5 +285,29 @@ class ProfileController extends BaseAPIController
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function validatorRules($requestInput) : array
+    {
+        $validationArray = [];
+        foreach ($requestInput as $dynamicModelFields) {
+            foreach ($dynamicModelFields as $key => $field) {
+                if( !empty($field['attributes']) ) {
+                    // $validationRules = '';
+                    $validationRules = [];
+                    foreach ($field['attributes'] as $attribute) {
+                        // $validationRules .= $validationRules === '' ? $attribute['name'] : '|' . $attribute['name'];
+                        $rule = $attribute['name'];
+                        if( $attribute['name'] === 'sa_id_number') {
+                            $rule = new SouthAfricanIdNumber;
+                        }
+                        array_push($validationRules, $rule);
+                    }
+                    $validationArray[$field['field']] = $validationRules;
+                }
+            }
+        }
+
+        return $validationArray;
     }
 }
