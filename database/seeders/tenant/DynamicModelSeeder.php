@@ -1,10 +1,9 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\tenant;
 
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\Profile;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DynamicModelSeeder extends Seeder
