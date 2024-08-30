@@ -18,6 +18,8 @@ class DynamicModelFieldAttributeSeeder extends Seeder
             ['attribute_id' => 1, 'dynamic_model_field_id' => 2],
             ['attribute_id' => 6, 'dynamic_model_field_id' => 2],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 3],
+            ['attribute_id' => 1, 'dynamic_model_field_id' => 4],
+            ['attribute_id' => 1, 'dynamic_model_field_id' => 5],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 6],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 7],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 8],
@@ -30,7 +32,9 @@ class DynamicModelFieldAttributeSeeder extends Seeder
             ['attribute_id' => 1, 'dynamic_model_field_id' => 20],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 21],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 27],
-            ['attribute_id' => 18, 'dynamic_model_field_id' => 3]
+            ['attribute_id' => 17, 'dynamic_model_field_id' => 3],
+            ['attribute_id' => 17, 'dynamic_model_field_id' => 4],
+            ['attribute_id' => 17, 'dynamic_model_field_id' => 5]
         ]);
     }
 }

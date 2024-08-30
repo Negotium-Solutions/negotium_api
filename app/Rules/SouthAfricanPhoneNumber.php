@@ -29,14 +29,7 @@ class SouthAfricanPhoneNumber implements ValidationRule
 
         if ($attribute === 'sa_phone_number') {
             if (!preg_match('/^0[1-9][0-9]\d{7}$/', $cleanedNumber)) {
-                $fail('The :attribute must be a valid South African phone/landline number.');
-                return;
-            }
-        }
-
-        if ($attribute !== 'sa_mobile_number') {
-            if (!preg_match('/^0[6-9]\d{9}$/', $cleanedNumber)) {
-                $fail('The :attribute must be a valid South African mobile/cellphone number.');
+                $fail('The :attribute must be a valid South African phone number.');
                 return;
             }
         }
