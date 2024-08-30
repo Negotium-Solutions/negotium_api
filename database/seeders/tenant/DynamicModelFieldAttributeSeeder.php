@@ -29,7 +29,8 @@ class DynamicModelFieldAttributeSeeder extends Seeder
             ['attribute_id' => 1, 'dynamic_model_field_id' => 13],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 20],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 21],
-            ['attribute_id' => 1, 'dynamic_model_field_id' => 27]
+            ['attribute_id' => 1, 'dynamic_model_field_id' => 27],
+            ['attribute_id' => 18, 'dynamic_model_field_id' => 3]
         ]);
     }
 }

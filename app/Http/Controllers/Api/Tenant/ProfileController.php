@@ -8,6 +8,7 @@ use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\Profile;
 use App\Models\Tenant\ProfileProcess;
 use App\Rules\SouthAfricanIdNumber;
+use App\Rules\SouthAfricanPhoneNumber;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
@@ -155,7 +156,7 @@ class ProfileController extends BaseAPIController
     {
         $validatorRules = $this->validatorRules($request->input('dynamicModelFields'));
 
-        $validator = \Validator::make($request->input('dynamicModel'),
+        $validator = \Validator::make(array_merge($request->all(), $request->input('dynamicModel')),
             $validatorRules
         );
 
@@ -300,6 +301,9 @@ class ProfileController extends BaseAPIController
                         $rule = $attribute['name'];
                         if( $attribute['name'] === 'sa_id_number') {
                             $rule = new SouthAfricanIdNumber;
+                        }
+                        elseif( $attribute['name'] === 'sa_mobile_number') {
+                            $rule = new SouthAfricanPhoneNumber;
                         }
                         array_push($validationRules, $rule);
                     }

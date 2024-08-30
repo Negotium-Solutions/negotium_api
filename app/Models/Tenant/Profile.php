@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const PROFILE_TYPE_INDIVIDUAL = 1;
+    const PROFILE_TYPE_BUSINESS = 2;
     /**
      * The attributes that are mass assignable.
      *
@@ -26,9 +26,16 @@ class Profile extends Model
         'company_name'
     ];
 
+    protected $appends = ['profile_name'];
+
     public function profile_type()
     {
         return $this->belongsTo(ProfileType::class);
+    }
+
+    public function getProfileNameAttribute()
+    {
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->first_name.' '.$this->last_name : $this->company_name;
     }
 
     public function processes() : HasManyThrough
@@ -61,20 +68,6 @@ class Profile extends Model
             ->orderBy('created_at', 'desc');
     }
 
-    /*
-    public function schema() : HasOneThrough
-    {
-        return $this->hasOneThrough(
-            Schema::class,
-            DynamicModelSchema::class,
-            'dynamic_model_id',
-            'id',
-            'id',
-            'schema_id'
-        );
-    }
-    */
-
     public function schema() : BelongsTo
     {
         return $this->belongsTo(Schema::class);
@@ -97,7 +90,6 @@ class Profile extends Model
 
         $_dynamicModelFields = [];
         foreach ($dynamicModelFields as $key => $dynamicModelField) {
-            $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $dynamicModelField;
             if( $key === 0 ) {
 
                 $field["schema_id"] = $dynamicModelField->scheme_id;
@@ -105,27 +97,47 @@ class Profile extends Model
                 $field["dynamic_model_field_group"]["id"] = $dynamicModelField->dynamicModelFieldGroup->id;
                 $field["dynamic_model_field_group"]["name"] = $dynamicModelField->dynamicModelFieldGroup->name;
 
-                if( $this->profile_type_id == 1 ) {
-					$field["label"] = "First Name";
-					$field["field"] = "first_name";
+                if( $this->profile_type_id == self::PROFILE_TYPE_INDIVIDUAL ) {
+                    $field = $this->addDynamicModelField('First Name', $dynamicModelField->dynamicModelFieldGroup, ['required', 'string']);
                     $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
-                    $field["label"] = "Last Name";
-                    $field["field"] = "last_name";
+                    $field = $this->addDynamicModelField('Last Name', $dynamicModelField->dynamicModelFieldGroup, ['required', 'string']);
                     $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
                 }
 
-                if( $this->profile_type_id == 2 ) {
-                    $field["label"] = "Company Name";
-                    $field["field"] = "company_name";
+                if( $this->profile_type_id == self::PROFILE_TYPE_BUSINESS ) {
+                    $field = $this->addDynamicModelField('Company Name', $dynamicModelField->dynamicModelFieldGroup, ['required', 'string']);
                     $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
                 }
 
-                $field["label"] = "Email";
-                $field["field"] = "email";
+                $field = $this->addDynamicModelField('Email', $dynamicModelField->dynamicModelFieldGroup, ['required', 'email']);
                 $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
             }
+            $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $dynamicModelField;
         }
 
         return $_dynamicModelFields;
+    }
+
+    public function addDynamicModelField($field, $dynamic_model_field_group, $rules)
+    {
+        $attributes = [];
+        foreach ($rules as $rule) {
+            $attributes[] = [
+                'label' => $rule,
+                'name' => strtolower($rule)
+            ];
+        }
+
+        $dynamicField = [
+            'id' => rand(1000000, 2000000),
+            'schema_id' => $this->schema->id,
+            'label' => $field,
+            'field' => strtolower(str_replace(' ', '_', $field)),
+            'dynamic_model_field_group_id' => $dynamic_model_field_group->id,
+            'dynamic_model_field_group' => $dynamic_model_field_group,
+            'attributes' => $attributes
+        ];
+
+        return $dynamicField;
     }
 }

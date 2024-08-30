@@ -29,7 +29,8 @@ class AttributeSeeder extends Seeder
             ['name' => 'uuid', 'label' => 'UUID'],
             ['name' => 'json', 'label' => 'Json'],
             ['name' => 'boolean', 'label' => 'Boolean'],
-            ['name' => 'sa_phone_number', 'label' => 'SA Phone Number']
+            ['name' => 'sa_phone_number', 'label' => 'SA Phone Number'],
+            ['name' => 'sa_mobile_number', 'label' => 'SA Mobile Number']
         ]);
     }
 }
