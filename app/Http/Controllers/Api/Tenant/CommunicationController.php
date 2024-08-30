@@ -189,7 +189,7 @@ class CommunicationController extends BaseApiController
             Mail::to($request->to)
                 ->cc($request->cc)
                 ->bcc($request->bcc)
-                ->send(new CommunicationEmail($profile->profile_name, $request->subject, $request->body));
+                ->send(new CommunicationEmail($profile->profile_name, $request->subject, $request->message));
 
             $communication = new Communication();
             $communication->profile_id = $id;
