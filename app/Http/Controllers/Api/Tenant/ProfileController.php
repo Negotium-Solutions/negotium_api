@@ -155,7 +155,7 @@ class ProfileController extends BaseAPIController
     {
         $validatorRules = $this->validatorRules($request->input('dynamicModelFields'));
 
-        $validator = \Validator::make($request->input('dynamicModel'),
+        $validator = \Validator::make(array_merge($request->all(), $request->input('dynamicModel')),
             $validatorRules
         );
 
