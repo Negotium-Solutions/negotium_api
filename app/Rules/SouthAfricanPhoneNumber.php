@@ -23,7 +23,7 @@ class SouthAfricanPhoneNumber implements ValidationRule
         }
 
         if (strlen($cleanedNumber) !== 10 || !ctype_digit($cleanedNumber)) {
-            $fail('The :attribute must have exactly 10 digits.');
+            $fail('The :attribute must be a valid South African phone number.');
             return;
         }
 
