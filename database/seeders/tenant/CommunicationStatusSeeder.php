@@ -14,7 +14,10 @@ class CommunicationStatusSeeder extends Seeder
     {
         CommunicationStatus::insert([
             ['name' => 'Read'],
-            ['name' => 'Unread']
+            ['name' => 'Unread'],
+            ['name' => 'Pending'],
+            ['name' => 'Draft'],
+            ['name' => 'Sent']
         ]);
     }
 }

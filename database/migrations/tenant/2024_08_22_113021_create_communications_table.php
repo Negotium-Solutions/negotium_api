@@ -12,10 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('communications', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id');
+
+            $table->string('to')->nullable();
+            $table->string('cc')->nullable();
+            $table->string('bcc')->nullable();
+            $table->uuid('user_id')->nullable();
+            $table->integer('parent_id')->nullable();
+
             $table->string('subject')->nullable();
             $table->longText('message')->nullable();
-            $table->uuid('user_id')->nullable();
             $table->integer('profile_id')->nullable();
             $table->integer('communication_type_id')->nullable();
             $table->integer('status_id')->nullable();

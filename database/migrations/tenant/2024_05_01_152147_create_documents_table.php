@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('size')->nullable();
             $table->string('user_id')->nullable();
             $table->string('profile_id')->nullable();
+            $table->uuid('owner_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
