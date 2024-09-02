@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Stancl\Tenancy\Contracts\Tenant;
 
 class DocumentController extends BaseAPIController implements ApiInterface
 {
@@ -225,14 +226,23 @@ class DocumentController extends BaseAPIController implements ApiInterface
         }
     }
 
-    public function download($filename)
+    public function download($id)
     {
-        $filePath = 'tenant8f781748-53a8-483c-9d69-bf0246fe0dcc/documents/' . $filename;
+        // Retrieve the document metadata
+        $document = Document::findOrFail($id);
 
-        if (!Storage::disk('public')->exists($filePath)) {
+        // Retrieve the current tenant
+        $currentTenant = app(Tenant::class);
+
+        // Build the path to the document
+        $filePath = "tenants{$currentTenant->id}/" . $document->path;
+
+        // Check if the file exists
+        if (!Storage::exists($filePath)) {
             abort(404, 'File not found.');
         }
 
-        return Storage::disk('public')->download($filePath);
+        // Serve the file for download
+        return Storage::download($filePath, $document->name);
     }
 }
