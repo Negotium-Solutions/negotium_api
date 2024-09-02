@@ -7,6 +7,7 @@ use App\Models\Tenant\Document;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
@@ -85,38 +86,31 @@ class DocumentController extends BaseAPIController implements ApiInterface
     {
         $validator = \Validator::make($request->all(), [
             'name' => 'string|required',
-            'file' => ['required|file', File::types(['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'png', 'txt'])]
+            'files' => 'required|array',
+            'files.*' => 'file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:10240', // 10MB Max per file
         ]);
 
-        $hasFileErrors = false;
-        $errorFileMessages = [];
-        if ( !$request->hasFile('file') ) {
-            $hasFileErrors = true;
-            $errorFileMessages[] = 'The file field is required.';
-        }
-
-        if ($validator->fails() || $hasFileErrors) {
-            if($hasFileErrors) {
-                foreach ($errorFileMessages as $errorFileMessage) {
-                    $validator->errors()->add('file', $errorFileMessage);
-                }
-            }
+        if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
-            $uploadedFile = $request->file('file');
-            $path = $uploadedFile->store('documents', 'public');
+            foreach($request->file('files') as $file) {
+                $originalName = $file->getClientOriginalName();
+                $originalName = date('Y_m_d_H_i_s').'_'.rand(1000, 9999).'_'.str_replace(' ', '_', $originalName);
+                $path = $file->storeAs('documents', $originalName);
 
-            $document = new Document();
-            $document->name = $request->name;
-            $document->path = $path;
-            $document->type =  $uploadedFile->getClientMimeType();
-            $document->size = $uploadedFile->getSize();
-            $document->user_id = Auth::user()->id;
+                $document = new Document();
+                $document->name = $request->input('name');
+                $document->path = $path;
+                $document->type = $file->getClientMimeType();
+                $document->size = $file->getSize();
+                $document->profile_id = $request->input('profile_id');
+                $document->user_id = Auth::user()->id;
 
-            if ($document->save() === false) {
-                throw new \RuntimeException('Could not save document');
+                if ($document->save() === false) {
+                    throw new \RuntimeException('Could not save document');
+                }
             }
 
             return $this->success(['id' => $document->id], 'document successfully created.', $request->all(), Response::HTTP_CREATED);
@@ -229,5 +223,16 @@ class DocumentController extends BaseAPIController implements ApiInterface
         } catch (\Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the document', ['document_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function download($filename)
+    {
+        $filePath = 'tenant8f781748-53a8-483c-9d69-bf0246fe0dcc/documents/' . $filename;
+
+        if (!Storage::disk('public')->exists($filePath)) {
+            abort(404, 'File not found.');
+        }
+
+        return Storage::disk('public')->download($filePath);
     }
 }

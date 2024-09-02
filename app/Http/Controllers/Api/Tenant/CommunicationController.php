@@ -177,8 +177,6 @@ class CommunicationController extends BaseApiController
             'message' => 'required|string'
         ]);
 
-        // return response($request->all());
-
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -196,6 +194,7 @@ class CommunicationController extends BaseApiController
             $communication->to = implode(';', $request->to);
             $communication->cc = !empty($request->cc) ? implode(';', $request->cc) : null;
             $communication->bcc = !empty($request->bcc) ? implode(';', $request->bcc) : null;
+            $communication->subject = $request->subject;
             $communication->message = $request->message;
             $communication->communication_type_id = $request->communication_type_id;
             $communication->status_id = Communication::STATUS_SENT;
@@ -212,6 +211,37 @@ class CommunicationController extends BaseApiController
         }
 
         return $this->success([], 'communication email successfully sent', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+    }
+
+    public function sendSMS(Request $request, $id) : Response {
+        $validator = \Validator::make($request->all(), [
+            'message' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            // Todo: Send SMS
+            $communication = new Communication();
+            $communication->profile_id = $id;
+            $communication->message = $request->message;
+            $communication->communication_type_id = $request->communication_type_id;
+            $communication->status_id = Communication::STATUS_SENT;
+            $communication->user_id = Auth::user()->id;
+
+            $old_value = [];
+            $new_value = $request->all();
+
+            if ($communication->save() === false) {
+                return $this->error([], 'Failed to save an sms', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'There was an error trying to send an sms', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->success([], 'sms successfully sent', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**

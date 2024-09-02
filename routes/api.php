@@ -106,6 +106,7 @@ Route::group([
     Route::post('/communication/update/{id}', [CommunicationController::class, 'update'])->name('api.communication.update');
     Route::delete('/communication/delete/{id?}', [CommunicationController::class, 'delete'])->name('api.communication.delete');
     Route::post('/communication/send-email/{id}', [CommunicationController::class, 'sendEmail'])->name('api.communication.send-email');
+    Route::post('/communication/send-sms/{id}', [CommunicationController::class, 'sendSMS'])->name('api.communication.send-sms');
 
     // Schema routes
     Route::get('/schema/{id?}', [SchemaController::class, 'get'])->name('api.schema');
