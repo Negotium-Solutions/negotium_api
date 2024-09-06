@@ -6,11 +6,14 @@ use App\Mail\Tenant\CommunicationEmail;
 use App\Models\Tenant\Communication;
 use App\Models\Tenant\Profile;
 use App\Models\User;
+use Illuminate\Http\Client\PendingRequest as PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Stancl\Tenancy\Contracts\Tenant;
 
 class CommunicationController extends BaseApiController
 {
@@ -213,7 +216,8 @@ class CommunicationController extends BaseApiController
         return $this->success([], 'communication email successfully sent', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
-    public function sendSMS(Request $request, $id) : Response {
+    public function sendSMS(Request $request, $id) : Response
+    {
         $validator = \Validator::make($request->all(), [
             'message' => 'required|string'
         ]);
@@ -223,20 +227,46 @@ class CommunicationController extends BaseApiController
         }
 
         try {
-            // Todo: Send SMS
-            $communication = new Communication();
-            $communication->profile_id = $id;
-            $communication->message = $request->message;
-            $communication->communication_type_id = $request->communication_type_id;
-            $communication->status_id = Communication::STATUS_SENT;
-            $communication->user_id = Auth::user()->id;
+            $profile = Profile::find($id);
 
-            $old_value = [];
-            $new_value = $request->all();
+            $payload = [
+                "messages" => [
+                    "destinations" => ["to" => $profile->cell_number],
+                    "from" => app(Tenant::class)->configs->infobip_phone_number,
+                    "text" => $request->input('message')
+                ]
+            ];
 
-            if ($communication->save() === false) {
-                return $this->error([], 'Failed to save an sms', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response = Http::withHeaders([
+                'Authorization' => 'App '. app(Tenant::class)->configs->infobip_api_key,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ])->post(app(Tenant::class)->configs->infobip_base_url.'/sms/2/text/advanced',
+                $payload
+            );
+
+            $responseData = json_decode($response->getBody(), true);
+
+            if ( $response->getStatusCode() === 200 ) {
+                // Todo: Send SMS
+                $communication = new Communication();
+                $communication->profile_id = $id;
+                $communication->message = $request->message;
+                $communication->communication_type_id = $request->communication_type_id;
+                $communication->status_id = Communication::STATUS_SENT;
+                $communication->user_id = Auth::user()->id;
+
+                $old_value = [];
+                $new_value = $request->all();
+
+                if ($communication->save() === false) {
+                    return $this->error([], 'Failed to save an sms', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                $message = 'InfoBip API: '.(isset($responseData['requestError']['serviceException']['text']) ? $responseData['requestError']['serviceException']['text'] : 'Error sending sms.');
+                return $this->error(['payload' => $payload, 'profile' => $profile], $message, $request->all(), $response->getStatusCode());
             }
+
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'There was an error trying to send an sms', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

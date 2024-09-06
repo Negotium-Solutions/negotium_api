@@ -111,6 +111,9 @@ class Profile extends Model
 
                 $field = $this->addDynamicModelField('Email', $dynamicModelField->dynamicModelFieldGroup, ['required', 'email']);
                 $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
+
+                $field = $this->addDynamicModelField('Cell Number', $dynamicModelField->dynamicModelFieldGroup, ['required', 'sa_phone_number']);
+                $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
             }
             $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $dynamicModelField;
         }

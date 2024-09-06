@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
@@ -13,11 +14,8 @@ class Tenant extends BaseTenant implements TenantWithDatabase
 {
     use HasDatabase, HasDomains, SoftDeletes, HasFactory;
 
-    protected $fillable = [
-            'name',
-            'domain',
-            'first_name',
-            'last_name',
-            'email'
-    ];
+    public function configs() : HasOne
+    {
+        return $this->hasOne(TenantConfig::class);
+    }
 }

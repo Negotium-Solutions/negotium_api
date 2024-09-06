@@ -172,6 +172,8 @@ class ProfileController extends BaseAPIController
             $old_value = Profile::findOrFail($id);
             $new_value = $request->all();
 
+            $profile->cell_number = $request->input('cell_number');
+
             if ($profile->updateOrFail($request->all()) === false) {
                 throw new \RuntimeException('Could not update profile');
             }

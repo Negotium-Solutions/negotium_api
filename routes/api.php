@@ -93,6 +93,7 @@ Route::group([
     Route::post('/document/create', [DocumentController::class, 'create'])->name('api.document.create');
     Route::post('/document/update/{id}', [DocumentController::class, 'update'])->name('api.document.update');
     Route::delete('/document/delete/{id?}', [DocumentController::class, 'delete'])->name('api.document.delete');
+    Route::get('/document/download/{id?}', [DocumentController::class, 'download'])->name('api.document.download');
 
     // Notes routes
     Route::get('/note/{id?}', [NoteController::class, 'get'])->name('api.note');

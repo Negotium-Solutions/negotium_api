@@ -20,6 +20,11 @@ class TenantController extends BaseAPIController
         try{
             $query = isset($id) ? Tenant::where('id', $id) : Tenant::query();
 
+            if ($request->has('with') && ($request->input('with') != '')) {
+                $_with = explode(',', $request->input('with'));
+                $query = $query->with($_with);
+            }
+
             $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
