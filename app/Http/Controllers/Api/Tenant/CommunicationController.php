@@ -276,6 +276,75 @@ class CommunicationController extends BaseApiController
         return $this->success([], 'sms successfully sent', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
+
+    public function sendWhatsApp(Request $request, $id) : Response
+    {
+        $validator = \Validator::make($request->all(), [
+            'message' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            $profile = Profile::find($id);
+
+            $cell_number = Helper::replaceNumberPrefix($profile->cell_number, '27');
+            $payload = [
+                "messages" => [
+                    "from" => app(Tenant::class)->configs->infobip_phone_number,
+                    "to" => $cell_number,
+                    "messageId" => "19805861-501c-4df0-aa04-66f2c3b48837",
+                    "content" => [
+                        "templateName" => "message_test",
+                        "templateData" => [
+                            "body" => [
+                                "placeholders" => $request->input('message')
+                            ]
+                        ],
+                        "language" => "en"
+                    ]
+                ]
+            ];
+
+            $response = Http::withHeaders([
+                'Authorization' => 'App '. app(Tenant::class)->configs->infobip_api_key,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ])->post(app(Tenant::class)->configs->infobip_base_url.'/whatsapp/1/message/template',
+                $payload
+            );
+
+            $responseData = json_decode($response->getBody(), true);
+
+            if ( $response->getStatusCode() === 200 ) {
+                // Todo: Send SMS
+                $communication = new Communication();
+                $communication->profile_id = $id;
+                $communication->message = $request->message;
+                $communication->communication_type_id = $request->communication_type_id;
+                $communication->status_id = Communication::STATUS_SENT;
+                $communication->user_id = Auth::user()->id;
+
+                $old_value = [];
+                $new_value = $request->all();
+
+                if ($communication->save() === false) {
+                    return $this->error([], 'Failed to save whatsApp', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                $message = 'InfoBip API: '.(isset($responseData['requestError']['serviceException']['text']) ? $responseData['requestError']['serviceException']['text'] : 'Error sending whatsApp.');
+                return $this->error(['payload' => $payload, 'profile' => $profile], $message, $request->all(), $response->getStatusCode());
+            }
+
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'There was an error trying to send whatsApp', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->success([], 'whatsApp successfully sent', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+    }
+
     /**
      * Delete a Communication by ID.
      *
