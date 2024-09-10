@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('work_city')->nullable();
             $table->string('work_country')->nullable();
             $table->string('work_postal_code')->nullable();
-            $table->integer('parent_id')->nullable();
+            $table->uuid('parent_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

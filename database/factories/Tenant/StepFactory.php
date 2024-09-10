@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Tenant;
 
+use App\Models\Tenant\Process;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,9 +17,11 @@ class StepFactory extends Factory
      */
     public function definition(): array
     {
+        $process = Process::limit(2)->get();
+        $process_id = $process[0]->id;
         return [
             'name' => fake()->word,
-            'parent_id' => rand(1, 2)
+            'parent_id' => $process_id
         ];
     }
 }

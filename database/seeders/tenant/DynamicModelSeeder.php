@@ -13,7 +13,7 @@ class DynamicModelSeeder extends Seeder
      */
     public function run(): void
     {
-        $profiles = Profile::orderBy('id')->get();
+        $profiles = Profile::get();
 
         foreach ($profiles as $profile) {
             $tableName = 'individual_1';

@@ -17,8 +17,6 @@ class ProcessLogFactory extends Factory
     public function definition(): array
     {
         return [
-            'process_id' => rand(1, 25),
-            'profile_id' => rand(1, 10),
             'process_status_id' => rand(1, 6),
             'step_id' => rand(1, 10),
             'created_at' => $this->faker->dateTimeBetween('-6 months', '-2 months'),

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('processes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
             $table->string('name')->nullable();
             $table->integer('process_category_id')->nullable();
             $table->timestamps();

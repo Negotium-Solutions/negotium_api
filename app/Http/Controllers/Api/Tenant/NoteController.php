@@ -89,7 +89,7 @@ class NoteController extends BaseApiController
         $validator = \Validator::make($request->all(), [
             'subject' => 'string|required',
             'note' => 'string|required',
-            'profile_id' => 'integer|required'
+            'profile_id' => 'required'
         ]);
 
         if ($validator->fails()) {

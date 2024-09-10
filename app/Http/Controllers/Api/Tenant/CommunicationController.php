@@ -98,7 +98,7 @@ class CommunicationController extends BaseApiController
             'subject' => 'string|required',
             'communication' => 'string|required',
             'user_email' => 'email|required',
-            'profile_id' => 'integer|required'
+            'profile_id' => 'required'
         ]);
 
         if ($validator->fails()) {

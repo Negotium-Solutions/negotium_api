@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Tenant;
 
+use App\Models\Tenant\Profile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,6 +20,7 @@ class DocumentFactory extends Factory
     {
         $userIds = User::orderBy('id')->pluck('id')->toArray();
         $documentType = ['txt', 'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+        $profileIds = Profile::pluck('id')->toArray();
 
         return [
             'name' => fake()->name,
@@ -26,7 +28,7 @@ class DocumentFactory extends Factory
             'path' => "documents/",
             'size' => rand(1, 10000),
             'user_id' => $userIds[rand(0, count($userIds) - 1)],
-            'profile_id' => rand(1, 22)
+            'profile_id' => $profileIds[rand(0, count($profileIds) - 1)],
         ];
     }
 }

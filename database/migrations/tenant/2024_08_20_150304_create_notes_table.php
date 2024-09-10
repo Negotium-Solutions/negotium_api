@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('subject')->nullable();
             $table->longText('note')->nullable();
-            $table->integer('profile_id')->nullable();
+            $table->uuid('profile_id')->nullable();
             $table->uuid('user_id')->nullable();
             $table->dateTime('reminder_datetime')->nullable();
             $table->timestamps();
