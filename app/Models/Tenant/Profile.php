@@ -76,7 +76,6 @@ class Profile extends Model
 
     public function dynamicModel()
     {
-        $this->schema->name;
         $dynamicModel = new DynamicModel();
         $dynamicModel->setTable($this->schema->name);
 

@@ -1,0 +1,65 @@
+{
+    "table": "business",
+    "fields": {
+        "Company Information": {
+            "Company Name": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Company Registration": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Cell Number": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Email": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "email"
+                ]
+            }
+        },
+        "Company Address": {
+            "type": "string",
+            "Building Name": {
+                "attributes": []
+            },
+            "Unit Number": {
+                "type": "string",
+                "attributes": []
+            },
+            "Street Address": {
+                "type": "string",
+                "attributes": []
+            },
+            "Suburb": {
+                "type": "string",
+                "attributes": []
+            },
+            "City": {
+                "type": "string",
+                "attributes": []
+            },
+            "Country": {
+                "type": "string",
+                "attributes": []
+            },
+            "Postal Code": {
+                "type": "string",
+                "attributes": []
+            }
+        }
+    }
+}

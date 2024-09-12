@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Http\Requests\Tenant\DynamicModelFieldRequest;
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
@@ -73,8 +74,9 @@ class ProfileController extends BaseAPIController
 
             if (isset($id) && $hasDynamicModel) {
                 $profile = Profile::find($id);
-                $data['dynamicModel'] = $profile->dynamicModel()->toArray();
-                $data['dynamicModelFields'] = $profile->dynamicModelFields();
+                $data['dynamicModel'] = $profile->dynamicModel()->transformed();
+                // $data['dynamicModel'] = $profile->dynamicModel()->toArray();
+                // $data['dynamicModelFields'] = $profile->dynamicModelFields();
             }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
@@ -152,8 +154,9 @@ class ProfileController extends BaseAPIController
      * @param $id
      * @return Response
      */
-    public function update(Request $request, $id) : Response
+    public function update(DynamicModelFieldRequest $request, $id) : Response
     {
+        /*
         $validatorRules = $this->validatorRules($request->input('dynamicModelFields'));
 
         $validator = \Validator::make(array_merge($request->all(), $request->input('dynamicModel')),
@@ -163,6 +166,7 @@ class ProfileController extends BaseAPIController
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+        */
 
         try {
             $profile = Profile::find($id);

@@ -39,13 +39,13 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(ProcessCategorySeeder::class);
         $this->call(ProcessSeeder::class);
         $this->call(ActivityTypeSeeder::class);
-        $this->call(SchemaSeeder::class);
+        $this->call(AttributeSeeder::class);
+        $this->call(DynamicModelFieldSeeder::class);
         $this->call(ProfileSeeder::class);
         $this->call(ProfileProcessSeeder::class);
         $this->call(ProfileTypeSeeder::class);
         $this->call(DocumentSeeder::class);
         $this->call(ActivityGroupSeeder::class);
-        $this->call(AttributeSeeder::class);
         $this->call(ModelTypeSeeder::class);
         $this->call(StepSeeder::class);
         $this->call(ActivitySeeder::class);
@@ -56,10 +56,10 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(CommunicationSeeder::class);
         $this->call(CommunicationTypeSeeder::class);
         $this->call(CommunicationStatusSeeder::class);
-        $this->call(DynamicModelSchemaSeeder::class);
-        $this->call(DynamicModelSeeder::class);
-        $this->call(DynamicModelFieldSeeder::class);
-        $this->call(DynamicModelFieldGroupSeeder::class);
-        $this->call(DynamicModelFieldAttributeSeeder::class);
+        // $this->call(SchemaSeeder::class);
+        // $this->call(DynamicModelSeeder::class);
+        // $this->call(DynamicModelSchemaSeeder::class);
+        // $this->call(DynamicModelFieldGroupSeeder::class);
+        // $this->call(DynamicModelFieldAttributeSeeder::class);
     }
 }

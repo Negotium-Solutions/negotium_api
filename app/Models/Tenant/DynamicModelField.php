@@ -2,7 +2,6 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\DynamicModelFieldGroup;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,7 +27,7 @@ class DynamicModelField extends Model
         return $this->belongsTo(DynamicModelFieldGroup::class, 'dynamic_model_field_group_id');
     }
 
-    public function attributes() : HasManyThrough
+    public function dynamicModelFieldAttributes() : HasManyThrough
     {
         return $this->hasManyThrough(
             Attribute::class,
@@ -38,5 +37,13 @@ class DynamicModelField extends Model
             'id',
             'attribute_id'
         );
+    }
+
+    public function setField($field) : void
+    {
+        $this->save();
+        $this->label = $field;
+        $this->field = trim(str_replace(' ', '_', strtolower($field))).'_'.$this->id;
+        $this->save();
     }
 }

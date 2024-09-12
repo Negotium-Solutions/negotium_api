@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('dynamic_model_fields', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid('schema_id')->nullable();
             $table->string('label')->nullable();
             $table->string('field')->nullable();
             $table->string('dynamic_model_field_group_id')->nullable();

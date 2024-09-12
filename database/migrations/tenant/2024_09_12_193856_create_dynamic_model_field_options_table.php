@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dynamic_model_schemas', function (Blueprint $table) {
+        Schema::create('dynamic_model_field_options', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('dynamic_model_id')->nullable();
-            $table->integer('schema_id')->nullable();
+            $table->string('name')->nullable();
+            $table->integer('dynamic_model_field_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dynamic_model_schemas');
+        Schema::dropIfExists('dynamic_model_field_options');
     }
 };

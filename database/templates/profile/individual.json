@@ -1,0 +1,134 @@
+{
+    "table": "individual",
+    "fields": {
+        "Personal Information": {
+            "First Name": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Last Name": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Cell Number": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Email": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "email"
+                ]
+            },
+            "ID Number": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Maiden Name": {
+                "type": "string",
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Gender": {
+                "type": "integer",
+                "options": [
+                    "Male",
+                    "Female"
+                ],
+                "attributes": [
+                    "required",
+                    "string"
+                ]
+            }
+        },
+        "Contact Details": {
+            "Mobile Number": {
+                "type": "string",
+                "attributes": []
+            },
+            "Work Number": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home Number": {
+                "type": "string",
+                "attributes": []
+            }
+        },
+        "Home Address": {
+            "Resident Type": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home Building Name": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home Unit Number": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home Street name": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home Suburb": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home City": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home Country": {
+                "type": "string",
+                "attributes": []
+            },
+            "Home Postal Code": {
+                "type": "string",
+                "attributes": []
+            }
+        },
+        "Work Address": {
+            "Work Building Name": {
+                "type": "string",
+                "attributes": []
+            },
+            "Work Street Address": {
+                "type": "string",
+                "attributes": []
+            },
+            "Work Suburb": {
+                "type": "string",
+                "attributes": []
+            },
+            "Work City": {
+                "type": "string",
+                "attributes": []
+            },
+            "Work Country": {
+                "type": "string",
+                "attributes": []
+            },
+            "Work Postal Code": {
+                "type": "string",
+                "attributes": []
+            }
+        }
+    }
+}

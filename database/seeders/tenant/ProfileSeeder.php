@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\tenant;
 
+use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\Profile;
 use App\Models\Tenant\Schema;
 use Illuminate\Database\Seeder;
@@ -13,8 +14,8 @@ class ProfileSeeder extends Seeder
      */
     public function run(): void
     {
-        $individual = Schema::where('name', 'individual_1')->first();
-        $business = Schema::where('name', 'business_2')->first();
+        $individual = Schema::where('name', 'like', '%individual%')->first();
+        $business = Schema::where('name', 'like', '%business%')->first();
 
         Profile::factory([
             'first_name' => 'Nico',
@@ -32,5 +33,18 @@ class ProfileSeeder extends Seeder
         ])->create();
 
         Profile::factory(20)->create();
+
+        $profiles = Profile::get();
+        foreach ($profiles as $profile) {
+            $tableName = $individual->name;
+            if ($profile->profile_type_id == 2) {
+                $tableName = $business->name;
+            }
+
+            $dynamicModel = new DynamicModel();
+            $dynamicModel->setTable($tableName);
+            $dynamicModel->parent_id = $profile->id;
+            $dynamicModel->save();
+        }
     }
 }
