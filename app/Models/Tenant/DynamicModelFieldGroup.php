@@ -16,7 +16,7 @@ class DynamicModelFieldGroup extends Model
         'deleted_at',
     ];
 
-    public function dynamicModelFields() : HasMany
+    public function fields() : HasMany
     {
         return $this->hasMany(DynamicModelField::class);
     }

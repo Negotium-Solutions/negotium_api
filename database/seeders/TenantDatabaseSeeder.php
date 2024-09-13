@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\tenant\ActivityGroupSeeder;
+use Database\Seeders\tenant\DynamicModelFieldTypeGroupSeeder;
 use Database\Seeders\tenant\ActivitySeeder;
-use Database\Seeders\tenant\ActivityTypeSeeder;
-use Database\Seeders\tenant\AttributeSeeder;
+use Database\Seeders\tenant\DynamicModelFieldTypeSeeder;
+use Database\Seeders\tenant\ValidationSeeder;
 use Database\Seeders\tenant\CommunicationSeeder;
 use Database\Seeders\tenant\CommunicationStatusSeeder;
 use Database\Seeders\tenant\CommunicationTypeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
-use Database\Seeders\tenant\DynamicModelFieldAttributeSeeder;
+use Database\Seeders\tenant\DynamicModelFieldValidationSeeder;
 use Database\Seeders\tenant\DynamicModelFieldGroupSeeder;
 use Database\Seeders\tenant\DynamicModelFieldSeeder;
 use Database\Seeders\tenant\DynamicModelSchemaSeeder;
@@ -38,14 +38,14 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(UserSeeder::class, false, ['domain' => $domain]);
         $this->call(ProcessCategorySeeder::class);
         $this->call(ProcessSeeder::class);
-        $this->call(ActivityTypeSeeder::class);
-        $this->call(AttributeSeeder::class);
+        $this->call(DynamicModelFieldTypeSeeder::class);
+        $this->call(ValidationSeeder::class);
         $this->call(DynamicModelFieldSeeder::class);
         $this->call(ProfileSeeder::class);
         $this->call(ProfileProcessSeeder::class);
         $this->call(ProfileTypeSeeder::class);
         $this->call(DocumentSeeder::class);
-        $this->call(ActivityGroupSeeder::class);
+        $this->call(DynamicModelFieldTypeGroupSeeder::class);
         $this->call(ModelTypeSeeder::class);
         $this->call(StepSeeder::class);
         $this->call(ActivitySeeder::class);
@@ -60,6 +60,6 @@ class TenantDatabaseSeeder extends Seeder
         // $this->call(DynamicModelSeeder::class);
         // $this->call(DynamicModelSchemaSeeder::class);
         // $this->call(DynamicModelFieldGroupSeeder::class);
-        // $this->call(DynamicModelFieldAttributeSeeder::class);
+        // $this->call(DynamicModelFieldValidationSeeder::class);
     }
 }

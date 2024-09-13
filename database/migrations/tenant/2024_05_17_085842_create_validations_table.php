@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_types', function (Blueprint $table) {
+        Schema::create('validations', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('label')->nullable();
             $table->string('name')->nullable();
-            $table->string('schema_data_type')->nullable();
-            $table->integer('activity_group_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activity_types');
+        Schema::dropIfExists('validations');
     }
 };

@@ -36,12 +36,27 @@ class ProfileSeeder extends Seeder
 
         $profiles = Profile::get();
         foreach ($profiles as $profile) {
-            $tableName = $individual->name;
+            $tableName = '';
+            $dynamicModel = new DynamicModel();
+            if ($profile->profile_type_id == 1) {
+                $tableName = $individual->name;
+                $dynamicModel->first_name_1 = fake()->firstName();
+                $dynamicModel->last_name_2 = fake()->lastName();
+                $dynamicModel->cell_number_3 = fake()->phoneNumber();
+                $dynamicModel->email_4 = fake()->email();
+                // Update profile
+                $profile->schema_id = $individual->id;
+                $profile->save();
+            }
             if ($profile->profile_type_id == 2) {
                 $tableName = $business->name;
+                $dynamicModel->company_name_25 = fake()->company();
+                $dynamicModel->cell_number_27 = fake()->phoneNumber();
+                $dynamicModel->email_28 = fake()->email();
+                // Update profile
+                $profile->schema_id = $business->id;
+                $profile->save();
             }
-
-            $dynamicModel = new DynamicModel();
             $dynamicModel->setTable($tableName);
             $dynamicModel->parent_id = $profile->id;
             $dynamicModel->save();

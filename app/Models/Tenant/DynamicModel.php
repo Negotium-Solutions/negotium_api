@@ -21,44 +21,26 @@ class DynamicModel extends Model
         'deleted_at',
     ];
 
-    public function dynamicModelFieldGroup() : BelongsTo
-    {
-        return $this->belongsTo(DynamicModelFieldGroup::class);
-    }
-
-    public function transformed()
+    /*
+     * Transformed model properties
+     */
+    public function propertiesByGroup()
     {
         $properties = parent::toArray();
 
-        $dynamicModelFieldGroups = DynamicModelFieldGroup::with(['dynamicModelFields'])->where('schema_id', $this->schema()->id)->get();
+        $dynamicModelFieldGroups = DynamicModelFieldGroup::with(['fields.options', 'fields.validations'])->where('schema_id', $this->schema()->id)->get();
 
         foreach ($dynamicModelFieldGroups as $dynamicModelFieldGroup) {
-            foreach ($dynamicModelFieldGroup->dynamicModelFields as $key => $dynamicModelField) {
+            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
                 $dynamicModelField->value = $properties[$dynamicModelField->field];
-                $dynamicModelField->dynamic_model_field_attributes = !empty($dynamicModelField->dynamicModelFieldAttributes) ? $dynamicModelField->dynamicModelFieldAttributes : [];
             }
         }
 
         return $dynamicModelFieldGroups;
     }
 
-    public function getDynamicModelFieldId($columnName)
-    {
-        $comment = DB::table('information_schema.COLUMNS')
-                ->where('TABLE_NAME', $this->table)
-                ->where('COLUMN_NAME', $columnName)
-                ->value('COLUMN_COMMENT');
-
-        return isset(json_decode($comment)->dynamic_model_field_id) ? json_decode($comment)->dynamic_model_field_id : null;
-    }
-
     public function schema() : Model
     {
         return Schema::where('name', $this->table)->first();
-    }
-
-    public function addColumn()
-    {
-
     }
 }

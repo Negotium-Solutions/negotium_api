@@ -74,9 +74,7 @@ class ProfileController extends BaseAPIController
 
             if (isset($id) && $hasDynamicModel) {
                 $profile = Profile::find($id);
-                $data['dynamicModel'] = $profile->dynamicModel()->transformed();
-                // $data['dynamicModel'] = $profile->dynamicModel()->toArray();
-                // $data['dynamicModelFields'] = $profile->dynamicModelFields();
+                $data['dynamicModel'] = $profile->dynamicModel()->propertiesByGroup();
             }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
@@ -156,18 +154,6 @@ class ProfileController extends BaseAPIController
      */
     public function update(DynamicModelFieldRequest $request, $id) : Response
     {
-        /*
-        $validatorRules = $this->validatorRules($request->input('dynamicModelFields'));
-
-        $validator = \Validator::make(array_merge($request->all(), $request->input('dynamicModel')),
-            $validatorRules
-        );
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-        */
-
         try {
             $profile = Profile::find($id);
             if((!isset($profile))){
@@ -176,19 +162,16 @@ class ProfileController extends BaseAPIController
             $old_value = Profile::findOrFail($id);
             $new_value = $request->all();
 
-            $profile->cell_number = $request->input('cell_number');
-
-            if ($profile->updateOrFail($request->all()) === false) {
-                throw new \RuntimeException('Could not update profile');
-            }
-
-            $_dynamicModelRequest = $request->input('dynamicModel');
+            $_dynamicModel = $profile->dynamicModel();
             $dynamicModel = new DynamicModel();
             $dynamicModel->setTable($profile->schema->name);
-            $dynamicModel = $dynamicModel->where('id', $_dynamicModelRequest['id'])->first();
-            foreach ($_dynamicModelRequest as $key => $value) {
-                if ($key != 'id') {
-                    $dynamicModel->{$key} = $value;
+            $dynamicModel = $dynamicModel->where('id', $_dynamicModel->id)->first();
+
+            foreach ($request->all() as $key => $value) {
+                if (array_key_exists($key, $dynamicModel->getAttributes())) {
+                    if (!in_array($key, ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
+                        $dynamicModel->{$key} = $value;
+                    }
                 }
             }
             $dynamicModel->updated_at = now();

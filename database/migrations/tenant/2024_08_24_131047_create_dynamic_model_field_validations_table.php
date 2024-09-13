@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dynamic_model_field_attributes', function (Blueprint $table) {
+        Schema::create('dynamic_model_field_validations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('attribute_id')->nullable();
+            $table->integer('validation_id')->nullable();
             $table->integer('dynamic_model_field_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dynamic_model_field_attributes');
+        Schema::dropIfExists('dynamic_model_field_validations');
     }
 };

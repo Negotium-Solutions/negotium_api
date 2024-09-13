@@ -23,6 +23,6 @@ class Activity extends Model
 
     public function type()
     {
-        return $this->belongsTo(ActivityType::class);
+        return $this->belongsTo(DynamicModelFieldType::class);
     }
 }

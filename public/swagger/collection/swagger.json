@@ -265,7 +265,7 @@
         "/{tenant}/activity-group/{id}": {
             "get": {
                 "tags": [
-                    "ActivityGroup"
+                    "DynamicModelFieldTypeGroup"
                 ],
                 "summary": "Get a activity group",
                 "description": "Authenticate using a bearer token",
@@ -307,7 +307,7 @@
         "/{tenant}/activity-groups": {
             "get": {
                 "tags": [
-                    "ActivityGroup"
+                    "DynamicModelFieldTypeGroup"
                 ],
                 "summary": "Get Activity Groups",
                 "description": "Authenticate using a bearer token",
@@ -2221,8 +2221,8 @@
             "description": "Activity"
         },
         {
-            "name": "ActivityGroup",
-            "description": "ActivityGroup"
+            "name": "DynamicModelFieldTypeGroup",
+            "description": "DynamicModelFieldTypeGroup"
         },
         {
             "name": "Communication",

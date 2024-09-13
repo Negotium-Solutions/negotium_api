@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Tenant;
 
+use App\Rules\SouthAfricanIdNumber;
+use App\Rules\SouthAfricanPhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DynamicModelFieldRequest extends FormRequest
@@ -21,8 +23,31 @@ class DynamicModelFieldRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $validationArray = [];
+        $dynamicModel = $this->input('dynamicModel');
+        foreach ($dynamicModel as $group) {
+            foreach ($group['fields'] as $field) {
+                $validations = [];
+                foreach ($field['validations'] as $validation) {
+                    switch ($validation['name']) {
+                        case 'sa_id_number':
+                            $validations[] = new SouthAfricanIdNumber;
+                            break;
+                        case 'sa_phone_number':
+                            $validations[] = new SouthAfricanPhoneNumber;
+                            break;
+                        default:
+                            $validations[] = $validation['name'];
+                            break;
+                    }
+                }
+                // Build the validation rules
+                $validationArray[$field['field']] = $validations;
+                // Reconstruct the request
+                $this->merge([$field['field'] => $field['value']]);
+            }
+        }
+
+        return $validationArray;
     }
 }

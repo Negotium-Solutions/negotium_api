@@ -2,17 +2,17 @@
 
 namespace Database\Seeders\tenant;
 
-use App\Models\Tenant\DynamicModelFieldAttribute;
+use App\Models\Tenant\DynamicModelFieldValidation;
 use Illuminate\Database\Seeder;
 
-class DynamicModelFieldAttributeSeeder extends Seeder
+class DynamicModelFieldValidationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DynamicModelFieldAttribute::insert([
+        DynamicModelFieldValidation::insert([
             ['attribute_id' => 1, 'dynamic_model_field_id' => 1],
             ['attribute_id' => 3, 'dynamic_model_field_id' => 1],
             ['attribute_id' => 1, 'dynamic_model_field_id' => 2],

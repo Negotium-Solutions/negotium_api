@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ActivityGroup extends Model
+class Validation extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function activity_types()
-    {
-        return $this->hasMany(ActivityType::class, 'activity_group_id');
-    }
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'laravel_through_key'
+    ];
 }

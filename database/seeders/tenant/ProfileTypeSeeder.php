@@ -3,7 +3,7 @@
 namespace Database\Seeders\tenant;
 
 use App\Models\Tenant\Activity;
-use App\Models\Tenant\ActivityType;
+use App\Models\Tenant\DynamicModelFieldType;
 use App\Models\Tenant\ProfileType;
 use App\Models\Tenant\Schema as CRMSchema;
 use App\Models\Tenant\Step;
@@ -71,7 +71,7 @@ class ProfileTypeSeeder extends Seeder
             $table->bigIncrements('id');
             $table->integer('data_owner_id')->nullable();
             foreach ($columns as $column) {
-                $activityType = ActivityType::find($column->type_id);
+                $activityType = DynamicModelFieldType::find($column->type_id);
                 $table->{$activityType->schema_data_type}($this->toCleanString($column->name))->nullable()->comment(json_encode($column));
             }
             $table->timestamps();

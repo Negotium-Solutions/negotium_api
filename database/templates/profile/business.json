@@ -3,62 +3,62 @@
     "fields": {
         "Company Information": {
             "Company Name": {
-                "type": "string",
-                "attributes": [
+                "type_id": 1,
+                "validations": [
                     "required",
                     "string"
                 ]
             },
             "Company Registration": {
-                "type": "string",
-                "attributes": [
+                "type_id": 1,
+                "validations": [
                     "required",
                     "string"
                 ]
             },
             "Cell Number": {
-                "type": "string",
-                "attributes": [
+                "type_id": 1,
+                "validations": [
                     "required",
                     "string"
                 ]
             },
             "Email": {
-                "type": "string",
-                "attributes": [
+                "type_id": 1,
+                "validations": [
                     "required",
                     "email"
                 ]
             }
         },
         "Company Address": {
-            "type": "string",
             "Building Name": {
-                "attributes": []
+                "type_id": 1,
+                "validations": []
             },
             "Unit Number": {
-                "type": "string",
-                "attributes": []
+                "type_id": 1,
+                "validations": []
             },
             "Street Address": {
-                "type": "string",
-                "attributes": []
+                "type_id": 1,
+                "validations": []
             },
             "Suburb": {
-                "type": "string",
-                "attributes": []
+                "type_id": 1,
+                "validations": []
             },
             "City": {
-                "type": "string",
-                "attributes": []
+                "type_id": 1,
+                "validations": []
             },
             "Country": {
-                "type": "string",
-                "attributes": []
+                "type_id": 1,
+                "validations": []
             },
             "Postal Code": {
-                "type": "string",
-                "attributes": []
+                "type_id": 1,
+                "validations": []
             }
         }
     }
