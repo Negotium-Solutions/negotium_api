@@ -21,13 +21,12 @@ class Profile extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'company_name'
-    ];
 
-    protected $appends = ['profile_name'];
+    protected $appends = [
+        'profile_name',
+        'email',
+        'cell_number'
+    ];
 
     public function profile_type()
     {
@@ -36,7 +35,16 @@ class Profile extends Model
 
     public function getProfileNameAttribute()
     {
-        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->first_name.' '.$this->last_name : $this->company_name;
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->first_name_1.' '.$this->dynamicModel()->last_name_2 : $this->dynamicModel()->company_name_25;
+    }
+
+    public function getEmailAttribute()
+    {
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->email_4 : $this->dynamicModel()->email_28;
+    }
+    public function getCellNumberAttribute()
+    {
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->cell_phone_3 : $this->dynamicModel()->cell_phone_27;
     }
 
     public function processes() : HasManyThrough

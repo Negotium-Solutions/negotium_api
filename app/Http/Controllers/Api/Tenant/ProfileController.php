@@ -251,7 +251,7 @@ class ProfileController extends BaseAPIController
         }
 
         try {
-            foreach($request->input('data') as $data) {
+            foreach ($request->input('data') as $data) {
                 $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
                 if (!isset($profileProcess->id) || !($profileProcess->id > 0)) {
                     $profileProcess = new ProfileProcess();
@@ -273,34 +273,7 @@ class ProfileController extends BaseAPIController
 
             return $this->success(['id' => $profileProcess->id], 'process successfully assigned to profile.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public function validatorRules($requestInput) : array
-    {
-        $validationArray = [];
-        foreach ($requestInput as $dynamicModelFields) {
-            foreach ($dynamicModelFields as $key => $field) {
-                if( !empty($field['attributes']) ) {
-                    // $validationRules = '';
-                    $validationRules = [];
-                    foreach ($field['attributes'] as $attribute) {
-                        // $validationRules .= $validationRules === '' ? $attribute['name'] : '|' . $attribute['name'];
-                        $rule = $attribute['name'];
-                        if( $attribute['name'] === 'sa_id_number') {
-                            $rule = new SouthAfricanIdNumber;
-                        }
-                        elseif( $attribute['name'] === 'sa_phone_number') {
-                            $rule = new SouthAfricanPhoneNumber;
-                        }
-                        array_push($validationRules, $rule);
-                    }
-                    $validationArray[$field['field']] = $validationRules;
-                }
-            }
-        }
-
-        return $validationArray;
     }
 }

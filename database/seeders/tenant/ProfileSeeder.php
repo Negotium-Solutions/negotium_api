@@ -18,20 +18,18 @@ class ProfileSeeder extends Seeder
         $business = Schema::where('name', 'like', '%business%')->first();
 
         Profile::factory([
-            'first_name' => 'Nico',
-            'last_name' => 'Van Der Meulen',
             'profile_type_id' => 1,
             'avatar' => '/images/individual/avatar'.rand(1, 5).'.png',
             'schema_id' => $individual->id
         ])->create();
 
         Profile::factory([
-            'company_name' => 'Negotium Solutions',
             'profile_type_id' => 2,
             'avatar' => '/images/business/avatar'.rand(1, 5).'.png',
             'schema_id' => $business->id
         ])->create();
 
+        $phoneNumbers = ["0614116444", "0848791089","0642596255"];
         Profile::factory(20)->create();
 
         $profiles = Profile::get();
@@ -42,7 +40,7 @@ class ProfileSeeder extends Seeder
                 $tableName = $individual->name;
                 $dynamicModel->first_name_1 = fake()->firstName();
                 $dynamicModel->last_name_2 = fake()->lastName();
-                $dynamicModel->cell_number_3 = fake()->phoneNumber();
+                $dynamicModel->cell_number_3 = $phoneNumbers[array_rand($phoneNumbers)];
                 $dynamicModel->email_4 = fake()->email();
                 // Update profile
                 $profile->schema_id = $individual->id;
@@ -51,7 +49,7 @@ class ProfileSeeder extends Seeder
             if ($profile->profile_type_id == 2) {
                 $tableName = $business->name;
                 $dynamicModel->company_name_25 = fake()->company();
-                $dynamicModel->cell_number_27 = fake()->phoneNumber();
+                $dynamicModel->cell_number_27 = $phoneNumbers[array_rand($phoneNumbers)];
                 $dynamicModel->email_28 = fake()->email();
                 // Update profile
                 $profile->schema_id = $business->id;
