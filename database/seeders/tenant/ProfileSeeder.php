@@ -38,25 +38,37 @@ class ProfileSeeder extends Seeder
             $dynamicModel = new DynamicModel();
             if ($profile->profile_type_id == 1) {
                 $tableName = $individual->name;
-                $dynamicModel->first_name_1 = fake()->firstName();
-                $dynamicModel->last_name_2 = fake()->lastName();
-                $dynamicModel->cell_number_3 = $phoneNumbers[array_rand($phoneNumbers)];
-                $dynamicModel->email_4 = fake()->email();
+                $dynamicModel->first_name = fake()->firstName();
+                $dynamicModel->last_name = fake()->lastName();
+                $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
+                $dynamicModel->email = fake()->email();
                 // Update profile
                 $profile->schema_id = $individual->id;
                 $profile->save();
             }
             if ($profile->profile_type_id == 2) {
                 $tableName = $business->name;
-                $dynamicModel->company_name_25 = fake()->company();
-                $dynamicModel->cell_number_27 = $phoneNumbers[array_rand($phoneNumbers)];
-                $dynamicModel->email_28 = fake()->email();
+                $dynamicModel->company_name = fake()->company();
+                $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
+                $dynamicModel->email = fake()->email();
                 // Update profile
                 $profile->schema_id = $business->id;
                 $profile->save();
             }
             $dynamicModel->setTable($tableName);
             $dynamicModel->parent_id = $profile->id;
+            if($dynamicModel->get()->count() === 0){
+                if($profile->profile_type_id == 1) {
+                    $dynamicModel->first_name = 'Nico';
+                    $dynamicModel->last_name = 'Van Der Meulen';
+                    $dynamicModel->email = 'nico@negotium-solutions.com';
+                    $dynamicModel->cell_number = '0832848212';
+                } else {
+                    $dynamicModel->company_name = 'Negotium Solutions';
+                    $dynamicModel->email = 'admin@negotium-solutions.com';
+                    $dynamicModel->cell_number = '0614116444';
+                }
+            }
             $dynamicModel->save();
         }
     }

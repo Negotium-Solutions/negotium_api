@@ -45,11 +45,15 @@ class DynamicModelField extends Model
         return $this->hasMany(DynamicModelFieldOption::class, 'dynamic_model_field_id');
     }
 
-    public function setField($field) : void
+    public function setField($field, $defaultProfile = false) : void
     {
         $this->save();
         $this->label = $field;
-        $this->field = trim(str_replace(' ', '_', strtolower($field))).'_'.$this->id;
+        if(in_array($field, ['First Name', 'Last Name', 'Company Name', 'Email', 'Cell Number']) && $defaultProfile) {
+            $this->field = trim(str_replace(' ', '_', strtolower($field)));
+        } else {
+            $this->field = trim(str_replace(' ', '_', strtolower($field))).'_'.$this->id;
+        }
         $this->save();
     }
 }

@@ -35,16 +35,17 @@ class Profile extends Model
 
     public function getProfileNameAttribute()
     {
-        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->first_name_1.' '.$this->dynamicModel()->last_name_2 : $this->dynamicModel()->company_name_25;
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->first_name.' '.$this->dynamicModel()->last_name : $this->dynamicModel()->company_name;
     }
 
     public function getEmailAttribute()
     {
-        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->email_4 : $this->dynamicModel()->email_28;
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->email : $this->dynamicModel()->email;
     }
+
     public function getCellNumberAttribute()
     {
-        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->cell_number_3 : $this->dynamicModel()->cell_number_27;
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->cell_number : $this->dynamicModel()->cell_number;
     }
 
     public function processes() : HasManyThrough
@@ -88,67 +89,5 @@ class Profile extends Model
         $dynamicModel->setTable($this->schema->name);
 
         return $dynamicModel->where('parent_id', $this->id)->first();
-    }
-
-    public function dynamicModelFields()
-    {
-        $dynamicModelFields = DynamicModelField::with(['dynamicModelFieldGroup', 'attributes'])
-                            ->where('schema_id', $this->schema_id)
-                            ->orderBy('dynamic_model_field_group_id')->get();
-
-        $_dynamicModelFields = [];
-        foreach ($dynamicModelFields as $key => $dynamicModelField) {
-            if( $key === 0 ) {
-
-                $field["schema_id"] = $dynamicModelField->scheme_id;
-                $field["dynamic_model_field_group_id"] = $dynamicModelField->dynamic_model_field_group_id;
-                $field["dynamic_model_field_group"]["id"] = $dynamicModelField->dynamicModelFieldGroup->id;
-                $field["dynamic_model_field_group"]["name"] = $dynamicModelField->dynamicModelFieldGroup->name;
-
-                if( $this->profile_type_id == self::PROFILE_TYPE_INDIVIDUAL ) {
-                    $field = $this->addDynamicModelField('First Name', $dynamicModelField->dynamicModelFieldGroup, ['required', 'string']);
-                    $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
-                    $field = $this->addDynamicModelField('Last Name', $dynamicModelField->dynamicModelFieldGroup, ['required', 'string']);
-                    $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
-                }
-
-                if( $this->profile_type_id == self::PROFILE_TYPE_BUSINESS ) {
-                    $field = $this->addDynamicModelField('Company Name', $dynamicModelField->dynamicModelFieldGroup, ['required', 'string']);
-                    $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
-                }
-
-                $field = $this->addDynamicModelField('Email', $dynamicModelField->dynamicModelFieldGroup, ['required', 'email']);
-                $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
-
-                $field = $this->addDynamicModelField('Cell Number', $dynamicModelField->dynamicModelFieldGroup, ['required', 'sa_phone_number']);
-                $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $field;
-            }
-            $_dynamicModelFields[$dynamicModelField->dynamicModelFieldGroup->name][] = $dynamicModelField;
-        }
-
-        return $_dynamicModelFields;
-    }
-
-    public function addDynamicModelField($field, $dynamic_model_field_group, $rules)
-    {
-        $attributes = [];
-        foreach ($rules as $rule) {
-            $attributes[] = [
-                'label' => $rule,
-                'name' => strtolower($rule)
-            ];
-        }
-
-        $dynamicField = [
-            'id' => rand(1000000, 2000000),
-            'schema_id' => $this->schema->id,
-            'label' => $field,
-            'field' => strtolower(str_replace(' ', '_', $field)),
-            'dynamic_model_field_group_id' => $dynamic_model_field_group->id,
-            'dynamic_model_field_group' => $dynamic_model_field_group,
-            'attributes' => $attributes
-        ];
-
-        return $dynamicField;
     }
 }

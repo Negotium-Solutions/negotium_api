@@ -46,7 +46,7 @@ class DynamicModelFieldSeeder extends Seeder
 
             foreach ($dynamicModelFields as $field => $_dynamicModelField) {
                 $dynamicModelField = new DynamicModelField();
-                $dynamicModelField->setField($field);
+                $dynamicModelField->setField($field, true);
                 $dynamicModelField->dynamic_model_field_type_id = $_dynamicModelField->type_id;
                 $dynamicModelField->dynamic_model_field_group_id = $dynamicModelFieldGroup->id;
                 $dynamicModelField->save();
