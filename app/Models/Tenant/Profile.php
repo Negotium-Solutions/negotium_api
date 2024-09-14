@@ -44,7 +44,7 @@ class Profile extends Model
     }
     public function getCellNumberAttribute()
     {
-        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->cell_phone_3 : $this->dynamicModel()->cell_phone_27;
+        return (int)($this->profile_type_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->dynamicModel()->cell_number_3 : $this->dynamicModel()->cell_number_27;
     }
 
     public function processes() : HasManyThrough

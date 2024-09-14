@@ -7,7 +7,6 @@ use App\Mail\Tenant\CommunicationEmail;
 use App\Models\Tenant\Communication;
 use App\Models\Tenant\Profile;
 use App\Models\User;
-use Illuminate\Http\Client\PendingRequest as PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
