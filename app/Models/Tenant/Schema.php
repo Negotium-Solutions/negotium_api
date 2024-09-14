@@ -30,4 +30,11 @@ class Schema extends Model
 
         return $columns;
     }
+
+    public function setName($name) : void
+    {
+        $this->save();
+        $this->name = $name.'_'.$this->id;
+        $this->save();
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Models\Tenant;
 
 use App\definitions\ModelTypeDefinitions;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class Process extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasUuids;
 
     protected $fillable = [
         'name'
@@ -55,5 +56,9 @@ class Process extends Model
         return $this->hasOne(ProcessLog::class)
             ->join('profiles', 'process_logs.profile_id', '=', 'profiles.id')
             ->select('process_logs.*');
+    }
+
+    public function dynamicModel() : HasOne {
+        return $this->hasOne(DynamicModel::class);
     }
 }

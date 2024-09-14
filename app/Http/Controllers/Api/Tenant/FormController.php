@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Controllers\Api\ApiInterface;
-use App\Models\Tenant\Attribute;
+use App\Models\Tenant\Validation;
 use App\Models\Tenant\Form;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -50,7 +50,7 @@ class FormController extends BaseAPIController implements ApiInterface
             $form = Form::with('steps.activities')->where('id', $id)->first();
 
             $data['activities'] = $form->steps[0]->activities;
-            $data['attributes'] = Attribute::orderBy('id')->get();
+            $data['attributes'] = Validation::orderBy('id')->get();
 
             if(count($data['activities']) == 0){
                 return $this->success([], 'No form record(s) found', [], Response::HTTP_NOT_FOUND);

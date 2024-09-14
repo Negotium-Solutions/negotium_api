@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Http\Requests\Tenant\DynamicModelFieldRequest;
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
@@ -73,8 +74,7 @@ class ProfileController extends BaseAPIController
 
             if (isset($id) && $hasDynamicModel) {
                 $profile = Profile::find($id);
-                $data['dynamicModel'] = $profile->dynamicModel()->toArray();
-                $data['dynamicModelFields'] = $profile->dynamicModelFields();
+                $data['dynamicModel'] = $profile->dynamicModel()->propertiesByGroup();
             }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
@@ -152,18 +152,8 @@ class ProfileController extends BaseAPIController
      * @param $id
      * @return Response
      */
-    public function update(Request $request, $id) : Response
+    public function update(DynamicModelFieldRequest $request, $id) : Response
     {
-        $validatorRules = $this->validatorRules($request->input('dynamicModelFields'));
-
-        $validator = \Validator::make(array_merge($request->all(), $request->input('dynamicModel')),
-            $validatorRules
-        );
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         try {
             $profile = Profile::find($id);
             if((!isset($profile))){
@@ -172,19 +162,16 @@ class ProfileController extends BaseAPIController
             $old_value = Profile::findOrFail($id);
             $new_value = $request->all();
 
-            $profile->cell_number = $request->input('cell_number');
-
-            if ($profile->updateOrFail($request->all()) === false) {
-                throw new \RuntimeException('Could not update profile');
-            }
-
-            $_dynamicModelRequest = $request->input('dynamicModel');
+            $_dynamicModel = $profile->dynamicModel();
             $dynamicModel = new DynamicModel();
             $dynamicModel->setTable($profile->schema->name);
-            $dynamicModel = $dynamicModel->where('id', $_dynamicModelRequest['id'])->first();
-            foreach ($_dynamicModelRequest as $key => $value) {
-                if ($key != 'id') {
-                    $dynamicModel->{$key} = $value;
+            $dynamicModel = $dynamicModel->where('id', $_dynamicModel->id)->first();
+
+            foreach ($request->all() as $key => $value) {
+                if (array_key_exists($key, $dynamicModel->getAttributes())) {
+                    if (!in_array($key, ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
+                        $dynamicModel->{$key} = $value;
+                    }
                 }
             }
             $dynamicModel->updated_at = now();
@@ -264,7 +251,7 @@ class ProfileController extends BaseAPIController
         }
 
         try {
-            foreach($request->input('data') as $data) {
+            foreach ($request->input('data') as $data) {
                 $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
                 if (!isset($profileProcess->id) || !($profileProcess->id > 0)) {
                     $profileProcess = new ProfileProcess();
@@ -286,34 +273,7 @@ class ProfileController extends BaseAPIController
 
             return $this->success(['id' => $profileProcess->id], 'process successfully assigned to profile.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public function validatorRules($requestInput) : array
-    {
-        $validationArray = [];
-        foreach ($requestInput as $dynamicModelFields) {
-            foreach ($dynamicModelFields as $key => $field) {
-                if( !empty($field['attributes']) ) {
-                    // $validationRules = '';
-                    $validationRules = [];
-                    foreach ($field['attributes'] as $attribute) {
-                        // $validationRules .= $validationRules === '' ? $attribute['name'] : '|' . $attribute['name'];
-                        $rule = $attribute['name'];
-                        if( $attribute['name'] === 'sa_id_number') {
-                            $rule = new SouthAfricanIdNumber;
-                        }
-                        elseif( $attribute['name'] === 'sa_phone_number') {
-                            $rule = new SouthAfricanPhoneNumber;
-                        }
-                        array_push($validationRules, $rule);
-                    }
-                    $validationArray[$field['field']] = $validationRules;
-                }
-            }
-        }
-
-        return $validationArray;
     }
 }

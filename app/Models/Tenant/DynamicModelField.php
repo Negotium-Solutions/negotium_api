@@ -2,10 +2,10 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\DynamicModelFieldGroup;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class DynamicModelField extends Model
@@ -15,7 +15,7 @@ class DynamicModelField extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
-        'deleted_at',
+        'deleted_at'
     ];
 
     public function schema() : BelongsTo
@@ -23,20 +23,37 @@ class DynamicModelField extends Model
         return $this->belongsTo(Schema::class, 'schema_id');
     }
 
-    public function dynamicModelFieldGroup() : BelongsTo
+    public function group() : BelongsTo
     {
         return $this->belongsTo(DynamicModelFieldGroup::class, 'dynamic_model_field_group_id');
     }
 
-    public function attributes() : HasManyThrough
+    public function validations() : HasManyThrough
     {
         return $this->hasManyThrough(
-            Attribute::class,
-            DynamicModelFieldAttribute::class,
+            Validation::class,
+            DynamicModelFieldValidation::class,
             'dynamic_model_field_id',
             'id',
             'id',
-            'attribute_id'
+            'validation_id'
         );
+    }
+
+    public function options() : HasMany
+    {
+        return $this->hasMany(DynamicModelFieldOption::class, 'dynamic_model_field_id');
+    }
+
+    public function setField($field, $defaultProfile = false) : void
+    {
+        $this->save();
+        $this->label = $field;
+        if(in_array($field, ['First Name', 'Last Name', 'Company Name', 'Email', 'Cell Number']) && $defaultProfile) {
+            $this->field = trim(str_replace(' ', '_', strtolower($field)));
+        } else {
+            $this->field = trim(str_replace(' ', '_', strtolower($field))).'_'.$this->id;
+        }
+        $this->save();
     }
 }

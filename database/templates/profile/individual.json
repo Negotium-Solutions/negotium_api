@@ -1,0 +1,134 @@
+{
+    "table": "individual",
+    "fields": {
+        "Personal Information": {
+            "First Name": {
+                "type_id": 1,
+                "validations": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Last Name": {
+                "type_id": 1,
+                "validations": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Cell Number": {
+                "type_id": 1,
+                "validations": [
+                    "required",
+                    "sa_phone_number"
+                ]
+            },
+            "Email": {
+                "type_id": 1,
+                "validations": [
+                    "required",
+                    "email"
+                ]
+            },
+            "ID Number": {
+                "type_id": 1,
+                "validations": [
+                    "required",
+                    "sa_id_number"
+                ]
+            },
+            "Maiden Name": {
+                "type_id": 1,
+                "validations": [
+                    "required",
+                    "string"
+                ]
+            },
+            "Gender": {
+                "type_id": 9,
+                "options": [
+                    "Male",
+                    "Female"
+                ],
+                "validations": [
+                    "required",
+                    "string"
+                ]
+            }
+        },
+        "Contact Details": {
+            "Mobile Number": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Work Number": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home Number": {
+                "type_id": 1,
+                "validations": []
+            }
+        },
+        "Home Address": {
+            "Resident Type": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home Building Name": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home Unit Number": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home Street name": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home Suburb": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home City": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home Country": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Home Postal Code": {
+                "type_id": 1,
+                "validations": []
+            }
+        },
+        "Work Address": {
+            "Work Building Name": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Work Street Address": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Work Suburb": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Work City": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Work Country": {
+                "type_id": 1,
+                "validations": []
+            },
+            "Work Postal Code": {
+                "type_id": 1,
+                "validations": []
+            }
+        }
+    }
+}

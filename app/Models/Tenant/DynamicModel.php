@@ -2,12 +2,12 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\DynamicModelFieldGroup;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class DynamicModel extends Model
 {
@@ -15,8 +15,32 @@ class DynamicModel extends Model
 
     protected $table; // This is set dynamically by the model using it [Profile, Process, etc]
 
-    public function dynamicModelFieldGroup() : BelongsTo
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    /*
+     * Transformed model properties
+     */
+    public function propertiesByGroup()
     {
-        return $this->belongsTo(DynamicModelFieldGroup::class);
+        $properties = parent::toArray();
+
+        $dynamicModelFieldGroups = DynamicModelFieldGroup::with(['fields.options', 'fields.validations'])->where('schema_id', $this->schema()->id)->get();
+
+        foreach ($dynamicModelFieldGroups as $dynamicModelFieldGroup) {
+            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
+                $dynamicModelField->value = $properties[$dynamicModelField->field];
+            }
+        }
+
+        return $dynamicModelFieldGroups;
+    }
+
+    public function schema() : Model
+    {
+        return Schema::where('name', $this->table)->first();
     }
 }

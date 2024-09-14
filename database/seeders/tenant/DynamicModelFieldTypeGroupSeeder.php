@@ -2,17 +2,17 @@
 
 namespace Database\Seeders\tenant;
 
-use App\Models\Tenant\ActivityGroup;
+use App\Models\Tenant\DynamicModelFieldTypeGroup;
 use Illuminate\Database\Seeder;
 
-class ActivityGroupSeeder extends Seeder
+class DynamicModelFieldTypeGroupSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        ActivityGroup::insert([
+        DynamicModelFieldTypeGroup::insert([
             ['name' => 'User Input'],
             ['name' => 'Select'],
             ['name' => 'Uploads'],

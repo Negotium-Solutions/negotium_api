@@ -4,6 +4,7 @@ namespace Database\Seeders\tenant;
 
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\Profile;
+use App\Models\Tenant\Schema;
 use Illuminate\Database\Seeder;
 
 class DynamicModelSeeder extends Seeder
@@ -13,12 +14,14 @@ class DynamicModelSeeder extends Seeder
      */
     public function run(): void
     {
-        $profiles = Profile::orderBy('id')->get();
+        $profiles = Profile::get();
+        $individual = Schema::where('name', 'like', '%individual%')->first();
+        $business = Schema::where('name', 'like', '%business%')->first();
 
         foreach ($profiles as $profile) {
-            $tableName = 'individual_1';
+            $tableName = $individual->name;
             if ($profile->profile_type_id == 2) {
-                $tableName = 'business_2';
+                $tableName = $business->name;
             }
 
             $individual = new DynamicModel();

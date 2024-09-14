@@ -2,17 +2,17 @@
 
 namespace Database\Seeders\tenant;
 
-use App\Models\Tenant\Attribute;
+use App\Models\Tenant\Validation;
 use Illuminate\Database\Seeder;
 
-class AttributeSeeder extends Seeder
+class ValidationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Attribute::insert([
+        Validation::insert([
             ['name' => 'required', 'label' => 'Required'],
             ['name' => 'indent', 'label' => 'Indent'],
             ['name' => 'sa_id_number', 'label' => 'SA ID Number'],

@@ -17,4 +17,15 @@ class Helper
         }
         return $phoneNumber; // Return the number as is if it doesn't start with '0'
     }
+
+    public static function fieldToLabel($fieldName)
+    {
+        // Replace underscores with spaces
+        $formatted = str_replace('_', ' ', $fieldName);
+
+        // Capitalize the first letter of each word
+        $formatted = ucwords($formatted);
+
+        return $formatted;
+    }
 }

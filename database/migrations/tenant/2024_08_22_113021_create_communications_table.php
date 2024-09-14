@@ -22,7 +22,7 @@ return new class extends Migration
 
             $table->string('subject')->nullable();
             $table->longText('message')->nullable();
-            $table->integer('profile_id')->nullable();
+            $table->uuid('profile_id')->nullable();
             $table->integer('communication_type_id')->nullable();
             $table->integer('status_id')->nullable();
             $table->timestamps();
