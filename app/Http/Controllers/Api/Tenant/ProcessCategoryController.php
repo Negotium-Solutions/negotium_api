@@ -88,6 +88,11 @@ class ProcessCategoryController extends BaseAPIController
     public function create(ProcessCategoryRequest $request) : Response
     {
         try {
+            $processCategoryExists = ProcessCategory::where('name', $request->input('name'))->first();
+            if (isset($processCategoryExists->id)) {
+                return $this->success(['id' => $processCategoryExists->id, 'color' => $processCategoryExists->color], 'Process category with this name already exists.', $request->all(), Response::HTTP_CREATED);
+            }
+
             $processCategory = new ProcessCategory();
             $processCategory->name = $request->name;
             $processCategory->color = fake()->colorName;
@@ -96,7 +101,7 @@ class ProcessCategoryController extends BaseAPIController
                 throw new \RuntimeException('Could not save process category');
             }
 
-            return $this->success(['id' => $processCategory->id], 'process category successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $processCategory->id, 'color' => $processCategory->color], 'process category successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create process category.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

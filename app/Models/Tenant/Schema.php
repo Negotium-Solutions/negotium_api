@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
 class Schema extends Model
@@ -36,5 +37,19 @@ class Schema extends Model
         $this->save();
         $this->name = $name.'_'.$this->id;
         $this->save();
+    }
+
+    public function createSchema($name)
+    {
+        $this->save();
+        $this->name = $name.'_'.$this->id;
+        $this->save();
+
+        \Illuminate\Support\Facades\Schema::create($this->name, function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('parent_id')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 }
