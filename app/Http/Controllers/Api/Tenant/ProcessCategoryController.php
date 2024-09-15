@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use Throwable;
+use App\Http\Requests\Tenant\ProcessCategoryRequest;
 use App\Models\Tenant\ProcessCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 use Illuminate\Support\Facades\Validator;
+use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Throwable;
 
 class ProcessCategoryController extends BaseAPIController
 {
@@ -84,19 +85,12 @@ class ProcessCategoryController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    public function create(Request $request) : Response
+    public function create(ProcessCategoryRequest $request) : Response
     {
-        $validator = Validator::make($request->all(),
-            ['name' => 'string|required']
-        );
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         try {
             $processCategory = new ProcessCategory();
             $processCategory->name = $request->name;
+            $processCategory->color = fake()->colorName;
 
             if ($processCategory->save() === false) {
                 throw new \RuntimeException('Could not save process category');
