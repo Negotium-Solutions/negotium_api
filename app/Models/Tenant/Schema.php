@@ -52,4 +52,11 @@ class Schema extends Model
             $table->softDeletes();
         });
     }
+
+    public function createField($_table, $name, $type)
+    {
+        \Illuminate\Support\Facades\Schema::table($_table, function (Blueprint $table) use ($name, $type) {
+            $table->{$type}($name)->nullable();
+        });
+    }
 }

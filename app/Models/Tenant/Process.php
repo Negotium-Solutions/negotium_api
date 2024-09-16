@@ -67,4 +67,8 @@ class Process extends Model
     public function dynamicModel() : HasOne {
         return $this->hasOne(DynamicModel::class);
     }
+
+    public function schema() : BelongsTo {
+        return $this->belongsTo(Schema::class);
+    }
 }

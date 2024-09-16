@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\Tenant\CommunicationController;
 use App\Http\Controllers\Api\Tenant\LookUpController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
+use App\Http\Controllers\Api\Tenant\DynamicModelFieldController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +129,8 @@ Route::group([
     Route::post('/form/create', [FormController::class, 'create'])->name('api.form.create');
     Route::put('/form/update/{id}', [FormController::class, 'update'])->name('api.form.update');
     Route::delete('/form/delete/{id?}', [FormController::class, 'delete'])->name('api.form.delete');
+
+    Route::post('/dynamic-model-field/create', [DynamicModelFieldController::class, 'create'])->name('api.dynamic-model-field.create');
 
     // Lookup routes
     Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');

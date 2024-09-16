@@ -18,11 +18,6 @@ class DynamicModelField extends Model
         'deleted_at'
     ];
 
-    public function schema() : BelongsTo
-    {
-        return $this->belongsTo(Schema::class, 'schema_id');
-    }
-
     public function group() : BelongsTo
     {
         return $this->belongsTo(DynamicModelFieldGroup::class, 'dynamic_model_field_group_id');

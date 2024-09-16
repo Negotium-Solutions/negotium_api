@@ -29,7 +29,7 @@ class Step extends Model
 
     public function activities()
     {
-        return $this->hasMany(Activity::class, 'step_id');
+        return $this->hasMany(DynamicModelField::class, 'step_id');
     }
 
     public function schema()
