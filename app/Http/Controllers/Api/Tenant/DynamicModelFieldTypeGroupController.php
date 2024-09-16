@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
-class ActivityGroupController extends BaseApiController
+class DynamicModelFieldTypeGroupController extends BaseApiController
 {
     /**
      * Get activity group(s)

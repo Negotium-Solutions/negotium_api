@@ -10,8 +10,14 @@ class DynamicModelFieldTypeGroup extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function activity_types()
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    public function field_types()
     {
-        return $this->hasMany(DynamicModelFieldType::class, 'activity_group_id');
+        return $this->hasMany(DynamicModelFieldType::class, 'dynamic_model_field_type_group_id');
     }
 }
