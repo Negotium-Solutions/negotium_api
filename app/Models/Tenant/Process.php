@@ -31,6 +31,12 @@ class Process extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function category() : BelongsTo
     {
         return $this->belongsTo(ProcessCategory::class, 'process_category_id');
@@ -38,7 +44,7 @@ class Process extends Model
 
     public function steps() : HasMany
     {
-        return $this->hasMany(Step::class, 'parent_id')->where('model_id', ModelTypeDefinitions::PROCESS);
+        return $this->hasMany(Step::class, 'parent_id');
     }
 
     public function profiles() : HasManyThrough {

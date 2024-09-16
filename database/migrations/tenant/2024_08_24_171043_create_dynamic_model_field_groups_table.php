@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('dynamic_model_field_groups', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
+            $table->uuid('parent_id')->nullable();
             $table->uuid('schema_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

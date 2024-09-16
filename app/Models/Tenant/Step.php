@@ -11,6 +11,12 @@ class Step extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function process()
     {
         return $this->belongsTo(Process::class, 'parent_id');
