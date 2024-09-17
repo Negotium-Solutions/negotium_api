@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Tenant\ProcessCategoryController;
 use App\Http\Controllers\Api\Tenant\ProcessController;
 use App\Http\Controllers\Api\Tenant\StepController;
 use App\Http\Controllers\Api\Tenant\ActivityController;
-use App\Http\Controllers\Api\Tenant\ActivityGroupController;
+use App\Http\Controllers\Api\Tenant\DynamicModelFieldTypeGroupController;
 use App\Http\Controllers\Api\Tenant\DocumentController;
 use App\Http\Controllers\Api\Tenant\SchemaController;
 use App\Http\Controllers\Api\Tenant\SchemaDataStoreController;
@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\Tenant\CommunicationController;
 use App\Http\Controllers\Api\Tenant\LookUpController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
+use App\Http\Controllers\Api\Tenant\DynamicModelFieldController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,7 +87,7 @@ Route::group([
     Route::delete('/activity/delete/{id?}', [ActivityController::class, 'delete'])->name('api.activity.delete');
 
     // Activity Group routes
-    Route::get('/activity-group/{id?}', [ActivityGroupController::class, 'get'])->name('api.activity-group');
+    Route::get('/dynamic-model-field-type-group/{id?}', [DynamicModelFieldTypeGroupController::class, 'get'])->name('api.dynamic-model-field-type-group');
 
     // Documents routes
     Route::get('/document/{id?}', [DocumentController::class, 'get'])->name('api.document');
@@ -128,6 +129,8 @@ Route::group([
     Route::post('/form/create', [FormController::class, 'create'])->name('api.form.create');
     Route::put('/form/update/{id}', [FormController::class, 'update'])->name('api.form.update');
     Route::delete('/form/delete/{id?}', [FormController::class, 'delete'])->name('api.form.delete');
+
+    Route::post('/dynamic-model-field/create', [DynamicModelFieldController::class, 'create'])->name('api.dynamic-model-field.create');
 
     // Lookup routes
     Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');

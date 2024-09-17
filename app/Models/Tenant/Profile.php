@@ -28,6 +28,12 @@ class Profile extends Model
         'cell_number'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     public function profile_type()
     {
         return $this->belongsTo(ProfileType::class);

@@ -20,6 +20,12 @@ class ProcessCategory extends Model
         'process_category_id'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     public function processes()
     {
         return $this->hasMany(Process::class, 'id');

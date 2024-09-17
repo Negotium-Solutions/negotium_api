@@ -15,9 +15,10 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('label')->nullable();
             $table->string('field')->nullable();
-            $table->string('dynamic_model_field_type_id')->nullable();
+            $table->integer('dynamic_model_field_type_id')->nullable();
+            $table->integer('dynamic_model_field_group_id')->nullable();
+            $table->integer('step_id')->nullable();
             $table->integer('order')->nullable();
-            $table->string('dynamic_model_field_group_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

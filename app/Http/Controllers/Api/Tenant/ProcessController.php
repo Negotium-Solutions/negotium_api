@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\Tenant\ProcessLog;
-use Throwable;
+use App\Http\Requests\Tenant\ProcessRequest;
 use App\Models\Tenant\Process;
+use App\Models\Tenant\ProcessLog;
+use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 use Illuminate\Support\Facades\Validator;
+use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Throwable;
 
 class ProcessController extends BaseAPIController
 {
+    const PROCESS_KEY = 'process';
+
     /**
      * Get process categor(y)(ies)
      *
@@ -86,21 +90,16 @@ class ProcessController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    public function create(Request $request) : Response
+    public function create(ProcessRequest $request) : Response
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'string|required',
-            'process_category_id' => 'integer|required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(),  Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        $schema = new TenantSchema();
+        $schema->createSchema(self::PROCESS_KEY);
 
         try {
             $process = new Process();
             $process->name = $request->name;
             $process->process_category_id = $request->process_category_id;
+            $process->schema_id = $schema->id;
 
             if ($process->save() === false) {
                 throw new \RuntimeException('Could not save process');

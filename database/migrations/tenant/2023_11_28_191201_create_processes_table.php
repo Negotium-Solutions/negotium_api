@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name')->nullable();
             $table->integer('process_category_id')->nullable();
+            $table->uuid('schema_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

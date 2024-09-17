@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Controllers\Exception;
 use App\Http\Controllers\Throwable;
+use App\Http\Requests\Tenant\StepRequest;
 use App\Models\Tenant\Step;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -90,23 +91,12 @@ class StepController extends BaseApiController
      * @return Response
      * @throws Exception
      */
-    public function create(Request $request) : Response
+    public function create(StepRequest $request) : Response
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'string|required',
-            'parent_id' => 'integer|required',
-            'model_id' => 'integer|required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         try {
             $step = new Step();
             $step->name = $request->name;
             $step->parent_id = $request->parent_id;
-            $step->model_id = $request->model_id;
 
             if ($step->save() === false) {
                 throw new \RuntimeException('Could not save step');
@@ -114,7 +104,7 @@ class StepController extends BaseApiController
             $step->order = $step->id;
             $step->save();
 
-            return $this->success(['id' => $step->id], 'Step successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $step->id, 'order' => $step->order], 'Step successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create step.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

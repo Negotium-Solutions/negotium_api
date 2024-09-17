@@ -9,4 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class DynamicModelFieldType extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 }

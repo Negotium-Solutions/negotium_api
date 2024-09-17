@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('steps', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
-            $table->integer('parent_id')->nullable();
+            $table->uuid('parent_id')->nullable();
             $table->integer('order')->nullable();
-            $table->integer('model_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

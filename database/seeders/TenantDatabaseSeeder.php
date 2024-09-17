@@ -48,14 +48,14 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(DynamicModelFieldTypeGroupSeeder::class);
         $this->call(ModelTypeSeeder::class);
         $this->call(StepSeeder::class);
-        $this->call(ActivitySeeder::class);
-        $this->call(FormSeeder::class);
+        // $this->call(ActivitySeeder::class);
         $this->call(ProcessStatusSeeder::class);
         $this->call(ProcessLogSeeder::class);
         $this->call(NoteSeeder::class);
         $this->call(CommunicationSeeder::class);
         $this->call(CommunicationTypeSeeder::class);
         $this->call(CommunicationStatusSeeder::class);
+        // $this->call(FormSeeder::class);
         // $this->call(SchemaSeeder::class);
         // $this->call(DynamicModelSeeder::class);
         // $this->call(DynamicModelSchemaSeeder::class);
