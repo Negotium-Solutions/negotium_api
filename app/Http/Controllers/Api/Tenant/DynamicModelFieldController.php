@@ -14,6 +14,11 @@ use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
 class DynamicModelFieldController extends BaseApiController
 {
+    const RADIO = 7;
+    const CHECKBOX = 8;
+    const DROPDOWN = 9;
+    const EMAIL = 13;
+
     /**
      * Get step(s)
      *
@@ -109,7 +114,7 @@ class DynamicModelFieldController extends BaseApiController
                 throw new \RuntimeException('Could not save note');
             }
 
-            if (in_array($dynamicModelField->dynamic_model_field_type_id, [7, 8, 9])) {
+            if (in_array($dynamicModelField->dynamic_model_field_type_id, [self::RADIO, self::CHECKBOX, self::DROPDOWN])) {
                 foreach ($request->get('options') as $option) {
                     $dynamicModelFieldTypeOption = new DynamicModelFieldOption();
                     $dynamicModelFieldTypeOption->name = $option;

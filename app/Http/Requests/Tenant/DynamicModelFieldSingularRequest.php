@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DynamicModelFieldSingularRequest extends FormRequest
 {
+    const RADIO = 7;
+    const CHECKBOX = 8;
+    const DROPDOWN = 9;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -28,7 +31,7 @@ class DynamicModelFieldSingularRequest extends FormRequest
         ];
 
         $options = [];
-        if (in_array($this->input('dynamic_model_field_type_id'), [7, 8, 9])) {
+        if (in_array($this->input('dynamic_model_field_type_id'), [self::RADIO, self::CHECKBOX, self::DROPDOWN])) {
             $options = ['options' => 'required|array'];
         }
 
