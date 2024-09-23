@@ -131,6 +131,7 @@ Route::group([
     Route::delete('/form/delete/{id?}', [FormController::class, 'delete'])->name('api.form.delete');
 
     Route::post('/dynamic-model-field/create', [DynamicModelFieldController::class, 'create'])->name('api.dynamic-model-field.create');
+    Route::get('/dynamic-model-field/step/{step_id?}', [DynamicModelFieldController::class, 'get'])->name('api.dynamic-model-field');
 
     // Lookup routes
     Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');
