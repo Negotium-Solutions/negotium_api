@@ -3,10 +3,12 @@
 namespace Database\Seeders\tenant;
 
 use App\Models\Tenant\Process;
+use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Database\Seeder;
 
 class ProcessSeeder extends Seeder
 {
+    const PROCESS_KEY = 'process';
     /**
      * Run the database seeds.
      */
@@ -37,5 +39,14 @@ class ProcessSeeder extends Seeder
         Process::factory(['name' => 'Process 23'])->create();
         Process::factory(['name' => 'Process 24'])->create();
         Process::factory(['name' => 'Process 25'])->create();
+
+        $processes = Process::all();
+
+        $processes->each(function (Process $process) {
+            $schema = new TenantSchema();
+            $schema->createSchema(self::PROCESS_KEY);
+            $process->schema_id = $schema->id;
+            $process->save();
+        });
     }
 }

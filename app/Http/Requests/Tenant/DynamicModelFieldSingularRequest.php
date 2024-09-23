@@ -21,10 +21,17 @@ class DynamicModelFieldSingularRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $requestArray = [
             'name' => 'required|string',
             'step_id' => 'integer|required',
             'dynamic_model_field_type_id' => 'integer|required'
         ];
+
+        $options = [];
+        if (in_array($this->input('dynamic_model_field_type_id'), [7, 8, 9])) {
+            $options = ['options' => 'required|array'];
+        }
+
+        return array_merge($requestArray, $options);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Requests\Tenant\DynamicModelFieldSingularRequest;
 use App\Models\Tenant\DynamicModelField;
+use App\Models\Tenant\DynamicModelFieldOption;
 use App\Models\Tenant\DynamicModelFieldType;
 use App\Models\Tenant\Schema as TenantSchema;
 use App\Models\Tenant\Step;
@@ -51,6 +52,15 @@ class DynamicModelFieldController extends BaseApiController
 
             if ($dynamicModelField->save() === false) {
                 throw new \RuntimeException('Could not save note');
+            }
+
+            if (in_array($dynamicModelField->dynamic_model_field_type_id, [7, 8, 9])) {
+                foreach ($request->get('options') as $option) {
+                    $dynamicModelFieldTypeOption = new DynamicModelFieldOption();
+                    $dynamicModelFieldTypeOption->name = $option;
+                    $dynamicModelFieldTypeOption->dynamic_model_field_id = $dynamicModelField->id;
+                    $dynamicModelFieldTypeOption->save();
+                }
             }
 
             return $this->success(['id' => $dynamicModelField->id], 'Dynamic model field successfully created.', $request->all(), Response::HTTP_CREATED);
