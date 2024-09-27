@@ -52,11 +52,10 @@ class DynamicModelFieldController extends BaseApiController
      * @return Response
      * @throws Exception
      */
-    public function get(Request $request, $step_id = null) : Response
+    public function get(Request $request, int $step_id = null, int $id = null) : Response
     {
         try{
-            $query = isset($step_id) ? DynamicModelField::where('step_id', $step_id) : DynamicModelField::query();
-
+            $query = isset($id) ? DynamicModelField::where('step_id', $step_id)->where('id', $id) : DynamicModelField::where('step_id', $step_id);
             if ($request->has('with')) {
                 $with_array = explode(',', $request->with);
                 $query = $query->with($with_array);
@@ -126,6 +125,42 @@ class DynamicModelFieldController extends BaseApiController
             return $this->success(['id' => $dynamicModelField->id], 'Dynamic model field successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create dynamic model field.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Delete a dynamic-model-field by ID.
+     *
+     * @OA\Delete(
+     *      path="/{tenant}/dynamic-model-field/delete/{id}",
+     *      operationId="deletedynamic-model-fieldById",
+     *      tags={"Activity"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @param String $id
+     * @return Response
+     * @throws Exception
+     */
+    public function delete(int $id) : Response
+    {
+        try {
+            $activity = DynamicModelField::find($id);
+            if((!isset($activity))){
+                return $this->success([], 'No activity record found to delete', [], Response::HTTP_NOT_FOUND);
+            }
+
+            if ($activity->delete() === false) {
+                throw new \RuntimeException('Could not delete the activity');
+            }
+
+            return response()->noContent();
+        } catch (\Throwable $exception) {
+            return $this->error([$exception->getMessage()], 'There was an error trying to delete the activity', ['activity_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
