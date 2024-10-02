@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Requests\Tenant\DynamicModelFieldSingularRequest;
 use App\Models\Tenant\DynamicModelField;
+use App\Models\Tenant\DynamicModelFieldOption;
 use App\Models\Tenant\DynamicModelFieldType;
 use App\Models\Tenant\Schema as TenantSchema;
 use App\Models\Tenant\Step;
@@ -13,6 +14,65 @@ use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
 class DynamicModelFieldController extends BaseApiController
 {
+    const RADIO = 7;
+    const CHECKBOX = 8;
+    const DROPDOWN = 9;
+    const EMAIL = 13;
+
+    /**
+     * Get step(s)
+     *
+     * @OA\Get(
+     *       path="/{tenant}/dynamic-model-field/{id}",
+     *       summary="Get a DynamicModelField",
+     *       operationId="getDynamicModelField",
+     *       tags={"DynamicModelField"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Parameter(name="id", description="DynamicModelField Id", required=false, in="path", @OA\Schema( type="string" )),
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  ),
+     *
+     * @OA\Get(
+     *       path="/{tenant}/dynamic-model-field",
+     *       summary="Get DynamicModelFields",
+     *       operationId="getDynamicModelFields",
+     *       tags={"DynamicModelField"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  )
+     *
+     * @param Request $request
+     * @param Request $id
+     * @return Response
+     * @throws Exception
+     */
+    public function get(Request $request, int $step_id = null, int $id = null) : Response
+    {
+        try{
+            $query = isset($id) ? DynamicModelField::where('step_id', $step_id)->where('id', $id) : DynamicModelField::where('step_id', $step_id);
+            if ($request->has('with')) {
+                $with_array = explode(',', $request->with);
+                $query = $query->with($with_array);
+            }
+
+            $data = isset($id) ? $query->first() : $query->get();
+
+            if ((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)) {
+                return $this->success([], 'No dynamic model field record(s) found', [], Response::HTTP_NOT_FOUND);
+            }
+
+            return $this->success($data, 'dynamic model field(s) successfully retrieved', [], Response::HTTP_OK);
+        }catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve.', [], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
     /**
      * Create a new dynamic field model.
      *
@@ -53,9 +113,54 @@ class DynamicModelFieldController extends BaseApiController
                 throw new \RuntimeException('Could not save note');
             }
 
+            if (in_array($dynamicModelField->dynamic_model_field_type_id, [self::RADIO, self::CHECKBOX, self::DROPDOWN])) {
+                foreach ($request->get('options') as $option) {
+                    $dynamicModelFieldTypeOption = new DynamicModelFieldOption();
+                    $dynamicModelFieldTypeOption->name = $option;
+                    $dynamicModelFieldTypeOption->dynamic_model_field_id = $dynamicModelField->id;
+                    $dynamicModelFieldTypeOption->save();
+                }
+            }
+
             return $this->success(['id' => $dynamicModelField->id], 'Dynamic model field successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create dynamic model field.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Delete a dynamic-model-field by ID.
+     *
+     * @OA\Delete(
+     *      path="/{tenant}/dynamic-model-field/delete/{id}",
+     *      operationId="deletedynamic-model-fieldById",
+     *      tags={"Activity"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @param String $id
+     * @return Response
+     * @throws Exception
+     */
+    public function delete(int $id) : Response
+    {
+        try {
+            $activity = DynamicModelField::find($id);
+            if((!isset($activity))){
+                return $this->success([], 'No activity record found to delete', [], Response::HTTP_NOT_FOUND);
+            }
+
+            if ($activity->delete() === false) {
+                throw new \RuntimeException('Could not delete the activity');
+            }
+
+            return response()->noContent();
+        } catch (\Throwable $exception) {
+            return $this->error([$exception->getMessage()], 'There was an error trying to delete the activity', ['activity_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

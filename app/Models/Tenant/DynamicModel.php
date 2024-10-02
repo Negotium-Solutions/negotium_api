@@ -5,9 +5,7 @@ namespace App\Models\Tenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 
 class DynamicModel extends Model
 {
@@ -21,6 +19,8 @@ class DynamicModel extends Model
         'deleted_at',
     ];
 
+    const EMAIL = 13;
+
     /*
      * Transformed model properties
      */
@@ -32,7 +32,11 @@ class DynamicModel extends Model
 
         foreach ($dynamicModelFieldGroups as $dynamicModelFieldGroup) {
             foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
-                $dynamicModelField->value = $properties[$dynamicModelField->field];
+                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
+                    $dynamicModelField->value = DynamicModelFieldEmail::find($properties[$dynamicModelField->field]);
+                } else {
+                    $dynamicModelField->value = $properties[$dynamicModelField->field];
+                }
             }
         }
 

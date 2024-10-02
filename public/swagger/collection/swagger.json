@@ -262,79 +262,6 @@
                 ]
             }
         },
-        "/{tenant}/activity-group/{id}": {
-            "get": {
-                "tags": [
-                    "DynamicModelFieldTypeGroup"
-                ],
-                "summary": "Get a activity group",
-                "description": "Authenticate using a bearer token",
-                "operationId": "getActivityGroup",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Activity Group Id",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/{tenant}/activity-groups": {
-            "get": {
-                "tags": [
-                    "DynamicModelFieldTypeGroup"
-                ],
-                "summary": "Get Activity Groups",
-                "description": "Authenticate using a bearer token",
-                "operationId": "getActivityGroups",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
-            }
-        },
         "/{tenant}/communication/{id}": {
             "get": {
                 "tags": [
@@ -682,6 +609,183 @@
                     },
                     "404": {
                         "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/dynamic-model-field/{id}": {
+            "get": {
+                "tags": [
+                    "DynamicModelField"
+                ],
+                "summary": "Get a DynamicModelField",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getDynamicModelField",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "DynamicModelField Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/dynamic-model-field": {
+            "get": {
+                "tags": [
+                    "DynamicModelField"
+                ],
+                "summary": "Get DynamicModelFields",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getDynamicModelFields",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/dynamic-model-/create": {
+            "post": {
+                "tags": [
+                    "DynamicFieldModel"
+                ],
+                "summary": "Create a new dynamic-model-field",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createDynamicFieldModel",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/activity-group/{id}": {
+            "get": {
+                "tags": [
+                    "DynamicModelFieldTypeGroup"
+                ],
+                "summary": "Get a activity group",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getActivityGroup",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Activity Group Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/activity-groups": {
+            "get": {
+                "tags": [
+                    "DynamicModelFieldTypeGroup"
+                ],
+                "summary": "Get Activity Groups",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getActivityGroups",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 },
                 "security": [
@@ -2221,16 +2325,24 @@
             "description": "Activity"
         },
         {
-            "name": "DynamicModelFieldTypeGroup",
-            "description": "DynamicModelFieldTypeGroup"
-        },
-        {
             "name": "Communication",
             "description": "Communication"
         },
         {
             "name": "Document",
             "description": "Document"
+        },
+        {
+            "name": "DynamicModelField",
+            "description": "DynamicModelField"
+        },
+        {
+            "name": "DynamicFieldModel",
+            "description": "DynamicFieldModel"
+        },
+        {
+            "name": "DynamicModelFieldTypeGroup",
+            "description": "DynamicModelFieldTypeGroup"
         },
         {
             "name": "Form",

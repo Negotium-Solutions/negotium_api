@@ -23,6 +23,11 @@ class DynamicModelField extends Model
         return $this->belongsTo(DynamicModelFieldGroup::class, 'dynamic_model_field_group_id');
     }
 
+    public function field_type() : BelongsTo
+    {
+        return $this->belongsTo(DynamicModelFieldType::class, 'dynamic_model_field_type_id');
+    }
+
     public function validations() : HasManyThrough
     {
         return $this->hasManyThrough(
