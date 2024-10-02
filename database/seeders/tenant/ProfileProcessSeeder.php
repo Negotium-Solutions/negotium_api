@@ -17,17 +17,55 @@ class ProfileProcessSeeder extends Seeder
         $profile_id1 = Profile::orderBy('created_at')->first()->id;
         $profile_id2 = Profile::orderBy('created_at')->first()->id;
         $processes = Process::limit(10)->get();
-        ProfileProcess::insert([
-            ['profile_id' => $profile_id1, 'process_id' => $processes[0]->id],
-            ['profile_id' => $profile_id1, 'process_id' => $processes[1]->id],
-            ['profile_id' => $profile_id1, 'process_id' => $processes[2]->id],
-            ['profile_id' => $profile_id1, 'process_id' => $processes[3]->id],
-            ['profile_id' => $profile_id1, 'process_id' => $processes[4]->id],
-            ['profile_id' => $profile_id2, 'process_id' => $processes[5]->id],
-            ['profile_id' => $profile_id2, 'process_id' => $processes[6]->id],
-            ['profile_id' => $profile_id2, 'process_id' => $processes[7]->id],
-            ['profile_id' => $profile_id2, 'process_id' => $processes[8]->id],
-            ['profile_id' => $profile_id2, 'process_id' => $processes[9]->id]
-        ]);
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id1;
+        $profileProcess->process_id = $processes[0]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id1;
+        $profileProcess->process_id = $processes[1]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id1;
+        $profileProcess->process_id = $processes[2]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id1;
+        $profileProcess->process_id = $processes[3]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id1;
+        $profileProcess->process_id = $processes[4]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id2;
+        $profileProcess->process_id = $processes[5]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id2;
+        $profileProcess->process_id = $processes[6]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id2;
+        $profileProcess->process_id = $processes[7]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id2;
+        $profileProcess->process_id = $processes[8]->id;
+        $profileProcess->save();
+
+        $profileProcess = new ProfileProcess();
+        $profileProcess->profile_id = $profile_id2;
+        $profileProcess->process_id = $processes[9]->id;
+        $profileProcess->save();
     }
 }

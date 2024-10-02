@@ -64,8 +64,17 @@ class Process extends Model
             ->select('process_logs.*');
     }
 
-    public function dynamicModel() : HasOne {
-        return $this->hasOne(DynamicModel::class);
+    public function dynamicModel($profile_process_id)
+    {
+        $dynamicModel = new DynamicModel();
+        $dynamicModel->setTable($this->schema->name);
+
+        if (empty($dynamicModel->where('parent_id', $profile_process_id)->first()->parent_id)) {
+            $dynamicModel->parent_id = $profile_process_id;
+            $dynamicModel->save();
+        }
+
+        return $dynamicModel->where('parent_id', $profile_process_id)->first();
     }
 
     public function schema() : BelongsTo {

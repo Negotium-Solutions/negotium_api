@@ -43,6 +43,31 @@ class DynamicModel extends Model
         return $dynamicModelFieldGroups;
     }
 
+    /*
+     * Transformed model properties
+     */
+    public function propertiesByStep()
+    {
+        // return $this->hasMany(Step::class, 'parent_id');
+
+        $properties = parent::toArray();
+
+        $dynamicModelFieldGroups = Step::where('parent_id', $this->id)->get();
+
+        /*foreach ($dynamicModelFieldGroups as $dynamicModelFieldGroup) {
+            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
+                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
+                    $dynamicModelField->value = DynamicModelFieldEmail::find($properties[$dynamicModelField->field]);
+                } else {
+                    $dynamicModelField->value = $properties[$dynamicModelField->field];
+                }
+            }
+        }*/
+
+        return $dynamicModelFieldGroups;
+
+    }
+
     public function schema() : Model
     {
         return Schema::where('name', $this->table)->first();
