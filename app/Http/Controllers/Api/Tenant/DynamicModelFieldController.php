@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Http\Requests\Tenant\DynamicModelFieldRequest;
 use App\Http\Requests\Tenant\DynamicModelFieldSingularRequest;
+use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\DynamicModelField;
 use App\Models\Tenant\DynamicModelFieldOption;
 use App\Models\Tenant\DynamicModelFieldType;
@@ -126,6 +128,56 @@ class DynamicModelFieldController extends BaseApiController
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create dynamic model field.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function updateFields(DynamicModelFieldRequest $request) : Response
+    {
+        try {
+            $dynamicModel = new DynamicModel();
+            $dynamicModel->setTable($request->input('schema_table'));
+            $dynamicModel = $dynamicModel->where('parent_id', $request->input('parent_id'))->first();
+
+            $old_value = $dynamicModel;
+            $new_value = $request->all();
+
+            if ((!isset($dynamicModel))) {
+                return $this->success([], 'No dynamic model record found to update', [], Response::HTTP_NO_CONTENT);
+            }
+
+            /*
+            $fields = null;
+            if ($request->has('step_id') && $request->input('step_id') > 0) {
+                $steps = $request->input('steps');
+                foreach ($steps as $step) {
+                    if ($step['id'] === $request->input('step_id')) {
+                        $fields = $step['fields'];
+                    }
+                }
+            }
+
+            if ($fields === null) {
+                $fields = $request->all();
+            }
+            */
+
+            foreach ($request->all() as $key => $value) {
+            // foreach ($fields as $key => $value) {
+                if (array_key_exists($key, $dynamicModel->getAttributes())) {
+                    if (!in_array($key, ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
+                        $dynamicModel->{$key} = $value;
+                    }
+                }
+            }
+            $dynamicModel->updated_at = now();
+
+            if ($dynamicModel->save() === false) {
+                throw new \RuntimeException('Could not update profile dynamic model');
+            }
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'There was an error trying to update the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->success(['id' => $dynamicModel->id], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**

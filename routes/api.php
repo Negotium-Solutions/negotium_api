@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\Tenant\LookUpController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 use App\Http\Controllers\Api\Tenant\DynamicModelFieldController;
+use App\Http\Controllers\Api\Tenant\ProcessExecutionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,8 +72,10 @@ Route::group([
     Route::post('/process/create', [ProcessController::class, 'create'])->name('api.process.create');
     Route::put('/process/update/{id}', [ProcessController::class, 'update'])->name('api.process.update');
     Route::delete('/process/delete/{id?}', [ProcessController::class, 'delete'])->name('api.process.delete');
-    Route::get('/profile-process', [ProcessController::class, 'getProfileProcess'])->name('api.profile-process');
     Route::post('/process/update-process-log-status', [ProcessController::class, 'updateProcessLogStatus'])->name('api.process.update-process-log-status');
+
+    // Process Execution routes
+    Route::get('/process-execution', [ProcessExecutionController::class, 'get'])->name('api.process-execution');
 
     // Steps routes
     Route::get('/step/{parent_id}/{id?}/{model_id?}', [StepController::class, 'get'])->name('api.step');
@@ -131,6 +134,10 @@ Route::group([
     Route::put('/form/update/{id}', [FormController::class, 'update'])->name('api.form.update');
     Route::delete('/form/delete/{id?}', [FormController::class, 'delete'])->name('api.form.delete');
 
+    // Dynamic Model Field routes
+    Route::post('/dynamic-field/update', [DynamicModelFieldController::class, 'updateFields'])->name('api.dynamic-field.update');
+
+    // Dynamic Model Field routes
     Route::post('/dynamic-model-field/create', [DynamicModelFieldController::class, 'create'])->name('api.dynamic-model-field.create');
     Route::get('/dynamic-model-field/{step_id?}/{id?}', [DynamicModelFieldController::class, 'get'])->name('api.dynamic-model-field');
     Route::delete('/dynamic-model-field/delete/{id?}', [DynamicModelFieldController::class, 'delete'])->name('api.dynamic-model-field.delete');

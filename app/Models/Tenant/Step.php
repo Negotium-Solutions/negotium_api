@@ -5,6 +5,7 @@ namespace App\Models\Tenant;
 use App\definitions\ModelTypeDefinitions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Step extends Model
@@ -45,5 +46,10 @@ class Step extends Model
     public function model()
     {
         return $this->belongsTo(ModelType::class, 'model_id');
+    }
+
+    public function fields() : HasMany
+    {
+        return $this->hasMany(DynamicModelField::class, 'step_id');
     }
 }

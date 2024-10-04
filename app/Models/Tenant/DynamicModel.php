@@ -5,6 +5,7 @@ namespace App\Models\Tenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DynamicModel extends Model
@@ -43,18 +44,13 @@ class DynamicModel extends Model
         return $dynamicModelFieldGroups;
     }
 
-    /*
-     * Transformed model properties
-     */
-    public function propertiesByStep()
+    public function propertiesByStep($parent_id)
     {
-        // return $this->hasMany(Step::class, 'parent_id');
-
         $properties = parent::toArray();
 
-        $dynamicModelFieldGroups = Step::where('parent_id', $this->id)->get();
+        $dynamicModelFieldSteps = Step::with(['fields.options', 'fields.validations'])->where('parent_id', $parent_id)->get();
 
-        /*foreach ($dynamicModelFieldGroups as $dynamicModelFieldGroup) {
+        foreach ($dynamicModelFieldSteps as $dynamicModelFieldGroup) {
             foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
                 if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
                     $dynamicModelField->value = DynamicModelFieldEmail::find($properties[$dynamicModelField->field]);
@@ -62,10 +58,14 @@ class DynamicModel extends Model
                     $dynamicModelField->value = $properties[$dynamicModelField->field];
                 }
             }
-        }*/
+        }
 
-        return $dynamicModelFieldGroups;
+        return $dynamicModelFieldSteps;
+    }
 
+    public function steps() : HasMany
+    {
+        return $this->hasMany(Step::class, 'parent_id');
     }
 
     public function schema() : Model

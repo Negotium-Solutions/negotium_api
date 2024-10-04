@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Tenant;
 use App\Http\Requests\Tenant\ProcessRequest;
 use App\Models\Tenant\Process;
 use App\Models\Tenant\ProcessLog;
-use App\Models\Tenant\ProfileProcess;
 use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -55,31 +54,19 @@ class ProcessController extends BaseAPIController
         try{
             $query = isset($id) ? Process::where('id', $id) : Process::query();
 
-            $hasDynamicModel = false;
-            if ($request->has('with') && ($request->input('with') != '')) {
-                $_with = explode(',', $request->input('with'));
-
-                if (in_array('dynamicModel', $_with)) {
-                    $hasDynamicModel = true;
-                    $index = array_search('dynamicModel', $_with);
-                    unset($_with[$index]);
-                }
-                $query = $query->with($_with);
+            if ($request->has('with') && $request->input('with') != '') {
+                $with_array = explode(',', $request->with);
+                $query = $query->with($with_array);
             }
 
             $data = isset($id) ? $query->first() : $query->get();
-
-            if (isset($id) && $hasDynamicModel) {
-                $process = Process::find($id);
-                $data['dynamicModel'] = $process->dynamicModel($request->input('profile_process_id'))->propertiesByStep();
-            }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
                 return $this->success([], 'No process record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
             return $this->success($data, 'processes successfully retrieved', [], Response::HTTP_OK);
-        } catch (Throwable $exception) {
+        }catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve process.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -230,33 +217,5 @@ class ProcessController extends BaseAPIController
         }
 
         return $this->success([], 'process status successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
-    }
-
-    public function getProfileProcess(Request $request) : Response
-    {
-        $validator = Validator::make($request->all(),
-            ['profile_id' => 'string|required'],
-            ['process_id' => 'string|required']
-        );
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        try {
-            $processProfile = ProfileProcess::where('profile_id', $request->input('profile_id'))
-                                        ->where('process_id', $request->input('process_id'))->first();
-
-            if ( empty($processProfile) ) {
-                $processProfile = new ProfileProcess();
-                $processProfile->profile_id = $request->input('profile_id');
-                $processProfile->process_id = $request->input('process_id');
-                $processProfile->save();
-            }
-
-            return $this->success($processProfile, 'profile process successfully retrieved', [], Response::HTTP_OK);
-        } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve profile process.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
 }

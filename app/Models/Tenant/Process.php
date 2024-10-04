@@ -37,6 +37,15 @@ class Process extends Model
         'deleted_at',
     ];
 
+    protected $appends = [
+        'schema_table'
+    ];
+
+    public function getSchemaTableAttribute(): string
+    {
+        return $this->schema->name;
+    }
+
     public function category() : BelongsTo
     {
         return $this->belongsTo(ProcessCategory::class, 'process_category_id');
