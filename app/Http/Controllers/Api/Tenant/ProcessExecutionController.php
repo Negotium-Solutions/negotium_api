@@ -16,18 +16,6 @@ class ProcessExecutionController extends BaseApiController
      *
      * @OA\Get(
      *       path="/{tenant}/process-execution",
-     *       summary="Get a ProcessExecution",
-     *       operationId="getProcessExecution",
-     *       tags={"ProcessExecution"},
-     *       security = {{"BearerAuth": {}}},
-     *       description="Authenticate using a bearer token",
-     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
-     *       @OA\Response(response=401,description="Unauthenticated"),
-     *       @OA\Response(response=500,description="Internal server error")
-     *  ),
-     *
-     * @OA\Get(
-     *       path="/{tenant}/process-execution",
      *       summary="Get Process Execution",
      *       operationId="getProcessExectution",
      *       tags={"ProcessExecution"},
@@ -39,7 +27,6 @@ class ProcessExecutionController extends BaseApiController
      *  )
      *
      * @param Request $request
-     * @param Request $id
      * @return Response
      * @throws Exception
      */
