@@ -18,6 +18,11 @@ class DynamicModelField extends Model
         'deleted_at'
     ];
 
+    public function step() : BelongsTo
+    {
+        return $this->belongsTo(Step::class);
+    }
+
     public function group() : BelongsTo
     {
         return $this->belongsTo(DynamicModelFieldGroup::class, 'dynamic_model_field_group_id');

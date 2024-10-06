@@ -37,6 +37,15 @@ class Process extends Model
         'deleted_at',
     ];
 
+    protected $appends = [
+        'schema_table'
+    ];
+
+    public function getSchemaTableAttribute(): string
+    {
+        return $this->schema->name;
+    }
+
     public function category() : BelongsTo
     {
         return $this->belongsTo(ProcessCategory::class, 'process_category_id');
@@ -64,8 +73,17 @@ class Process extends Model
             ->select('process_logs.*');
     }
 
-    public function dynamicModel() : HasOne {
-        return $this->hasOne(DynamicModel::class);
+    public function dynamicModel($profile_process_id)
+    {
+        $dynamicModel = new DynamicModel();
+        $dynamicModel->setTable($this->schema->name);
+
+        if (empty($dynamicModel->where('parent_id', $profile_process_id)->first()->parent_id)) {
+            $dynamicModel->parent_id = $profile_process_id;
+            $dynamicModel->save();
+        }
+
+        return $dynamicModel->where('parent_id', $profile_process_id)->first();
     }
 
     public function schema() : BelongsTo {

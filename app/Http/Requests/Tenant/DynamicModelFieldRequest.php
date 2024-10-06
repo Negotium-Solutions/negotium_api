@@ -23,10 +23,19 @@ class DynamicModelFieldRequest extends FormRequest
      */
     public function rules(): array
     {
+        if ( $this->has('validation') && $this->input('validation') !== 1) {
+            return [];
+        }
+
         $validationArray = [];
-        $dynamicModel = $this->input('dynamicModel');
-        foreach ($dynamicModel as $group) {
-            foreach ($group['fields'] as $field) {
+        $steps = $this->input('steps');
+        foreach ($steps as $step)
+        {
+            if ( $this->has('step_id') && $this->input('step_id') !== $step['id'] ) {
+                continue;
+            }
+
+            foreach ($step['fields'] as $field) {
                 $validations = [];
                 foreach ($field['validations'] as $validation) {
                     switch ($validation['name']) {
