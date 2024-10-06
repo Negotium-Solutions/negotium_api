@@ -13,11 +13,10 @@ class SchemaSeeder extends Seeder
     public function run(): void
     {
         $schema = new Schema();
-        $schema->name = 'individual_1';
-        $schema->save();
+        $schema->createDynamicModel('Capture individual details', 1, 1, 1, 'Yes');
 
         $schema = new Schema();
-        $schema->name = 'business_2';
-        $schema->save();
+        $schema->createDynamicModel('Capture business details', 2, 1, 2, 'Yes');
+
     }
 }

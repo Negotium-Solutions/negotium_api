@@ -45,7 +45,7 @@ class Step extends Model
 
     public function model()
     {
-        return $this->belongsTo(ModelType::class, 'model_id');
+        return $this->belongsTo(DynamicModelType::class, 'model_id');
     }
 
     public function fields() : HasMany

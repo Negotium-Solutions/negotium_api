@@ -618,6 +618,79 @@
                 ]
             }
         },
+        "/{tenant}/dynamic-model/{id}": {
+            "get": {
+                "tags": [
+                    "DynamicModel"
+                ],
+                "summary": "Get a Dynamic Models",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getDynamicModel",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Dynamic Model Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/dynamic-model": {
+            "get": {
+                "tags": [
+                    "DynamicModel"
+                ],
+                "summary": "Get dynamic models",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getDynamicModels",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/dynamic-model-field/{id}": {
             "get": {
                 "tags": [
@@ -1581,6 +1654,37 @@
                 ]
             }
         },
+        "/{tenant}/process-execution": {
+            "get": {
+                "tags": [
+                    "ProcessExecution"
+                ],
+                "summary": "Get Process Execution",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcessExectution",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/profile/{id}": {
             "get": {
                 "tags": [
@@ -2365,6 +2469,10 @@
             "description": "Document"
         },
         {
+            "name": "DynamicModel",
+            "description": "DynamicModel"
+        },
+        {
             "name": "DynamicModelField",
             "description": "DynamicModelField"
         },
@@ -2395,6 +2503,10 @@
         {
             "name": "Process",
             "description": "Process"
+        },
+        {
+            "name": "ProcessExecution",
+            "description": "ProcessExecution"
         },
         {
             "name": "Profile",

@@ -59,4 +59,34 @@ class Schema extends Model
             $table->{$type}($name)->nullable();
         });
     }
+
+    public function createDynamicModel($name, $dynamic_model_category_id, $dynamic_model_type_id, $dynamic_model_template_id, $quick_capture)
+    {
+        $modelType = DynamicModelType::find($dynamic_model_type_id);
+        $this->save();
+        $this->name = $name;
+        $this->schema_table_name = strtolower(str_replace(' ', '_', trim($modelType->name).'_'.$this->id));
+        $this->dynamic_model_category_id = $dynamic_model_category_id;
+        $this->dynamic_model_type_id = $dynamic_model_type_id;
+        $this->dynamic_model_template_id = $dynamic_model_template_id;
+        $this->quick_capture = $quick_capture;
+        $this->save();
+
+        \Illuminate\Support\Facades\Schema::create($this->schema_table_name, function (Blueprint $table) use ($dynamic_model_type_id) {
+            $table->uuid('id')->primary();
+            if ($dynamic_model_type_id === 2) {
+                $table->uuid('profile_id')->nullable();
+            }
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    // New Code
+    public function createColumn($name, $type)
+    {
+        \Illuminate\Support\Facades\Schema::table($this->schema_table_name, function (Blueprint $table) use ($name, $type) {
+            $table->{$type}($name)->nullable();
+        });
+    }
 }

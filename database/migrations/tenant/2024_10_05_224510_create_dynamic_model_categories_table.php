@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('model_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name')->nullable();
+        Schema::create('dynamic_model_categories', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('model_types');
+        Schema::dropIfExists('dynamic_model_categories');
     }
 };
