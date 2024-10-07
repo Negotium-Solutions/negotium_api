@@ -66,34 +66,36 @@ class DynamicModelField extends Model
 
     public function createFields($schema_table_name, $step_id, $dynamicModelFields)
     {
-        foreach ($dynamicModelFields as $field => $_dynamicModelField) {
-            $dynamicModelField = new DynamicModelField();
-            $dynamicModelField->setField($field, true);
-            $dynamicModelField->dynamic_model_field_type_id = $_dynamicModelField->type_id;
-            $dynamicModelField->step_id = $step_id;
-            $dynamicModelField->save();
-            $dynamicModelField->order = $dynamicModelField->id;
-            $dynamicModelField->save();
+        foreach ($dynamicModelFields as $__dynamicModelFields) {
+            foreach ($__dynamicModelFields as $field => $_dynamicModelField) {
+                $dynamicModelField = new DynamicModelField();
+                $dynamicModelField->setField($field, true);
+                $dynamicModelField->dynamic_model_field_type_id = $_dynamicModelField->type_id;
+                $dynamicModelField->step_id = $step_id;
+                $dynamicModelField->save();
+                $dynamicModelField->order = $dynamicModelField->id;
+                $dynamicModelField->save();
 
-            Schema::table($schema_table_name, function (Blueprint $table) use ($_dynamicModelField, $dynamicModelField) {
-                $dynamicModelFieldType = DynamicModelFieldType::find($_dynamicModelField->type_id);
-                $table->{$dynamicModelFieldType->data_type}($dynamicModelField->field)->nullable();
-            });
+                Schema::table($schema_table_name, function (Blueprint $table) use ($_dynamicModelField, $dynamicModelField) {
+                    $dynamicModelFieldType = DynamicModelFieldType::find($_dynamicModelField->type_id);
+                    $table->{$dynamicModelFieldType->data_type}($dynamicModelField->field)->nullable();
+                });
 
-            foreach ($_dynamicModelField->validations as $_validation) {
-                $validation = Validation::where('name', $_validation)->first();
-                $dynamicModelFieldValidation = new DynamicModelFieldValidation();
-                $dynamicModelFieldValidation->validation_id = $validation->id;
-                $dynamicModelFieldValidation->dynamic_model_field_id = $dynamicModelField->id;
-                $dynamicModelFieldValidation->save();
-            }
+                foreach ($_dynamicModelField->validations as $_validation) {
+                    $validation = Validation::where('name', $_validation)->first();
+                    $dynamicModelFieldValidation = new DynamicModelFieldValidation();
+                    $dynamicModelFieldValidation->validation_id = $validation->id;
+                    $dynamicModelFieldValidation->dynamic_model_field_id = $dynamicModelField->id;
+                    $dynamicModelFieldValidation->save();
+                }
 
-            if(isset($_dynamicModelField->options)) {
-                foreach ($_dynamicModelField->options as $option) {
-                    $dynamicModelFieldOption = new DynamicModelFieldOption();
-                    $dynamicModelFieldOption->name = $option;
-                    $dynamicModelFieldOption->dynamic_model_field_id = $dynamicModelField->id;
-                    $dynamicModelFieldOption->save();
+                if (isset($_dynamicModelField->options)) {
+                    foreach ($_dynamicModelField->options as $option) {
+                        $dynamicModelFieldOption = new DynamicModelFieldOption();
+                        $dynamicModelFieldOption->name = $option;
+                        $dynamicModelFieldOption->dynamic_model_field_id = $dynamicModelField->id;
+                        $dynamicModelFieldOption->save();
+                    }
                 }
             }
         }

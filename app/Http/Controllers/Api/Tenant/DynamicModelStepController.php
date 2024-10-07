@@ -51,10 +51,15 @@ class DynamicModelStepController extends BaseApiController
                     }
                     $step->order = $step->id;
                     $step->save();
+
+                    $dynamicModelFields = json_decode(file_get_contents(base_path($_step['file'])));
+
+                    $dynamicModelField  = new DynamicModelField();
+                    $dynamicModelField->createFields($schema->table_name, $step->id, $dynamicModelFields);
                 }
             }
 
-            return $this->success(['id' => 1/*$step->id*/], 'Section successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $step->id], 'Section successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create section.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
