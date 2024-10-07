@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Tenant\DynamicModelFieldController;
 use App\Http\Controllers\Api\Tenant\ProcessExecutionController;
 use App\Http\Controllers\Api\Tenant\DynamicModelController;
 use App\Http\Controllers\Api\Tenant\DynamicModelCategoryController;
+use App\Http\Controllers\Api\Tenant\DynamicModelStepController;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,6 +146,9 @@ Route::group([
     Route::delete('/dynamic-model-field/delete/{id?}', [DynamicModelFieldController::class, 'delete'])->name('api.dynamic-model-field.delete');
 
     Route::get('/dynamic-model-category/{id?}', [DynamicModelCategoryController::class, 'get'])->name('api.dynamic-model-category');
+
+    // Dynamic Model Step routes
+    Route::post('/dynamic-model-step/create', [DynamicModelStepController::class, 'create'])->name('api.dynamic-model-step.create');
 
     // Lookup routes
     Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');
