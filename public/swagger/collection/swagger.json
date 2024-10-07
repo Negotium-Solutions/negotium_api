@@ -618,6 +618,79 @@
                 ]
             }
         },
+        "/{tenant}/dynamic-model-category/{id}": {
+            "get": {
+                "tags": [
+                    "DynamicModelCategory"
+                ],
+                "summary": "Get a Dynamic Model Category",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getDynamicModelCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Dynamic Model Category Category Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/dynamic-model-category": {
+            "get": {
+                "tags": [
+                    "Dynamic Model Category"
+                ],
+                "summary": "Get Dynamic Model Categories",
+                "description": "Authenticate using a bearer token",
+                "operationId": "DynamicModelCategories",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/dynamic-model/{id}": {
             "get": {
                 "tags": [
@@ -2467,6 +2540,14 @@
         {
             "name": "Document",
             "description": "Document"
+        },
+        {
+            "name": "DynamicModelCategory",
+            "description": "DynamicModelCategory"
+        },
+        {
+            "name": "Dynamic Model Category",
+            "description": "Dynamic Model Category"
         },
         {
             "name": "DynamicModel",

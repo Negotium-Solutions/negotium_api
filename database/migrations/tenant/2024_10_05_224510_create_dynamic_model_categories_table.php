@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dynamic_model_categories', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('dynamic_model_type_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -2,14 +2,17 @@
 
 namespace Database\Seeders;
 
+use App\Models\Tenant\DynamicModelCategory;
 use Database\Seeders\tenant\CommunicationSeeder;
 use Database\Seeders\tenant\CommunicationStatusSeeder;
 use Database\Seeders\tenant\CommunicationTypeSeeder;
 use Database\Seeders\tenant\DocumentSeeder;
+use Database\Seeders\tenant\DynamicModelCategorySeeder;
 use Database\Seeders\tenant\DynamicModelFieldSeeder;
 use Database\Seeders\tenant\DynamicModelFieldTypeGroupSeeder;
 use Database\Seeders\tenant\DynamicModelFieldTypeSeeder;
 use Database\Seeders\tenant\DynamicModelSchemaSeeder;
+use Database\Seeders\tenant\DynamicModelTemplateSeeder;
 use Database\Seeders\tenant\DynamicModelTypeSeeder;
 use Database\Seeders\tenant\NoteSeeder;
 use Database\Seeders\tenant\ProcessCategorySeeder;
@@ -37,6 +40,8 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(DynamicModelFieldTypeSeeder::class);
         $this->call(ValidationSeeder::class);
         $this->call(DynamicModelFieldSeeder::class);
+        $this->call(DynamicModelCategorySeeder::class);
+        $this->call(DynamicModelTemplateSeeder::class);
         $this->call(ProfileSeeder::class);
         $this->call(ProfileProcessSeeder::class);
         $this->call(ProfileTypeSeeder::class);

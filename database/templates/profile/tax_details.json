@@ -1,0 +1,16 @@
+{
+    "Bank Details": {
+        "Tax Category": {
+            "type_id": 9,
+            "options": [
+                "Category 01",
+                "Category 02"
+            ],
+            "validations": []
+        },
+        "Tax number": {
+            "type_id": 1,
+            "validations": []
+        }
+    }
+}

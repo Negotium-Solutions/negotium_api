@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('schemas', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->nullable();
-            $table->string('schema_table_name')->nullable();
-            $table->uuid('dynamic_model_category_id')->nullable(); // Profiles(Individual, Business), Processes(Category 01, Category 02, Category 03, ...)
+            $table->string('table_name')->nullable();
+            $table->integer('dynamic_model_category_id')->nullable(); // Profiles(Individual, Business), Processes(Category 01, Category 02, Category 03, ...)
             $table->integer('dynamic_model_type_id')->nullable(); // Process / Profile
-            $table->integer('dynamic_model_template_id')->nullable();
             $table->enum('quick_capture', ['Yes', 'No'])->default('No');
+            $table->enum('status', ['Active', 'Draft'])->default('Draft');
             $table->timestamps();
             $table->softDeletes();
         });

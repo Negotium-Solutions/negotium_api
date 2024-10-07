@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dynamic_model_templates', function (Blueprint $table) {
+        Schema::create('placeholder_for_dynamic_model_table', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->nullable();
-            $table->string('file')->nullable(); // Must be a json file
-            $table->integer('dynamic_model_category_id')->nullable();
-            $table->text('sample')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dynamic_model_templates');
+        Schema::dropIfExists('dynamic_model_categories');
     }
 };

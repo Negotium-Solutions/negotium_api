@@ -21,6 +21,7 @@ use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 use App\Http\Controllers\Api\Tenant\DynamicModelFieldController;
 use App\Http\Controllers\Api\Tenant\ProcessExecutionController;
 use App\Http\Controllers\Api\Tenant\DynamicModelController;
+use App\Http\Controllers\Api\Tenant\DynamicModelCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,8 @@ Route::group([
     Route::post('/dynamic-model-field/create', [DynamicModelFieldController::class, 'create'])->name('api.dynamic-model-field.create');
     Route::get('/dynamic-model-field/{step_id?}/{id?}', [DynamicModelFieldController::class, 'get'])->name('api.dynamic-model-field');
     Route::delete('/dynamic-model-field/delete/{id?}', [DynamicModelFieldController::class, 'delete'])->name('api.dynamic-model-field.delete');
+
+    Route::get('/dynamic-model-category/{id?}', [DynamicModelCategoryController::class, 'get'])->name('api.dynamic-model-category');
 
     // Lookup routes
     Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');

@@ -36,8 +36,11 @@ class ProfileSeeder extends Seeder
         foreach ($profiles as $profile) {
             $tableName = '';
             $dynamicModel = new DynamicModel();
+
+
             if ($profile->profile_type_id == 1) {
                 $tableName = $individual->name;
+                $dynamicModel->setTable($tableName);
                 $dynamicModel->first_name = fake()->firstName();
                 $dynamicModel->last_name = fake()->lastName();
                 $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
@@ -48,6 +51,7 @@ class ProfileSeeder extends Seeder
             }
             if ($profile->profile_type_id == 2) {
                 $tableName = $business->name;
+                $dynamicModel->setTable($tableName);
                 $dynamicModel->company_name = fake()->company();
                 $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
                 $dynamicModel->email = fake()->email();
@@ -55,7 +59,7 @@ class ProfileSeeder extends Seeder
                 $profile->schema_id = $business->id;
                 $profile->save();
             }
-            $dynamicModel->setTable($tableName);
+
             $dynamicModel->parent_id = $profile->id;
             if($dynamicModel->get()->count() === 0){
                 if($profile->profile_type_id == 1) {

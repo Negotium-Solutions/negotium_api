@@ -17,6 +17,5 @@ class SchemaSeeder extends Seeder
 
         $schema = new Schema();
         $schema->createDynamicModel('Capture business details', 2, 1, 2, 'Yes');
-
     }
 }
