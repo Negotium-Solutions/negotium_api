@@ -7,7 +7,7 @@
                 "string"
             ]
         },
-        "Surname": {
+        "Last Name": {
             "type_id": 1,
             "validations": [
                 "required",

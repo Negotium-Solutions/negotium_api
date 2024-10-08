@@ -56,7 +56,14 @@ class DynamicModelField extends Model
     {
         $this->save();
         $this->label = $field;
-        if(in_array($field, ['First Name', 'Last Name', 'Company Name', 'Email', 'Cell Number']) && $defaultProfile) {
+        $arrayFields = [
+            'First Name', 'Last Name', 'Company Name',
+            'Email', 'Cell Number', 'Phone Number',
+            'Email Address', 'Mobile Number',
+            'Work Number', 'Home Number',
+            'Surname', 'Nickname'
+        ];
+        if(in_array($field, $arrayFields) && $defaultProfile) {
             $this->field = trim(str_replace(' ', '_', strtolower($field)));
         } else {
             $this->field = trim(str_replace(' ', '_', strtolower($field))).'_'.$this->id;

@@ -8,8 +8,7 @@ use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\Profile;
 use App\Models\Tenant\ProfileProcess;
-use App\Rules\SouthAfricanIdNumber;
-use App\Rules\SouthAfricanPhoneNumber;
+use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
@@ -274,6 +273,21 @@ class ProfileController extends BaseAPIController
             return $this->success(['id' => $profileProcess->id], 'process successfully assigned to profile.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getSchema(Request $request, $id)
+    {
+        try {
+            $schema = TenantSchema::where('dynamic_model_category_id', $id)->first();
+            $request->merge(['table_name' => $schema->table_name]);
+            $dynamicModel = new DynamicModel();
+
+            $data = $dynamicModel->getSchema($schema->id);
+
+            return $this->success($data, 'profile schema successfully retrieved', [], Response::HTTP_OK);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve profile schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

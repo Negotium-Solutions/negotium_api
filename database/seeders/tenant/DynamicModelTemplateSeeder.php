@@ -14,7 +14,7 @@ class DynamicModelTemplateSeeder extends Seeder
     {
         DynamicModelTemplate::insert([
             ['name' => 'Personal Information', 'sample' => 'First Name, Surname, Nickname, ID Number', 'file' => 'database/templates/profile/personal_information.json', 'dynamic_model_category_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Contact Information', 'sample' => 'Mobile Number, Email Address, Work Number, Home Number', 'file' => 'database/templates/profile/contact_information.json', 'dynamic_model_category_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Contact Information', 'sample' => 'Mobile Number, Email Address, Work Number, Home Number', 'file' => 'database/templates/profile/personal_contact_information.json', 'dynamic_model_category_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Home Address', 'sample' => 'Residence Type, Street Address, Suburb, City, Country, Postal Code', 'file' => 'database/templates/profile/home_address.json', 'dynamic_model_category_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Work Address', 'sample' => 'Residence Type, Street Address, Suburb, City, Country, Postal Code', 'file' => 'database/templates/profile/work_address.json', 'dynamic_model_category_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Bank Details', 'sample' => 'Account Holder, Account Type, Bank, Account Number', 'file' => 'database/templates/profile/bank_details.json', 'dynamic_model_category_id' => 1, 'created_at' => now(), 'updated_at' => now()],

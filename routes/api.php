@@ -58,6 +58,8 @@ Route::group([
     Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');
     Route::post('/profile/assign-processes', [ProfileController::class, 'assignProcesses'])->name('api.profile.assign-processes');
 
+    Route::get('/profile/schema/{profile_type_id}', [ProfileController::class, 'getSchema'])->name('api.profile.schema');
+
     // Profile Type routes
     Route::get('/profile-type/{id?}', [ProfileTypeController::class, 'get'])->name('api.profile-type');
     Route::post('/profile-type/create', [ProfileTypeController::class, 'create'])->name('api.profile-type.create');

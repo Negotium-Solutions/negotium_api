@@ -973,6 +973,37 @@
                 ]
             }
         },
+        "/{tenant}/dynami-model-step/create": {
+            "post": {
+                "tags": [
+                    "DynamicModelStep"
+                ],
+                "summary": "Create a new dynamic model step",
+                "description": "Authenticate using a bearer token",
+                "operationId": "createDynamicModelStep",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Input validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/form/{id}": {
             "get": {
                 "tags": [
@@ -2564,6 +2595,10 @@
         {
             "name": "DynamicModelFieldTypeGroup",
             "description": "DynamicModelFieldTypeGroup"
+        },
+        {
+            "name": "DynamicModelStep",
+            "description": "DynamicModelStep"
         },
         {
             "name": "Form",
