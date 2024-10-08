@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 use App\Http\Controllers\Api\Tenant\DynamicModelFieldController;
 use App\Http\Controllers\Api\Tenant\ProcessExecutionController;
+use App\Http\Controllers\Api\Tenant\DynamicModelController;
+use App\Http\Controllers\Api\Tenant\DynamicModelCategoryController;
+use App\Http\Controllers\Api\Tenant\DynamicModelStepController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +52,7 @@ Route::group([
 
     // Profiles routes
     Route::get('/profile/{id?}', [ProfileController::class, 'get'])->name('api.profile');
-    Route::get('/profile/dynamic-model/{id}', [ProfileController::class, 'getDynamicModel'])->name('api.dynamic-model');
+    Route::get('/profile/dynamic-model/{id}', [ProfileController::class, 'getDynamicModel'])->name('api.profile.dynamic-model');
     Route::post('/profile/create', [ProfileController::class, 'create'])->name('api.profile.create');
     Route::post('/profile/update/{id}', [ProfileController::class, 'update'])->name('api.profile.update');
     Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');
@@ -142,6 +145,15 @@ Route::group([
     Route::get('/dynamic-model-field/{step_id?}/{id?}', [DynamicModelFieldController::class, 'get'])->name('api.dynamic-model-field');
     Route::delete('/dynamic-model-field/delete/{id?}', [DynamicModelFieldController::class, 'delete'])->name('api.dynamic-model-field.delete');
 
+    Route::get('/dynamic-model-category/{id?}', [DynamicModelCategoryController::class, 'get'])->name('api.dynamic-model-category');
+
+    // Dynamic Model Step routes
+    Route::post('/dynamic-model-step/create', [DynamicModelStepController::class, 'create'])->name('api.dynamic-model-step.create');
+
     // Lookup routes
     Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');
+
+    // Dynamic Models
+    Route::get('/dynamic-model/{id?}', [DynamicModelController::class, 'get'])->name('api.dynamic-model');
+
 });

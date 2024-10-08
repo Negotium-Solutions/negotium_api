@@ -1,0 +1,26 @@
+{
+    "Contact Information": {
+        "Mobile Number": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "sa_phone_number"
+            ]
+        },
+        "Email Address": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "email"
+            ]
+        },
+        "Work Number": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Home Number": {
+            "type_id": 1,
+            "validations": []
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "Company Information": {
+        "Company Name": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "string"
+            ]
+        },
+        "Company Registration": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "string"
+            ]
+        }
+    }
+}

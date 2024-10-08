@@ -1,0 +1,20 @@
+{
+    "Bank Details": {
+        "Account Holder": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Account Type": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Bank": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Account Number": {
+            "type_id": 1,
+            "validations": []
+        }
+    }
+}

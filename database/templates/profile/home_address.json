@@ -1,0 +1,28 @@
+{
+    "Home Address": {
+        "Resident Type": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Street Address": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Suburb": {
+            "type_id": 1,
+            "validations": []
+        },
+        "City": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Country": {
+            "type_id": 1,
+            "validations": []
+        },
+        "Postal Code": {
+            "type_id": 1,
+            "validations": []
+        }
+    }
+}

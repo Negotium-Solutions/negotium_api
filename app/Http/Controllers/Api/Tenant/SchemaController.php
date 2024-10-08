@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Models\Tenant\Schema as CRMSchema;
+use App\Http\Requests\Tenant\SchemaRequest;
+use App\Models\Tenant\DynamicModel;
+use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,12 +19,17 @@ class SchemaController extends BaseApiController
      */
     public function get(Request $request, $id = null) : Response
     {
-        try{
-            $query = isset($id) ? CRMSchema::where('id', $id) : CRMSchema::query();
+        try {
+            $query = isset($id) ? TenantSchema::where('id', $id) : TenantSchema::query();
+
+            if ($request->has('with') && $request->input('with') != '') {
+                $with_array = explode(',', $request->with);
+                $query = $query->with($with_array);
+            }
 
             $data = isset($id) ? $query->first() : $query->get();
 
-            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+            if ((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)) {
                 return $this->success([], 'No schema record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
@@ -32,10 +39,27 @@ class SchemaController extends BaseApiController
         }
     }
 
+    public function create(SchemaRequest $request) : Response
+    {
+        try {
+            $schema = new TenantSchema();
+            $schema->createDynamicModel(
+                $request->get('name'),
+                $request->get('dynamic_model_category_id'),
+                $request->get('dynamic_model_type_id'),
+                $request->get('quick_capture')
+            );
+
+            return $this->success(['id' => $schema->id], 'Schema successfully created.', $request->all(), Response::HTTP_CREATED);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     /**
      * Store a newly created schema
      */
-    public function create(Request $request) : Response
+    public function createOld(Request $request) : Response
     {
         $request_data = json_decode($request->getContent(), true);
 
@@ -52,7 +76,7 @@ class SchemaController extends BaseApiController
             $table = $this->toCleanString($request_data['name']);
             $columns = $request_data['columns'];
 
-            $schema = new CRMSchema();
+            $schema = new TenantSchema();
             $schema->name = $table;
             $schema->save();
 
@@ -92,7 +116,7 @@ class SchemaController extends BaseApiController
         $columns = $request_data['columns'];
 
         try {
-            $schema = CRMSchema::find($id);
+            $schema = TenantSchema::find($id);
             if((!isset($tenant))){
                 return $this->success([], 'No schema record found to update', [], Response::HTTP_NOT_FOUND);
             }
@@ -130,7 +154,7 @@ class SchemaController extends BaseApiController
     public function delete($id) : Response
     {
         try {
-            $schema = CRMSchema::find($id);
+            $schema = TenantSchema::find($id);
             if((!isset($schema))){
                 return $this->success([], 'No schema record found to delete', [], Response::HTTP_NOT_FOUND);
             }
@@ -151,7 +175,7 @@ class SchemaController extends BaseApiController
     public function getColumns($id) : Response
     {
         try{
-            $schema = CRMSchema::find($id);
+            $schema = TenantSchema::find($id);
 
             $data = $schema->getColumns();
 

@@ -1,0 +1,49 @@
+{
+    "Personal Information": {
+        "First Name": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "string"
+            ]
+        },
+        "Surname": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "string"
+            ]
+        },
+        "Nickname": {
+            "type_id": 1,
+            "validations": [
+                "string"
+            ]
+        },
+        "ID Number": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "sa_id_number"
+            ]
+        },
+        "Maiden Name": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "string"
+            ]
+        },
+        "Gender": {
+            "type_id": 9,
+            "options": [
+                "Male",
+                "Female"
+            ],
+            "validations": [
+                "required",
+                "string"
+            ]
+        }
+    }
+}
