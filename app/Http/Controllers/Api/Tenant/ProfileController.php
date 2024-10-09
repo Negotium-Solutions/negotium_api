@@ -76,7 +76,7 @@ class ProfileController extends BaseAPIController
 
             if (isset($id) && $hasDynamicModel) {
                 $profile = Profile::find($id);
-                $data['dynamicModel'] = $profile->dynamicModel($request)->propertiesByGroup();
+                $data['steps'] = $profile->dynamicModel($request)->propertiesByGroup();
             }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
@@ -319,14 +319,23 @@ class ProfileController extends BaseAPIController
                     }
                 }
             }
-            $dynamicModel->schema_id = $request->input('schema_id');
-            $dynamicModel->parent_id = $request->input('parent_id');
-            if ( (int)$request->input('profile_type_id') === 1 ) {
-                $dynamicModel->avatar = '/images/individual/avatar' . rand(1, 5) . '.png';
+
+            $profile = new Profile();
+            $profile->schema_id = $request->input('schema_id');
+            if ( (int)$request->input('profile_type_id') === 100 ) {
+                $profile->avatar = '/images/individual/avatar' . rand(1, 5) . '.png';
+                $profile->profile_type_id = 1;
             }
-            if ( (int)$request->input('profile_type_id') === 2 ) {
-                $dynamicModel->avatar = '/images/business/avatar' . rand(1, 5) . '.png';
+            if ( (int)$request->input('profile_type_id') === 200 ) {
+                $profile->avatar = '/images/business/avatar' . rand(1, 5) . '.png';
+                $profile->profile_type_id = 2;
             }
+            $profile->save();
+
+            // $dynamicModel->schema_id = $request->input('schema_id');
+            // $dynamicModel->parent_id = $request->input('parent_id');
+            $dynamicModel->parent_id = $profile->id;
+
             $dynamicModel->updated_at = now();
 
             if ($dynamicModel->save() === false) {
@@ -336,6 +345,6 @@ class ProfileController extends BaseAPIController
             return $this->error($exception->getMessage(), 'There was an error trying to create the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success(['id' => $dynamicModel->id], 'profile successfully created', $request->all(), Response::HTTP_CREATED, $old_value, $new_value);
+        return $this->success(['id' => $profile->id], 'profile successfully created', $request->all(), Response::HTTP_CREATED, $old_value, $new_value);
     }
 }
