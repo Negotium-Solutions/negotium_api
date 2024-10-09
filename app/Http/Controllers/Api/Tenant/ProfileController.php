@@ -317,6 +317,7 @@ class ProfileController extends BaseAPIController
                 }
             }
             $dynamicModel->schema_id = $request->input('schema_id');
+            $dynamicModel->parent_id = $request->input('parent_id');
             if ( (int)$request->input('profile_type_id') === 1 ) {
                 $dynamicModel->avatar = '/images/individual/avatar' . rand(1, 5) . '.png';
             }
