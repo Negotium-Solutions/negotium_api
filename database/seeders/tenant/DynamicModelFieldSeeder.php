@@ -21,16 +21,18 @@ class DynamicModelFieldSeeder extends Seeder
     public function run(): void
     {
         $individualDynamicModel = json_decode(file_get_contents('database/templates/profile/individual.json'));
-        $this->seedFromJsonData($individualDynamicModel);
+        $this->seedFromJsonData($individualDynamicModel, 100);
 
         $businessDynamicModel = json_decode(file_get_contents('database/templates/profile/business.json'));
-        $this->seedFromJsonData($businessDynamicModel);
+        $this->seedFromJsonData($businessDynamicModel, 200);
     }
 
-    public function seedFromJsonData($dynamicModel) : void
+    public function seedFromJsonData($dynamicModel, $hardcoded_value_for_demo) : void
     {
         $schema = new TenantSchema();
         $schema->setName($dynamicModel->table);
+        $schema->dynamic_model_category_id = $hardcoded_value_for_demo;
+        $schema->save();
         Schema::create($schema->name, function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('parent_id')->nullable();

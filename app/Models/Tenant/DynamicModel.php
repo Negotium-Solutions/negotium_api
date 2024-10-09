@@ -98,6 +98,23 @@ class DynamicModel extends Model
         return $dynamicModelFieldSteps;
     }
 
+    public function getSchemaByGroup($schem_id)
+    {
+        $dynamicModelFieldSteps = DynamicModelFieldGroup::with(['fields.options', 'fields.validations'])->where('schema_id', $schem_id)->get();
+
+        foreach ($dynamicModelFieldSteps as $dynamicModelFieldGroup) {
+            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
+                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
+                    $dynamicModelField->value = [];
+                } else {
+                    $dynamicModelField->value = '';
+                }
+            }
+        }
+
+        return $dynamicModelFieldSteps;
+    }
+
     public function steps() : HasMany
     {
         return $this->hasMany(Step::class, 'parent_id');

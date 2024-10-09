@@ -289,10 +289,13 @@ class ProfileController extends BaseAPIController
             $dynamicModel = new DynamicModel();
 
             $data['id'] = -1;
-            $data['validate'] = 1;
+            // $data['validate'] = 1;
+            $data['validate'] = 0;
             $data['schema_id'] = $schema->id;
-            $data['table_name'] = $schema->table_name;
-            $data['steps'] = $dynamicModel->getSchema($schema->id);
+            // $data['table_name'] = $schema->table_name;
+            $data['table_name'] = $schema->name;
+            // $data['steps'] = $dynamicModel->getSchema($schema->id);
+            $data['steps'] = $dynamicModel->getSchemaByGroup($schema->id);
 
             return $this->success($data, 'profile schema successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
