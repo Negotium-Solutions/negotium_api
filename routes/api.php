@@ -58,6 +58,8 @@ Route::group([
     Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');
     Route::post('/profile/assign-processes', [ProfileController::class, 'assignProcesses'])->name('api.profile.assign-processes');
 
+    Route::get('/profile/schema/{profile_type_id}', [ProfileController::class, 'getSchema'])->name('api.profile.schema');
+
     // Profile Type routes
     Route::get('/profile-type/{id?}', [ProfileTypeController::class, 'get'])->name('api.profile-type');
     Route::post('/profile-type/create', [ProfileTypeController::class, 'create'])->name('api.profile-type.create');
@@ -146,6 +148,7 @@ Route::group([
     Route::delete('/dynamic-model-field/delete/{id?}', [DynamicModelFieldController::class, 'delete'])->name('api.dynamic-model-field.delete');
 
     Route::get('/dynamic-model-category/{id?}', [DynamicModelCategoryController::class, 'get'])->name('api.dynamic-model-category');
+    Route::post('/dynamic-model/profile-capture/create', [ProfileController::class, 'createProfile'])->name('api.dynamic-model.profile-capture.create');
 
     // Dynamic Model Step routes
     Route::post('/dynamic-model-step/create', [DynamicModelStepController::class, 'create'])->name('api.dynamic-model-step.create');

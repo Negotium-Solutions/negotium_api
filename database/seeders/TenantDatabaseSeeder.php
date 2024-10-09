@@ -12,6 +12,7 @@ use Database\Seeders\tenant\DynamicModelFieldSeeder;
 use Database\Seeders\tenant\DynamicModelFieldTypeGroupSeeder;
 use Database\Seeders\tenant\DynamicModelFieldTypeSeeder;
 use Database\Seeders\tenant\DynamicModelSchemaSeeder;
+use Database\Seeders\tenant\DynamicModelSeeder;
 use Database\Seeders\tenant\DynamicModelTemplateSeeder;
 use Database\Seeders\tenant\DynamicModelTypeSeeder;
 use Database\Seeders\tenant\NoteSeeder;
@@ -58,7 +59,7 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(CommunicationStatusSeeder::class);
         // $this->call(FormSeeder::class);
         $this->call(SchemaSeeder::class);
-        // $this->call(DynamicModelSeeder::class);
+        $this->call(DynamicModelSeeder::class);
         // $this->call(DynamicModelSchemaSeeder::class);
         // $this->call(DynamicModelFieldGroupSeeder::class);
         // $this->call(DynamicModelFieldValidationSeeder::class);

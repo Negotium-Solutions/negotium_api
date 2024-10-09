@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class Process extends Model
 {
@@ -75,8 +76,8 @@ class Process extends Model
 
     public function dynamicModel($profile_process_id)
     {
+        Session::put('table_name', $this->schema->name);
         $dynamicModel = new DynamicModel();
-        $dynamicModel->setTable($this->schema->name);
 
         if (empty($dynamicModel->where('parent_id', $profile_process_id)->first()->parent_id)) {
             $dynamicModel->parent_id = $profile_process_id;

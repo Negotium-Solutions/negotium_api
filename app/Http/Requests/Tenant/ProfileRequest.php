@@ -6,7 +6,7 @@ use App\Rules\SouthAfricanIdNumber;
 use App\Rules\SouthAfricanPhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DynamicModelFieldRequest extends FormRequest
+class ProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,12 @@ class DynamicModelFieldRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ( $this->has('validation') && $this->input('validation') !== 1) {
+        $shouldValidate = false;
+        if ( $this->has('validate') && (int)$this->input('validate') === 1) {
+            $shouldValidate = true;
+        }
+
+        if($shouldValidate === false) {
             return [];
         }
 
@@ -31,10 +36,6 @@ class DynamicModelFieldRequest extends FormRequest
         $steps = $this->input('steps');
         foreach ($steps as $step)
         {
-            if ( $this->has('step_id') && $this->input('step_id') !== $step['id'] ) {
-                continue;
-            }
-
             foreach ($step['fields'] as $field) {
                 $validations = [];
                 if (!isset($field['validations'])) {

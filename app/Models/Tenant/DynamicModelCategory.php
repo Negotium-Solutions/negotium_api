@@ -11,6 +11,9 @@ class DynamicModelCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const INDIVIDUAL = 1; // for Profile
+    const BUSINESS = 2; // for Profile
+
     protected $hidden = [
         'created_at',
         'updated_at',

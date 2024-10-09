@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Session;
 
 class DynamicModel extends Model
 {
@@ -15,19 +16,30 @@ class DynamicModel extends Model
 
     protected $table; // This is set dynamically by the model using it [Profile, Process, etc]
 
+    protected $appends = [
+        'profile_name'
+    ];
+
     protected $hidden = [
         'created_at',
         'updated_at',
-        'deleted_at',
+        'deleted_at'
     ];
 
+    const PROFILE_TYPE_INDIVIDUAL = 1;
+
+    public function getProfileNameAttribute()
+    {
+        return (int)($this->parent_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->first_name.' '.$this->last_name : $this->company_name;
+    }
+
     const EMAIL = 13;
-/*
+
     public function getTable() : string
     {
-        return request()->get('table_name'); // The dynamic table is passed as part of the request
+        return Session::get('table_name'); // The dynamic table is passed as part of the session
     }
-*/
+
     /*
      * Transformed model properties
      */
@@ -62,6 +74,40 @@ class DynamicModel extends Model
                     $dynamicModelField->value = DynamicModelFieldEmail::find($properties[$dynamicModelField->field]);
                 } else {
                     $dynamicModelField->value = $properties[$dynamicModelField->field];
+                }
+            }
+        }
+
+        return $dynamicModelFieldSteps;
+    }
+
+    public function getSchema($parent_id)
+    {
+        $dynamicModelFieldSteps = Step::with(['fields.options', 'fields.validations'])->where('parent_id', $parent_id)->get();
+
+        foreach ($dynamicModelFieldSteps as $dynamicModelFieldGroup) {
+            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
+                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
+                    $dynamicModelField->value = [];
+                } else {
+                    $dynamicModelField->value = '';
+                }
+            }
+        }
+
+        return $dynamicModelFieldSteps;
+    }
+
+    public function getSchemaByGroup($schem_id)
+    {
+        $dynamicModelFieldSteps = DynamicModelFieldGroup::with(['fields.options', 'fields.validations'])->where('schema_id', $schem_id)->get();
+
+        foreach ($dynamicModelFieldSteps as $dynamicModelFieldGroup) {
+            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
+                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
+                    $dynamicModelField->value = [];
+                } else {
+                    $dynamicModelField->value = '';
                 }
             }
         }

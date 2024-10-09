@@ -1,0 +1,22 @@
+{
+    "Contact Information": {
+        "Email": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "email"
+            ]
+        },
+        "Cell Number": {
+            "type_id": 1,
+            "validations": [
+                "required",
+                "sa_phone_number"
+            ]
+        },
+        "Phone Number": {
+            "type_id": 1,
+            "validations": []
+        }
+    }
+}

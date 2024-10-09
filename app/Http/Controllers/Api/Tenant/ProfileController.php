@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Requests\Tenant\DynamicModelFieldRequest;
+use App\Http\Requests\Tenant\ProfileRequest;
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\Profile;
 use App\Models\Tenant\ProfileProcess;
-use App\Rules\SouthAfricanIdNumber;
-use App\Rules\SouthAfricanPhoneNumber;
+use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
 class ProfileController extends BaseAPIController
@@ -74,7 +76,7 @@ class ProfileController extends BaseAPIController
 
             if (isset($id) && $hasDynamicModel) {
                 $profile = Profile::find($id);
-                $data['dynamicModel'] = $profile->dynamicModel()->propertiesByGroup();
+                $data['steps'] = $profile->dynamicModel($request)->propertiesByGroup();
             }
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
@@ -162,10 +164,11 @@ class ProfileController extends BaseAPIController
             $old_value = Profile::findOrFail($id);
             $new_value = $request->all();
 
-            $_dynamicModel = $profile->dynamicModel();
+            $_dynamicModel = $profile->dynamicModel($request);
+            Session::put('table_name', $profile->schema->name);
             $dynamicModel = new DynamicModel();
-            $dynamicModel->setTable($profile->schema->name);
             $dynamicModel = $dynamicModel->where('id', $_dynamicModel->id)->first();
+
 
             foreach ($request->all() as $key => $value) {
                 if (array_key_exists($key, $dynamicModel->getAttributes())) {
@@ -275,5 +278,73 @@ class ProfileController extends BaseAPIController
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function getSchema(Request $request, $id)
+    {
+        try {
+            $schema = TenantSchema::where('dynamic_model_category_id', $id)->first();
+
+            $request->merge(['table_name' => $schema->table_name]);
+            $dynamicModel = new DynamicModel();
+
+            $data['id'] = -1;
+            // $data['validate'] = 1;
+            $data['validate'] = 0;
+            $data['schema_id'] = $schema->id;
+            // $data['table_name'] = $schema->table_name;
+            $data['table_name'] = $schema->name;
+            // $data['steps'] = $dynamicModel->getSchema($schema->id);
+            $data['steps'] = $dynamicModel->getSchemaByGroup($schema->id);
+
+            return $this->success($data, 'profile schema successfully retrieved', [], Response::HTTP_OK);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve profile schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function createProfile(ProfileRequest $request) : Response
+    {
+        try {
+            $old_value = [];
+            $new_value = $request->all();
+
+            Session::put('table_name', $request->input('table_name'));
+            $dynamicModel = new DynamicModel();
+            $table_columns = DB::getSchemaBuilder()->getColumnListing($request->input('table_name'));
+            foreach ($request->input('steps') as $key => $step) {
+                foreach ($step['fields'] as $field) {
+                    if (in_array($field['field'], $table_columns) && !in_array($field['field'], ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                        $dynamicModel->{$field['field']} = $field['value'];
+                    }
+                }
+            }
+
+            $profile = new Profile();
+            $profile->schema_id = $request->input('schema_id');
+            if ( (int)$request->input('profile_type_id') === 100 ) {
+                $profile->avatar = '/images/individual/avatar' . rand(1, 5) . '.png';
+                $profile->profile_type_id = 1;
+            }
+            if ( (int)$request->input('profile_type_id') === 200 ) {
+                $profile->avatar = '/images/business/avatar' . rand(1, 5) . '.png';
+                $profile->profile_type_id = 2;
+            }
+            $profile->save();
+
+            // $dynamicModel->schema_id = $request->input('schema_id');
+            // $dynamicModel->parent_id = $request->input('parent_id');
+            $dynamicModel->parent_id = $profile->id;
+
+            $dynamicModel->updated_at = now();
+
+            if ($dynamicModel->save() === false) {
+                throw new \RuntimeException('Could not create profile dynamic model');
+            }
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'There was an error trying to create the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->success(['id' => $profile->id], 'profile successfully created', $request->all(), Response::HTTP_CREATED, $old_value, $new_value);
     }
 }

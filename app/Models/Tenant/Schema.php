@@ -82,15 +82,65 @@ class Schema extends Model
         $this->quick_capture = $quick_capture;
         $this->save();
 
-        \Illuminate\Support\Facades\Schema::create($this->table_name, function (Blueprint $table) use ($dynamic_model_type_id) {
+        \Illuminate\Support\Facades\Schema::create($this->table_name, function (Blueprint $table) use ($dynamic_model_type_id, $dynamic_model_category_id) {
             $table->uuid('id')->primary();
             $table->uuid('schema_id')->nullable();
-            if ($dynamic_model_type_id === DynamicModelType::PROCESS) {
-                $table->uuid('profile_id')->nullable();
+            $table->uuid('parent_id')->nullable();
+            switch($dynamic_model_type_id) {
+                case DynamicModelType::PROFILE:
+                    $table->string('avatar')->nullable();
+                    break;
+                case DynamicModelType::PROCESS:
+                    $table->uuid('profile_id')->nullable();
+                    break;
             }
             $table->timestamps();
             $table->softDeletes();
         });
+    }
+
+    public function createDynamicModelFields($schema, $dynamicModelFields, $defaultProfile = false)
+    {
+        foreach ($dynamicModelFields as $step_name => $_step) {
+            $step = new Step();
+            $step->name = $step_name;
+            $step->parent_id = $schema->id;
+            $step->save();
+            $step->order = $step->id;
+            $step->save();
+
+            foreach ($_step as $field => $_dynamicModelField) {
+                $dynamicModelField = new DynamicModelField();
+                $dynamicModelField->setField($field, $defaultProfile);
+                $dynamicModelField->dynamic_model_field_type_id = $_dynamicModelField->type_id;
+                $dynamicModelField->step_id = $step->id;
+                $dynamicModelField->save();
+                $dynamicModelField->order = $dynamicModelField->id;
+                $dynamicModelField->save();
+
+                \Illuminate\Support\Facades\Schema::table($schema->table_name, function (Blueprint $table) use ($_dynamicModelField, $dynamicModelField) {
+                    $dynamicModelFieldType = DynamicModelFieldType::find($_dynamicModelField->type_id);
+                    $table->{$dynamicModelFieldType->data_type}($dynamicModelField->field)->nullable();
+                });
+
+                foreach ($_dynamicModelField->validations as $_validation) {
+                    $validation = Validation::where('name', $_validation)->first();
+                    $dynamicModelFieldValidation = new DynamicModelFieldValidation();
+                    $dynamicModelFieldValidation->validation_id = $validation->id;
+                    $dynamicModelFieldValidation->dynamic_model_field_id = $dynamicModelField->id;
+                    $dynamicModelFieldValidation->save();
+                }
+
+                if (isset($_dynamicModelField->options)) {
+                    foreach ($_dynamicModelField->options as $option) {
+                        $dynamicModelFieldOption = new DynamicModelFieldOption();
+                        $dynamicModelFieldOption->name = $option;
+                        $dynamicModelFieldOption->dynamic_model_field_id = $dynamicModelField->id;
+                        $dynamicModelFieldOption->save();
+                    }
+                }
+            }
+        }
     }
 
     // New Code

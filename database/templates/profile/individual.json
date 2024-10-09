@@ -18,31 +18,19 @@
             },
             "Cell Number": {
                 "type_id": 1,
-                "validations": [
-                    "required",
-                    "sa_phone_number"
-                ]
+                "validations": []
             },
             "Email": {
                 "type_id": 1,
-                "validations": [
-                    "required",
-                    "email"
-                ]
+                "validations": []
             },
             "ID Number": {
                 "type_id": 1,
-                "validations": [
-                    "required",
-                    "sa_id_number"
-                ]
+                "validations": []
             },
             "Maiden Name": {
                 "type_id": 1,
-                "validations": [
-                    "required",
-                    "string"
-                ]
+                "validations": []
             },
             "Gender": {
                 "type_id": 9,
@@ -50,10 +38,7 @@
                     "Male",
                     "Female"
                 ],
-                "validations": [
-                    "required",
-                    "string"
-                ]
+                "validations": []
             }
         },
         "Contact Details": {
