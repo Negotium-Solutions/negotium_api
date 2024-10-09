@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Session;
 
 class DynamicModel extends Model
 {
@@ -22,12 +23,12 @@ class DynamicModel extends Model
     ];
 
     const EMAIL = 13;
-/*
+
     public function getTable() : string
     {
-        return request()->get('table_name'); // The dynamic table is passed as part of the request
+        return Session::get('table_name'); // The dynamic table is passed as part of the session
     }
-*/
+
     /*
      * Transformed model properties
      */

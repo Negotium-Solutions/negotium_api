@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Session;
 
 class Profile extends Model
 {
@@ -91,8 +92,8 @@ class Profile extends Model
 
     public function dynamicModel()
     {
+        Session::put('table_name', $this->schema->name);
         $dynamicModel = new DynamicModel();
-        $dynamicModel->setTable($this->schema->name);
 
         return $dynamicModel->where('parent_id', $this->id)->first();
     }

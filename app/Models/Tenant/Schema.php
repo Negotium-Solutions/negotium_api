@@ -86,6 +86,9 @@ class Schema extends Model
             $table->uuid('id')->primary();
             $table->uuid('schema_id')->nullable();
             switch($dynamic_model_type_id) {
+                case DynamicModelType::PROFILE:
+                    $table->string('avatar')->nullable();
+                    break;
                 case DynamicModelType::PROCESS:
                     $table->uuid('profile_id')->nullable();
                     break;

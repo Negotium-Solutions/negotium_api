@@ -6,6 +6,7 @@ use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\Profile;
 use App\Models\Tenant\Schema;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Session;
 
 class ProfileSeeder extends Seeder
 {
@@ -40,7 +41,7 @@ class ProfileSeeder extends Seeder
 
             if ($profile->profile_type_id == 1) {
                 $tableName = $individual->name;
-                $dynamicModel->setTable($tableName);
+                Session::put('table_name', $tableName);
                 $dynamicModel->first_name = fake()->firstName();
                 $dynamicModel->last_name = fake()->lastName();
                 $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
@@ -51,7 +52,7 @@ class ProfileSeeder extends Seeder
             }
             if ($profile->profile_type_id == 2) {
                 $tableName = $business->name;
-                $dynamicModel->setTable($tableName);
+                Session::put('table_name', $tableName);
                 $dynamicModel->company_name = fake()->company();
                 $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
                 $dynamicModel->email = fake()->email();

@@ -12,6 +12,7 @@ use App\Models\Tenant\Schema as TenantSchema;
 use App\Models\Tenant\Step;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
 class DynamicModelFieldController extends BaseApiController
@@ -133,8 +134,8 @@ class DynamicModelFieldController extends BaseApiController
     public function updateFields(DynamicModelFieldRequest $request) : Response
     {
         try {
+            Session::put('table_name', $request->input('schema_table'));
             $dynamicModel = new DynamicModel();
-            $dynamicModel->setTable($request->input('schema_table'));
             $dynamicModel = $dynamicModel->where('parent_id', $request->input('parent_id'))->first();
 
             $old_value = $dynamicModel;

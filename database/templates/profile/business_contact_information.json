@@ -1,13 +1,13 @@
 {
     "Contact Information": {
-        "Email Address": {
+        "Email": {
             "type_id": 1,
             "validations": [
                 "required",
                 "email"
             ]
         },
-        "Mobile Number": {
+        "Cell Number": {
             "type_id": 1,
             "validations": [
                 "required",

@@ -37,6 +37,9 @@ class DynamicModelFieldRequest extends FormRequest
 
             foreach ($step['fields'] as $field) {
                 $validations = [];
+                if (!isset($field['validations'])) {
+                    continue;
+                }
                 foreach ($field['validations'] as $validation) {
                     switch ($validation['name']) {
                         case 'sa_id_number':
