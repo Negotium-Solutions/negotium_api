@@ -32,6 +32,7 @@ class DynamicModelSeeder extends Seeder
             $phoneNumbers = ["0614116444", "0848791089","0642596255"];
             if ($dynamic_model_category_id === 1) {
                 $profile->schema_id = $individualSchema->id;
+                $profile->parent_id = 1;
                 $profile->avatar = '/images/individual/avatar'.rand(1, 5).'.png';
                 $profile->first_name = fake()->firstName();
                 $profile->last_name = fake()->lastName();
@@ -41,6 +42,7 @@ class DynamicModelSeeder extends Seeder
 
             if ($dynamic_model_category_id === 2) {
                 $profile->schema_id = $businessSchema->id;
+                $profile->parent_id = 2;
                 $profile->avatar = '/images/business/avatar'.rand(1, 5).'.png';
                 $profile->company_name = fake()->company();
                 $profile->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
