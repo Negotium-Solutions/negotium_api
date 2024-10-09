@@ -16,11 +16,22 @@ class DynamicModel extends Model
 
     protected $table; // This is set dynamically by the model using it [Profile, Process, etc]
 
+    protected $appends = [
+        'profile_name'
+    ];
+
     protected $hidden = [
         'created_at',
         'updated_at',
-        'deleted_at',
+        'deleted_at'
     ];
+
+    const PROFILE_TYPE_INDIVIDUAL = 1;
+
+    public function getProfileNameAttribute()
+    {
+        return (int)($this->parent_id) === self::PROFILE_TYPE_INDIVIDUAL ? $this->first_name.' '.$this->last_name : $this->company_name;
+    }
 
     const EMAIL = 13;
 

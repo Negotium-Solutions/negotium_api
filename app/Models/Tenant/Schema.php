@@ -85,6 +85,7 @@ class Schema extends Model
         \Illuminate\Support\Facades\Schema::create($this->table_name, function (Blueprint $table) use ($dynamic_model_type_id, $dynamic_model_category_id) {
             $table->uuid('id')->primary();
             $table->uuid('schema_id')->nullable();
+            $table->uuid('parent_id')->nullable();
             switch($dynamic_model_type_id) {
                 case DynamicModelType::PROFILE:
                     $table->string('avatar')->nullable();
