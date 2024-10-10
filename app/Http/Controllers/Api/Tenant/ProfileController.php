@@ -349,11 +349,11 @@ class ProfileController extends BaseAPIController
     }
 
     /**
-     * Remove process from a profile.
+     * Delete process from profile.
      *
-     * @OA\RemoveProcess(
-     *      path="/{tenant}/profile/remove-process",
-     *      operationId="removeProcess",
+     * @OA\DeleteProcess(
+     *      path="/{tenant}/profile/delete-process",
+     *      operationId="deleteProcess",
      *      tags={"Profile"},
      *      security = {{"BearerAuth": {}}},
      *      description="Authenticate using a bearer token",
@@ -384,7 +384,7 @@ class ProfileController extends BaseAPIController
                 $profileProcess->delete();
             }
 
-            return $this->success(['id' => $profileProcess->id], 'process successfully deleted.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $profileProcess->id], 'process successfully deleted.', $request->all(), Response::HTTP_NO_CONTENT);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to delete process from profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
