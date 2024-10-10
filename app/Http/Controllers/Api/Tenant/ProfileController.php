@@ -347,4 +347,47 @@ class ProfileController extends BaseAPIController
 
         return $this->success(['id' => $profile->id], 'profile successfully created', $request->all(), Response::HTTP_CREATED, $old_value, $new_value);
     }
+
+    /**
+     * Remove process from a profile.
+     *
+     * @OA\RemoveProcess(
+     *      path="/{tenant}/profile/remove-process",
+     *      operationId="removeProcess",
+     *      tags={"Profile"},
+     *      security = {{"BearerAuth": {}}},
+     *      description="Authenticate using a bearer token",
+     *      @OA\Parameter(name="profile_id", in="path", @OA\Schema(type="string")),
+     *      @OA\Parameter(name="process_id", in="path", @OA\Schema(type="string")),
+     *      @OA\Response(response=204, description="No content"),
+     *      @OA\Response(response=404, description="Not found")
+     * )
+     *
+     * @return Response
+     * @throws Exception
+     */
+    public function deleteProcess(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'profile_id' => 'string|required',
+            'process_id' => 'string|required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
+
+            if (isset($profileProcess->id) && ($profileProcess->id > 0)) {
+                $profileProcess->delete();
+            }
+
+            return $this->success(['id' => $profileProcess->id], 'process successfully deleted.', $request->all(), Response::HTTP_CREATED);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to delete process from profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
