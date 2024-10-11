@@ -143,11 +143,16 @@ Route::group([
     // Lookup routes
     Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');
 
+
+
+
+
     // Dynamic Models - Start
     Route::get('/dynamic-model/{id?}', [DynamicModelController::class, 'get'])->name('api.dynamic-model');
     Route::get('/dynamic-model/new-empty-record/{schema_id}', [DynamicModelController::class, 'newRecord'])->name('api.dynamic-model.new-empty-record');
-    Route::get('/dynamic-model/group/{id?}', [DynamicModelController::class, 'getGroup'])->name('api.dynamic-model.group');
 
+
+    /** Todo: To be deleted from here going down */
     // Dynamic Model Field routes
     Route::post('/dynamic-field/update', [DynamicModelFieldController::class, 'updateFields'])->name('api.dynamic-field.update');
 
