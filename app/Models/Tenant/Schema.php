@@ -102,18 +102,28 @@ class Schema extends Model
     public function createDynamicModelFields($schema, $dynamicModelFields, $defaultProfile = false)
     {
         foreach ($dynamicModelFields as $step_name => $_step) {
+            /*
             $step = new Step();
             $step->name = $step_name;
             $step->parent_id = $schema->id;
             $step->save();
             $step->order = $step->id;
             $step->save();
+            */
+
+            $dynamicModelFieldGroup = new DynamicModelFieldGroup();
+            $dynamicModelFieldGroup->name = $step_name;
+            $dynamicModelFieldGroup->schema_id = $schema->id;
+            $dynamicModelFieldGroup->save();
+            $dynamicModelFieldGroup->order = (DynamicModelFieldGroup::all()->count() + 1) * 10;
+            $dynamicModelFieldGroup->save();
 
             foreach ($_step as $field => $_dynamicModelField) {
                 $dynamicModelField = new DynamicModelField();
                 $dynamicModelField->setField($field, $defaultProfile);
                 $dynamicModelField->dynamic_model_field_type_id = $_dynamicModelField->type_id;
-                $dynamicModelField->step_id = $step->id;
+                // $dynamicModelField->step_id = $step->id;
+                $dynamicModelField->dynamic_model_field_group_id = $dynamicModelFieldGroup->id;
                 $dynamicModelField->save();
                 $dynamicModelField->order = $dynamicModelField->id;
                 $dynamicModelField->save();
@@ -157,13 +167,18 @@ class Schema extends Model
         // return $this->table_name::query()->qet()->count() > 0 ? true : false;
     }
 
-    public function dynamicModel() : HasOne
+    public function models() : HasMany
     {
-        return $this->hasOne(DynamicModel::class, 'parent_id');
+        return $this->HasMany(DynamicModel::class, 'schema_id');
     }
 
     public function steps() : HasMany
     {
         return $this->hasMany(Step::class, 'parent_id');
+    }
+
+    public function groups() : HasMany
+    {
+        return $this->hasMany(DynamicModelFieldGroup::class, 'schema_id');
     }
 }

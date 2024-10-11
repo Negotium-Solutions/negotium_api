@@ -140,6 +140,14 @@ Route::group([
     Route::put('/form/update/{id}', [FormController::class, 'update'])->name('api.form.update');
     Route::delete('/form/delete/{id?}', [FormController::class, 'delete'])->name('api.form.delete');
 
+    // Lookup routes
+    Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');
+
+    // Dynamic Models - Start
+    Route::get('/dynamic-model/{id?}', [DynamicModelController::class, 'get'])->name('api.dynamic-model');
+    Route::get('/dynamic-model/new-empty-record/{schema_id}', [DynamicModelController::class, 'newRecord'])->name('api.dynamic-model.new-empty-record');
+    Route::get('/dynamic-model/group/{id?}', [DynamicModelController::class, 'getGroup'])->name('api.dynamic-model.group');
+
     // Dynamic Model Field routes
     Route::post('/dynamic-field/update', [DynamicModelFieldController::class, 'updateFields'])->name('api.dynamic-field.update');
 
@@ -153,11 +161,5 @@ Route::group([
 
     // Dynamic Model Step routes
     Route::post('/dynamic-model-step/create', [DynamicModelStepController::class, 'create'])->name('api.dynamic-model-step.create');
-
-    // Lookup routes
-    Route::get('/lookup', [LookUpController::class, 'get'])->name('api.lookup');
-
-    // Dynamic Models
-    Route::get('/dynamic-model/{id?}', [DynamicModelController::class, 'get'])->name('api.dynamic-model');
-
+    // Dynamic Models - End
 });

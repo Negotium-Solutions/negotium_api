@@ -5,6 +5,7 @@ namespace App\Models\Tenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
@@ -37,7 +38,7 @@ class DynamicModel extends Model
 
     public function getTable() : string
     {
-        return Session::get('table_name'); // The dynamic table is passed as part of the session
+        return request()->has('table_name') ? request()->get('table_name') : Session::get('table_name'); // The dynamic table is passed as part of the session
     }
 
     /*
@@ -120,9 +121,9 @@ class DynamicModel extends Model
         return $this->hasMany(Step::class, 'parent_id');
     }
 
-    public function schema() : Model
+    public function schema() : BelongsTo
     {
-        return Schema::where('name', $this->table)->first();
+        return $this->belongsTo(Schema::class, 'schema_id');
     }
 
     public function createDynamicModel($name, $dynamic_model_category_id, $dynamic_model_type_id, $quick_capture)
@@ -144,5 +145,31 @@ class DynamicModel extends Model
             $table->timestamps();
             $table->softDeletes();
         });
+    }
+
+
+    /*------------------------------- New Stuff -----------------------------------*/
+    public function getProperties()
+    {
+        $properties = parent::toArray();
+
+        // return ['id', $this->schema->id];
+
+        return $this->groups();
+        // return $properties;
+
+        $_customProperties = [];
+        foreach ($properties as $property) {
+            foreach($this->groups() as $group) {
+                $_customProperties[] = $property;
+            }
+        }
+
+        return $_customProperties;
+    }
+
+    public function groups() : HasMany
+    {
+        return $this->hasMany(DynamicModelFieldGroup::class, 'parent_id');
     }
 }
