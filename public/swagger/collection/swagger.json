@@ -764,6 +764,68 @@
                 ]
             }
         },
+        "/{tenant}/dynamic-model/new-record": {
+            "get": {
+                "tags": [
+                    "NewEmptyDynamicModelRecord"
+                ],
+                "summary": "Get new empty Dynamic Model Record",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getNewEmptyDynamicModelRecord",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/{tenant}/dynamic-model/schema": {
+            "get": {
+                "tags": [
+                    "GetSchema"
+                ],
+                "summary": "Get schema by dynamic model type id",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getSchema",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/dynamic-model-field/{id}": {
             "get": {
                 "tags": [
@@ -1940,7 +2002,7 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Delete a Profile by ID.",
+                "summary": "Delete a Profile by IDssssssssssssss.",
                 "description": "Authenticate using a bearer token",
                 "operationId": "deleteProfileById",
                 "parameters": [
@@ -2583,6 +2645,14 @@
         {
             "name": "DynamicModel",
             "description": "DynamicModel"
+        },
+        {
+            "name": "NewEmptyDynamicModelRecord",
+            "description": "NewEmptyDynamicModelRecord"
+        },
+        {
+            "name": "GetSchema",
+            "description": "GetSchema"
         },
         {
             "name": "DynamicModelField",

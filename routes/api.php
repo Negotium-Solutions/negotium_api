@@ -149,7 +149,10 @@ Route::group([
 
     // Dynamic Models - Start
     Route::get('/dynamic-model/{id?}', [DynamicModelController::class, 'get'])->name('api.dynamic-model');
+    Route::post('/dynamic-model/create', [DynamicModelController::class, 'create'])->name('api.dynamic-model.create');
     Route::get('/dynamic-model/new-empty-record/{schema_id}', [DynamicModelController::class, 'newRecord'])->name('api.dynamic-model.new-empty-record');
+    Route::get('/dynamic-model/category/{type_id}', [DynamicModelController::class, 'getCategory'])->name('api.dynamic-model.category');
+    Route::get('/dynamic-model/schema/{type_id}', [DynamicModelController::class, 'getSchema'])->name('api.dynamic-model.schema');
 
 
     /** Todo: To be deleted from here going down */

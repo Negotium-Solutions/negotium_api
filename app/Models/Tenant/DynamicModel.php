@@ -63,64 +63,6 @@ class DynamicModel extends Model
         return $dynamicModelFieldGroups;
     }
 
-    public function propertiesByStep($parent_id)
-    {
-        $properties = parent::toArray();
-
-        $dynamicModelFieldSteps = Step::with(['fields.options', 'fields.validations'])->where('parent_id', $parent_id)->get();
-
-        foreach ($dynamicModelFieldSteps as $dynamicModelFieldGroup) {
-            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
-                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
-                    $dynamicModelField->value = DynamicModelFieldEmail::find($properties[$dynamicModelField->field]);
-                } else {
-                    $dynamicModelField->value = $properties[$dynamicModelField->field];
-                }
-            }
-        }
-
-        return $dynamicModelFieldSteps;
-    }
-
-    public function getSchema($parent_id)
-    {
-        $dynamicModelFieldSteps = Step::with(['fields.options', 'fields.validations'])->where('parent_id', $parent_id)->get();
-
-        foreach ($dynamicModelFieldSteps as $dynamicModelFieldGroup) {
-            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
-                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
-                    $dynamicModelField->value = [];
-                } else {
-                    $dynamicModelField->value = '';
-                }
-            }
-        }
-
-        return $dynamicModelFieldSteps;
-    }
-
-    public function getSchemaByGroup($schem_id)
-    {
-        $dynamicModelFieldSteps = DynamicModelFieldGroup::with(['fields.options', 'fields.validations'])->where('schema_id', $schem_id)->get();
-
-        foreach ($dynamicModelFieldSteps as $dynamicModelFieldGroup) {
-            foreach ($dynamicModelFieldGroup->fields as $dynamicModelField) {
-                if (self::EMAIL === $dynamicModelField->dynamic_model_field_type_id) {
-                    $dynamicModelField->value = [];
-                } else {
-                    $dynamicModelField->value = '';
-                }
-            }
-        }
-
-        return $dynamicModelFieldSteps;
-    }
-
-    public function steps() : HasMany
-    {
-        return $this->hasMany(Step::class, 'parent_id');
-    }
-
     public function schema() : BelongsTo
     {
         return $this->belongsTo(Schema::class, 'schema_id');
@@ -145,27 +87,6 @@ class DynamicModel extends Model
             $table->timestamps();
             $table->softDeletes();
         });
-    }
-
-
-    /*------------------------------- New Stuff -----------------------------------*/
-    public function getProperties()
-    {
-        $properties = parent::toArray();
-
-        // return ['id', $this->schema->id];
-
-        return $this->groups();
-        // return $properties;
-
-        $_customProperties = [];
-        foreach ($properties as $property) {
-            foreach($this->groups() as $group) {
-                $_customProperties[] = $property;
-            }
-        }
-
-        return $_customProperties;
     }
 
     public function groups() : HasMany
