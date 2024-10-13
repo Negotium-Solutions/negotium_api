@@ -52,6 +52,7 @@ class ProfileSeeder extends Seeder
                 $profile->last_name = fake()->lastName();
                 $profile->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
                 $profile->email = fake()->email();
+                $profile->save();
             }
 
             Session::put('table_name', $businessSchema->table_name);
@@ -63,9 +64,8 @@ class ProfileSeeder extends Seeder
                 $profile->company_name = fake()->company();
                 $profile->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
                 $profile->email = fake()->email();
+                $profile->save();
             }
-
-            $profile->save();
         }
         /*--------------------- Seed Profile Data - End --------------------------*/
     }
