@@ -15,66 +15,58 @@ class ProfileSeeder extends Seeder
      */
     public function run(): void
     {
-        $individual = Schema::where('name', 'like', '%individual%')->first();
-        $business = Schema::where('name', 'like', '%business%')->first();
+        $individualSchema = new Schema();
+        $individualSchema->createDynamicModel('Capture individual details', 1, 1, 1, 'Yes');
+        $data = json_decode(file_get_contents(base_path('database/templates/profile/personal_information.json')));
+        $individualSchema->createDynamicModelFields($individualSchema, $data, true);
 
-        Profile::factory([
-            'profile_type_id' => 1,
-            'avatar' => '/images/individual/avatar'.rand(1, 5).'.png',
-            'schema_id' => $individual->id
-        ])->create();
+        $data = json_decode(file_get_contents(base_path('database/templates/profile/personal_contact_information.json')));
+        $individualSchema->createDynamicModelFields($individualSchema, $data, true);
 
-        Profile::factory([
-            'profile_type_id' => 2,
-            'avatar' => '/images/business/avatar'.rand(1, 5).'.png',
-            'schema_id' => $business->id
-        ])->create();
+        $data = json_decode(file_get_contents(base_path('database/templates/profile/home_address.json')));
+        $individualSchema->createDynamicModelFields($individualSchema, $data, true);
+
+        $data = json_decode(file_get_contents(base_path('database/templates/profile/work_address.json')));
+        $individualSchema->createDynamicModelFields($individualSchema, $data, true);
+
+        $businessSchema = new Schema();
+        $businessSchema->createDynamicModel('Capture business details', 2, 1, 2, 'Yes');
+        $data = json_decode(file_get_contents(base_path('database/templates/profile/company_information.json')));
+        $businessSchema->createDynamicModelFields($businessSchema, $data, true);
+
+        $data = json_decode(file_get_contents(base_path('database/templates/profile/business_contact_information.json')));
+        $businessSchema->createDynamicModelFields($businessSchema, $data, true);
 
         $phoneNumbers = ["0614116444", "0848791089","0642596255"];
-        Profile::factory(20)->create();
+        /*--------------------- Seed Profile Data - Start ------------------------*/
+        for ($i = 0; $i < 20; $i++) {
+            $dynamic_model_category_id = rand(1, 2);
 
-        $profiles = Profile::get();
-        foreach ($profiles as $profile) {
-            $tableName = '';
-            $dynamicModel = new DynamicModel();
-
-
-            if ($profile->profile_type_id == 1) {
-                $tableName = $individual->name;
-                Session::put('table_name', $tableName);
-                $dynamicModel->first_name = fake()->firstName();
-                $dynamicModel->last_name = fake()->lastName();
-                $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
-                $dynamicModel->email = fake()->email();
-                // Update profile
-                $profile->schema_id = $individual->id;
-                $profile->save();
-            }
-            if ($profile->profile_type_id == 2) {
-                $tableName = $business->name;
-                Session::put('table_name', $tableName);
-                $dynamicModel->company_name = fake()->company();
-                $dynamicModel->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
-                $dynamicModel->email = fake()->email();
-                // Update profile
-                $profile->schema_id = $business->id;
-                $profile->save();
+            Session::put('table_name', $individualSchema->table_name);
+            $profile = new DynamicModel();
+            if ($dynamic_model_category_id === 1) {
+                $profile->schema_id = $individualSchema->id;
+                $profile->parent_id = 1;
+                $profile->avatar = '/images/individual/avatar'.rand(1, 5).'.png';
+                $profile->first_name = fake()->firstName();
+                $profile->last_name = fake()->lastName();
+                $profile->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
+                $profile->email = fake()->email();
             }
 
-            $dynamicModel->parent_id = $profile->id;
-            if($dynamicModel->get()->count() === 0){
-                if($profile->profile_type_id == 1) {
-                    $dynamicModel->first_name = 'Nico';
-                    $dynamicModel->last_name = 'Van Der Meulen';
-                    $dynamicModel->email = 'nico@negotium-solutions.com';
-                    $dynamicModel->cell_number = '0832848212';
-                } else {
-                    $dynamicModel->company_name = 'Negotium Solutions';
-                    $dynamicModel->email = 'admin@negotium-solutions.com';
-                    $dynamicModel->cell_number = '0614116444';
-                }
+            Session::put('table_name', $businessSchema->table_name);
+            $profile = new DynamicModel();
+            if ($dynamic_model_category_id === 2) {
+                $profile->schema_id = $businessSchema->id;
+                $profile->parent_id = 2;
+                $profile->avatar = '/images/business/avatar'.rand(1, 5).'.png';
+                $profile->company_name = fake()->company();
+                $profile->cell_number = $phoneNumbers[array_rand($phoneNumbers)];
+                $profile->email = fake()->email();
             }
-            $dynamicModel->save();
+
+            $profile->save();
         }
+        /*--------------------- Seed Profile Data - End --------------------------*/
     }
 }

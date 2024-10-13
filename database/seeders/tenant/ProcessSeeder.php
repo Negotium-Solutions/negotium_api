@@ -53,11 +53,9 @@ class ProcessSeeder extends Seeder
         */
 
         // Seed  Dynamic Model Processes
-        for($i = 1; $i <= 20; $i++) {
+        for($i = 1; $i <= 25; $i++) {
             $schema = new Schema();
             $schema->createDynamicModel('Process '.$i , rand(1, 5), 2, 1, 'Yes');
-            // $data = json_decode(file_get_contents(base_path('database/templates/profile/personal_information.json')));
-            // $schema->createDynamicModelFields($schema, $data, true);
         }
     }
 }
