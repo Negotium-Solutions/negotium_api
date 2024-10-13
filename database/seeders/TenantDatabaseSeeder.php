@@ -37,6 +37,7 @@ class TenantDatabaseSeeder extends Seeder
     {
         $this->call(UserSeeder::class, false, ['domain' => $domain]);
         $this->call(ProcessCategorySeeder::class);
+        $this->call(DynamicModelTypeSeeder::class);
         $this->call(ProcessSeeder::class);
         $this->call(DynamicModelFieldTypeSeeder::class);
         $this->call(ValidationSeeder::class);
@@ -48,7 +49,6 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(ProfileTypeSeeder::class);
         $this->call(DocumentSeeder::class);
         $this->call(DynamicModelFieldTypeGroupSeeder::class);
-        $this->call(DynamicModelTypeSeeder::class);
         $this->call(StepSeeder::class);
         // $this->call(ActivitySeeder::class);
         $this->call(ProcessStatusSeeder::class);

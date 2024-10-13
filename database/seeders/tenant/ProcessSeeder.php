@@ -3,6 +3,7 @@
 namespace Database\Seeders\tenant;
 
 use App\Models\Tenant\Process;
+use App\Models\Tenant\Schema;
 use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +15,7 @@ class ProcessSeeder extends Seeder
      */
     public function run(): void
     {
+        /*
         Process::factory(['name' => 'Process 01'])->create();
         Process::factory(['name' => 'Process 02'])->create();
         Process::factory(['name' => 'Process 03'])->create();
@@ -48,5 +50,14 @@ class ProcessSeeder extends Seeder
             $process->schema_id = $schema->id;
             $process->save();
         });
+        */
+
+        // Seed  Dynamic Model Processes
+        for($i = 1; $i <= 20; $i++) {
+            $schema = new Schema();
+            $schema->createDynamicModel('Process '.$i , rand(1, 5), 2, 1, 'Yes');
+            // $data = json_decode(file_get_contents(base_path('database/templates/profile/personal_information.json')));
+            // $schema->createDynamicModelFields($schema, $data, true);
+        }
     }
 }

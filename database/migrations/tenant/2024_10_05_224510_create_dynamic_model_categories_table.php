@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('dynamic_model_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('color')->default(fake()->colorName);
             $table->string('dynamic_model_type_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

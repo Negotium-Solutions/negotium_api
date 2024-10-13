@@ -91,6 +91,7 @@ class Schema extends Model
                     $table->string('avatar')->nullable();
                     break;
                 case DynamicModelType::PROCESS:
+                    $table->uuid('name')->nullable();
                     $table->uuid('profile_id')->nullable();
                     break;
             }
