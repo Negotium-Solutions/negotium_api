@@ -16,7 +16,7 @@ class ProfileSeeder extends Seeder
     public function run(): void
     {
         $individualSchema = new Schema();
-        $individualSchema->createDynamicModel('Capture individual details', 1, 1, 1, 'Yes');
+        $individualSchema->createDynamicModel('Individual', 1, 1, 1, 'Yes');
         $data = json_decode(file_get_contents(base_path('database/templates/profile/personal_information.json')));
         $individualSchema->createDynamicModelFields($individualSchema, $data, true);
 
@@ -30,7 +30,7 @@ class ProfileSeeder extends Seeder
         $individualSchema->createDynamicModelFields($individualSchema, $data, true);
 
         $businessSchema = new Schema();
-        $businessSchema->createDynamicModel('Capture business details', 2, 1, 2, 'Yes');
+        $businessSchema->createDynamicModel('Business', 2, 1, 2, 'Yes');
         $data = json_decode(file_get_contents(base_path('database/templates/profile/company_information.json')));
         $businessSchema->createDynamicModelFields($businessSchema, $data, true);
 

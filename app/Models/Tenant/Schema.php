@@ -103,15 +103,6 @@ class Schema extends Model
     public function createDynamicModelFields($schema, $dynamicModelFields, $defaultProfile = false)
     {
         foreach ($dynamicModelFields as $step_name => $_step) {
-            /*
-            $step = new Step();
-            $step->name = $step_name;
-            $step->parent_id = $schema->id;
-            $step->save();
-            $step->order = $step->id;
-            $step->save();
-            */
-
             $dynamicModelFieldGroup = new DynamicModelFieldGroup();
             $dynamicModelFieldGroup->name = $step_name;
             $dynamicModelFieldGroup->schema_id = $schema->id;
@@ -181,5 +172,38 @@ class Schema extends Model
     public function groups() : HasMany
     {
         return $this->hasMany(DynamicModelFieldGroup::class, 'schema_id');
+    }
+
+    public function getDynamicModelsBySchema(Request $request, $id)
+    {
+        $request->merge(['table_name' => Schema::find($request->input('schema_id'))->table_name]);
+
+        $query = Schema::with(['models']);
+
+        if ( !empty($id) ) {
+            $query = Schema::with(['models' => function ($_query) use ($id) {
+                $_query->where('id', $id);
+            }]);
+        }
+
+        $query = $query->where('id', $request->input('schema_id'));
+
+        if ($request->has('with') && ($request->input('with') != '')) {
+            $_with = explode(',', $request->input('with'));
+            $query = $query->with($_with)->first();
+
+            if (in_array('groups.fields', $_with)) {
+                foreach ($query->groups as $group_key => $group) {
+                    foreach ($group->fields as $key => $field) {
+                        $field['value'] = $query->models[0]->{$field->field};
+                        $query->groups[$group_key]->fields[$key] = $field;
+                    }
+                }
+            }
+        } else {
+            $query = $query->first();
+        }
+
+        return $query;
     }
 }

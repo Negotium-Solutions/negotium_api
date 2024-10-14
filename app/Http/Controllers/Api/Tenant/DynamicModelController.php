@@ -98,6 +98,7 @@ class DynamicModelController extends BaseApiController
                     $dynamicModel->{$field['field']} = isset($field['value']) ? $field['value'] : null;
                 }
             }
+            $dynamicModel->schema_id = $request->input('id');
             $dynamicModel->updated_at = now();
 
             if ($dynamicModel->save() === false) {
@@ -109,7 +110,7 @@ class DynamicModelController extends BaseApiController
             return $this->error($exception->getMessage(), 'There was an error trying to update the dynamic model.', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success(['id' => $dynamicModel->id], 'Dynamic model created successfully3.', $request->all(), Response::HTTP_CREATED, [], $new_value);
+        return $this->success(['id' => $dynamicModel->id], 'Dynamic model created successfully.', $request->all(), Response::HTTP_CREATED, [], $new_value);
     }
 
     /**

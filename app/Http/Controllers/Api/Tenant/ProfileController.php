@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Requests\Tenant\DynamicModelFieldRequest;
+use App\Http\Requests\Tenant\DynamicModelRequest;
 use App\Http\Requests\Tenant\ProfileRequest;
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\ProcessLog;
@@ -53,34 +54,12 @@ class ProfileController extends BaseAPIController
      */
     public function get(Request $request, $id = null) : Response
     {
-        try{
-            $query = isset($id) ? Profile::where('id', $id) : Profile::query();
+        try {
+            $schema = new TenantSchema();
+            $data = $schema->getDynamicModelsBySchema($request, $id);
 
-            if ($request->has('pt_id') && ($request->input('pt_id') > 0)) {
-                $query = $query->where('profile_type_id', $request->input('pt_id'));
-            }
-
-            $hasDynamicModel = false;
-            if ($request->has('with') && ($request->input('with') != '')) {
-                $_with = explode(',', $request->input('with'));
-
-                if (in_array('dynamicModel', $_with)) {
-                    $hasDynamicModel = true;
-                    $index = array_search('dynamicModel', $_with);
-                    unset($_with[$index]);
-                }
-                $query = $query->with($_with);
-            }
-
-            $data = isset($id) ? $query->first() : $query->get();
-
-            if (isset($id) && $hasDynamicModel) {
-                $profile = Profile::find($id);
-                $data['steps'] = $profile->dynamicModel($request)->propertiesByGroup();
-            }
-
-            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
-                return $this->success([], 'No profile record(s) found', [], Response::HTTP_NOT_FOUND);
+            if(!isset($data->models[0]->id)){
+                return $this->success([], 'No record(s) found for dynamic model', [], Response::HTTP_NOT_FOUND);
             }
 
             return $this->success($data, 'profiles successfully retrieved', [], Response::HTTP_OK);
@@ -108,30 +87,31 @@ class ProfileController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    public function create(Request $request) : Response
+    public function create(DynamicModelRequest $request) : Response
     {
-        $validator = \Validator::make($request->all(), [
-            'first_name' => 'string|required',
-            'last_name' => 'string|required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         try {
-            $profile = new Profile();
-            $profile->first_name = $request->first_name;
-            $profile->last_name = $request->last_name;
+            $dynamicModel = new DynamicModel();
 
-            if ($profile->save() === false) {
-                throw new \RuntimeException('Could not save profile');
+            foreach ($request->input('groups') as $group) {
+                foreach ($group['fields'] as $field) {
+                    $dynamicModel->{$field['field']} = isset($field['value']) ? $field['value'] : null;
+                }
+            }
+            $dynamicModel->avatar = '/images/individual/avatar'.rand(1, 5).'.png';;
+            $dynamicModel->parent_id = $request->input('dynamic_model_category_id');
+            $dynamicModel->schema_id = $request->input('id');
+            $dynamicModel->updated_at = now();
+
+            if ($dynamicModel->save() === false) {
+                throw new \RuntimeException('Could not update dynamic model');
             }
 
-            return $this->success(['id' => $profile->id], 'profile successfully created.', $request->all(), Response::HTTP_CREATED);
-        } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create profile.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+            $new_value = $request->all();
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'There was an error trying to create profile.', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        return $this->success(['id' => $dynamicModel->id], 'Profile created successfully.', $request->all(), Response::HTTP_CREATED, [], $new_value);
     }
 
     /**
@@ -168,7 +148,6 @@ class ProfileController extends BaseAPIController
             Session::put('table_name', $profile->schema->name);
             $dynamicModel = new DynamicModel();
             $dynamicModel = $dynamicModel->where('id', $_dynamicModel->id)->first();
-
 
             foreach ($request->all() as $key => $value) {
                 if (array_key_exists($key, $dynamicModel->getAttributes())) {
