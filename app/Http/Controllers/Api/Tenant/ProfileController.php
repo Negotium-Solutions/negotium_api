@@ -137,35 +137,14 @@ class ProfileController extends BaseAPIController
     public function update(DynamicModelFieldRequest $request, $id) : Response
     {
         try {
-            $profile = Profile::find($id);
-            if((!isset($profile))){
-                return $this->success([], 'No profile record found to update', [], Response::HTTP_NO_CONTENT);
-            }
-            $old_value = Profile::findOrFail($id);
-            $new_value = $request->all();
-
-            $_dynamicModel = $profile->dynamicModel($request);
-            Session::put('table_name', $profile->schema->name);
-            $dynamicModel = new DynamicModel();
-            $dynamicModel = $dynamicModel->where('id', $_dynamicModel->id)->first();
-
-            foreach ($request->all() as $key => $value) {
-                if (array_key_exists($key, $dynamicModel->getAttributes())) {
-                    if (!in_array($key, ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
-                        $dynamicModel->{$key} = $value;
-                    }
-                }
-            }
-            $dynamicModel->updated_at = now();
-
-            if ($dynamicModel->save() === false) {
-                throw new \RuntimeException('Could not update profile dynamic model');
-            }
+            $old_value = [];
+            $new_value = [];
+            // Todo: Update profile code
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'There was an error trying to update the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success(['id' => $dynamicModel->id], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success(['id' => 0], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**
@@ -189,7 +168,7 @@ class ProfileController extends BaseAPIController
     public function delete($id) : Response
     {
         try {
-            $profile = Profile::find($id);
+            $profile = DynamicModel::find($id);
             if((!isset($profile))){
                 return $this->success([], 'No profile record found to delete', [], Response::HTTP_NOT_FOUND);
             }
