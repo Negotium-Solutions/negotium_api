@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Requests\Tenant\ProcessCategoryRequest;
+use App\Models\Tenant\DynamicModelCategory;
 use App\Models\Tenant\ProcessCategory;
+use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -47,8 +49,8 @@ class ProcessCategoryController extends BaseAPIController
      */
     public function get(Request $request, $id = null) : Response
     {
-        try{
-            $query = isset($id) ? ProcessCategory::where('id', $id) : ProcessCategory::query();
+        try {
+            $query = isset($id) ? DynamicModelCategory::where('dynamic_model_type_id', 2)->where('id', $id) : DynamicModelCategory::where('dynamic_model_type_id', 2);
 
             if ($request->has('with')) {
                 $query = $query->with($request->with);
@@ -61,7 +63,7 @@ class ProcessCategoryController extends BaseAPIController
             }
 
             return $this->success($data, 'process categories successfully retrieved', [], Response::HTTP_OK);
-        }catch (Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve process.', [], Response::HTTP_BAD_REQUEST);
         }
     }

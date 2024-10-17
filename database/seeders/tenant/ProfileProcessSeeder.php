@@ -18,7 +18,7 @@ class ProfileProcessSeeder extends Seeder
     public function run(): void
     {
         $profileTypes = Schema::where('dynamic_model_type_id', 1)->get();
-        $processes = Schema::where('dynamic_model_type_id', 2)->limit(4)->get();
+        $processes = Schema::with(['groups'])->where('dynamic_model_type_id', 2)->limit(4)->get();
         foreach ($profileTypes as $profileType) {
             Session::put('table_name', $profileType->table_name);
             $profiles = DynamicModel::where('schema_id', $profileType->id)->limit(4)->get();
@@ -27,6 +27,8 @@ class ProfileProcessSeeder extends Seeder
                     $profileProcess = new ProfileProcess();
                     $profileProcess->profile_id = $profile->id;
                     $profileProcess->process_id = $process->id;
+                    $profileProcess->step_id = isset($process->groups[0]->id) ? $process->groups[0]->id : null;
+                    $profileProcess->process_status_id = 1;
                     $profileProcess->save();
                 }
             }

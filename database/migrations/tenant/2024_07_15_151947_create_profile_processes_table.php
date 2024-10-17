@@ -15,6 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('profile_id')->nullable();
             $table->uuid('process_id')->nullable();
+            $table->uuid('step_id')->nullable();
+            $table->integer('process_status_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

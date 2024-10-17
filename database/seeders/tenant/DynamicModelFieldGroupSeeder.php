@@ -3,7 +3,7 @@
 namespace Database\Seeders\tenant;
 
 use App\Models\Tenant\DynamicModelFieldGroup;
-use App\Models\Tenant\Schema;
+use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Database\Seeder;
 
 class DynamicModelFieldGroupSeeder extends Seeder
@@ -13,16 +13,15 @@ class DynamicModelFieldGroupSeeder extends Seeder
      */
     public function run(): void
     {
-        $individual = Schema::where('name', 'individual_1')->first();
-        $business = Schema::where('name', 'business_2')->first();
-
-        DynamicModelFieldGroup::insert([
-            ['name' => 'Personal Information', 'schema_id' => $individual->id],
-            ['name' => 'Contact Details', 'schema_id' => $individual->id],
-            ['name' => 'Home Address', 'schema_id' => $individual->id],
-            ['name' => 'Work Address', 'schema_id' => $individual->id],
-            ['name' => 'Company Information', 'schema_id' => $business->id],
-            ['name' => 'Company Address', 'schema_id' => $business->id],
-        ]);
+        // Seed for processes only, dynamic_model_type_id = 2
+        $schemas = TenantSchema::where('dynamic_model_type_id', 2)->get();
+        foreach ($schemas as $schema) {
+            for($i = 1; $i <= 4; $i++) {
+                $dynamicModelFieldGroup = new DynamicModelFieldGroup();
+                $dynamicModelFieldGroup->name = 'Step 0'.$i;
+                $dynamicModelFieldGroup->schema_id = $schema->id;
+                $dynamicModelFieldGroup->save();
+            }
+        }
     }
 }

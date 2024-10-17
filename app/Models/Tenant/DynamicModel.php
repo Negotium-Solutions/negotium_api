@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Session;
@@ -92,5 +93,11 @@ class DynamicModel extends Model
     public function groups() : HasMany
     {
         return $this->hasMany(DynamicModelFieldGroup::class, 'parent_id');
+    }
+
+    public function log() : HasOne {
+        return $this->hasOne(ProcessLog::class)
+            ->join('profiles', 'process_logs.profile_id', '=', 'profiles.id')
+            ->select('process_logs.*');
     }
 }

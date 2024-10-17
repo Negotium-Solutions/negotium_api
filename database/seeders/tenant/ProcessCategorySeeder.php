@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\tenant;
 
+use App\Models\Tenant\DynamicModelCategory;
 use App\Models\Tenant\ProcessCategory;
 use Illuminate\Database\Seeder;
 
@@ -12,10 +13,12 @@ class ProcessCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        ProcessCategory::factory(['name' => 'Category 01'])->create();
-        ProcessCategory::factory(['name' => 'Category 02'])->create();
-        ProcessCategory::factory(['name' => 'Category 03'])->create();
-        ProcessCategory::factory(['name' => 'Category 04'])->create();
-        ProcessCategory::factory(['name' => 'Category 05'])->create();
+        DynamicModelCategory::factory(['name' => 'Category 01', 'dynamic_model_type_id' => 2, 'color' => fake()->colorName])->create();
+        DynamicModelCategory::factory(['name' => 'Category 02', 'dynamic_model_type_id' => 2, 'color' => fake()->colorName])->create();
+        DynamicModelCategory::factory(['name' => 'Category 03', 'dynamic_model_type_id' => 2, 'color' => fake()->colorName])->create();
+        DynamicModelCategory::factory(['name' => 'Category 04', 'dynamic_model_type_id' => 2, 'color' => fake()->colorName])->create();
+        DynamicModelCategory::factory(['name' => 'Category 05', 'dynamic_model_type_id' => 2, 'color' => fake()->colorName])->create();
+        DynamicModelCategory::factory(['name' => 'Category 06', 'dynamic_model_type_id' => 2, 'color' => fake()->colorName])->create();
+        DynamicModelCategory::factory(['name' => 'Category 07', 'dynamic_model_type_id' => 2, 'color' => fake()->colorName])->create();
     }
 }

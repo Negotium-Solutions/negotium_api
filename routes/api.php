@@ -58,6 +58,7 @@ Route::group([
     Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');
     Route::post('/profile/assign-processes', [ProfileController::class, 'assignProcesses'])->name('api.profile.assign-processes');
     Route::delete('/profile/delete-process', [ProfileController::class, 'deleteProcess'])->name('api.profile.delete-process');
+    Route::get('/profile/{id}/processes', [ProfileController::class, 'getProcesses'])->name('api.profile.processes');
 
     Route::get('/profile/schema/{profile_type_id}', [ProfileController::class, 'getSchema'])->name('api.profile.schema');
 

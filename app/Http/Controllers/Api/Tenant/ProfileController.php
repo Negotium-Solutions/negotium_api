@@ -330,4 +330,17 @@ class ProfileController extends BaseAPIController
         }
     }
 
+    public function getProcesses(Request $request, $profile_id)
+    {
+        $schema = TenantSchema::find($request->input('schema_id'));
+        Session::put('table_name', $schema->table_name);
+
+        try {
+            $processes = ProfileProcess::with(['process', 'step', 'status'])->where('profile_id', $profile_id)->get();
+
+            return $this->success($processes, 'processes successfully retrieved.', $request->all(), Response::HTTP_CREATED, [], []);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve processes.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

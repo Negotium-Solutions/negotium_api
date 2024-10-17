@@ -52,7 +52,7 @@ class ProcessController extends BaseAPIController
     public function get(Request $request, $id = null) : Response
     {
         try{
-            $query = isset($id) ? Process::where('id', $id) : Process::query();
+            $query = isset($id) ? TenantSchema::where('id', $id)->where('dynamic_model_type_id', 2) : TenantSchema::where('dynamic_model_type_id', 2);
 
             if ($request->has('with') && $request->input('with') != '') {
                 $with_array = explode(',', $request->with);

@@ -15,11 +15,6 @@ class DynamicModelCategorySeeder extends Seeder
         DynamicModelCategory::insert([
             ['name' => 'Individual', 'dynamic_model_type_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Business', 'dynamic_model_type_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Category 01', 'dynamic_model_type_id' => 2, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Category 02', 'dynamic_model_type_id' => 2, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Category 03', 'dynamic_model_type_id' => 2, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Category 04', 'dynamic_model_type_id' => 2, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Category 05', 'dynamic_model_type_id' => 2, 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }
