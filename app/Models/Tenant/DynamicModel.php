@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Models\Tenant\Schema as TenantSchema;
 
 class DynamicModel extends Model
 {
@@ -39,6 +41,10 @@ class DynamicModel extends Model
 
     public function getTable() : string
     {
+        if (request()->has('schema_id')) {
+            return TenantSchema::find(request()->get('schema_id'))->table_name;
+        }
+
         return request()->has('table_name') ? request()->get('table_name') : Session::get('table_name'); // The dynamic table is passed as part of the session
     }
 
@@ -99,5 +105,32 @@ class DynamicModel extends Model
         return $this->hasOne(ProcessLog::class)
             ->join('profiles', 'process_logs.profile_id', '=', 'profiles.id')
             ->select('process_logs.*');
+    }
+
+    public function getRecord(Request $request, $id)
+    {
+        // return $request->input('schema_id');
+        $query = Schema::where('id', $request->input('schema_id'));
+        $dynamicModel = DynamicModel::find($id);
+
+        // return $dynamicModel;
+
+        if ($request->has('with') && ($request->input('with') != '')) {
+            $_with = explode(',', $request->input('with'));
+            $query = $query->with($_with)->first();
+
+            if (in_array('groups.fields.validations', $_with)) {
+                foreach ($query->groups as $group_key => $group) {
+                    foreach ($group->fields as $key => $field) {
+                        $field['value'] = $dynamicModel[$key];
+                        $query->groups[$group_key]->fields[$key] = $field;
+                    }
+                }
+            }
+        } else {
+            $query = $query->first();
+        }
+
+        return $query;
     }
 }
