@@ -83,6 +83,7 @@ Route::group([
 
     // Process Execution routes
     Route::get('/process-execution/{id?}', [ProcessExecutionController::class, 'get'])->name('api.process-execution');
+    Route::post('/process-execution/update', [ProcessExecutionController::class, 'update'])->name('api.process-execution.update');
 
     // Steps routes
     Route::get('/step/{parent_id}/{id?}/{model_id?}', [StepController::class, 'get'])->name('api.step');
