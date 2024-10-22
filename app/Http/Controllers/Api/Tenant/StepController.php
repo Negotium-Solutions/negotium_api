@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Tenant;
 use App\Http\Controllers\Exception;
 use App\Http\Controllers\Throwable;
 use App\Http\Requests\Tenant\StepRequest;
+use App\Models\Tenant\DynamicModelFieldGroup;
 use App\Models\Tenant\Step;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -94,14 +95,14 @@ class StepController extends BaseApiController
     public function create(StepRequest $request) : Response
     {
         try {
-            $step = new Step();
+            $step = new DynamicModelFieldGroup();
             $step->name = $request->name;
-            $step->parent_id = $request->parent_id;
+            $step->schema_id = $request->schema_id;
 
             if ($step->save() === false) {
                 throw new \RuntimeException('Could not save step');
             }
-            $step->order = $step->id;
+            // $step->order = $step->id;
             $step->save();
 
             return $this->success(['id' => $step->id, 'order' => $step->order], 'Step successfully created.', $request->all(), Response::HTTP_CREATED);

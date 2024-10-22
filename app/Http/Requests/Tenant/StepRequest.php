@@ -23,7 +23,7 @@ class StepRequest extends FormRequest
     {
         return [
             'name' => 'string|required',
-            'parent_id' => 'required',
+            'schema_id' => 'string|required',
         ];
     }
 }
