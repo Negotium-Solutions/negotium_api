@@ -23,7 +23,7 @@ class ProcessRequest extends FormRequest
     {
         return [
             'name' => 'string|required',
-            'process_category_id' => 'integer|required'
+            'dynamic_model_category_id' => 'integer|required'
         ];
     }
 }

@@ -70,7 +70,7 @@ class Schema extends Model
         });
     }
 
-    public function createDynamicModel($name, $dynamic_model_category_id, $dynamic_model_type_id, $quick_capture)
+    public function createDynamicModel($name, $dynamic_model_category_id, $dynamic_model_type_id, $quick_capture = 'No')
     {
         $modelType = DynamicModelType::find($dynamic_model_type_id);
         $this->save();

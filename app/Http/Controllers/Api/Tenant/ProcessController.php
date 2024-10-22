@@ -92,20 +92,11 @@ class ProcessController extends BaseAPIController
      */
     public function create(ProcessRequest $request) : Response
     {
-        $schema = new TenantSchema();
-        $schema->createSchema(self::PROCESS_KEY);
-
         try {
-            $process = new Process();
-            $process->name = $request->name;
-            $process->process_category_id = $request->process_category_id;
-            $process->schema_id = $schema->id;
+            $schema = new TenantSchema();
+            $schema->createDynamicModel($request->input('name'), $request->input('dynamic_model_category_id'), 2);
 
-            if ($process->save() === false) {
-                throw new \RuntimeException('Could not save process');
-            }
-
-            return $this->success(['id' => $process->id], 'process successfully created.', $request->all(),  Response::HTTP_CREATED);
+            return $this->success(['id' => $schema->id], 'process successfully created.', $request->all(),  Response::HTTP_CREATED);
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to create process.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
