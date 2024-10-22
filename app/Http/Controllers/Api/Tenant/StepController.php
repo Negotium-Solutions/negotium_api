@@ -181,7 +181,7 @@ class StepController extends BaseApiController
     public function delete($id) : Response
     {
         try {
-            $step = Step::find($id);
+            $step = DynamicModelFieldGroup::find($id);
             if((!isset($step))){
                 return $this->success([], 'No step record found to delete', [], Response::HTTP_NOT_FOUND);
             }

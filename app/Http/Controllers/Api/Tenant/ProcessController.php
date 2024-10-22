@@ -172,7 +172,7 @@ class ProcessController extends BaseAPIController
     public function delete($id) : Response
     {
         try {
-            $process = Process::find($id);
+            $process = TenantSchema::find($id);
             if((!isset($process))){
                 return $this->success([], 'No process record found to delete', [], Response::HTTP_NOT_FOUND);
             }
