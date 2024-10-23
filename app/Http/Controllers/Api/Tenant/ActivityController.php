@@ -8,6 +8,7 @@ use App\Models\Tenant\DynamicModelField;
 use App\Models\Tenant\DynamicModelFieldGroup;
 use App\Models\Tenant\DynamicModelFieldOption;
 use App\Models\Tenant\DynamicModelFieldType;
+use App\Models\Tenant\DynamicModelFieldTypeGroup;
 use App\Models\Tenant\Schema as TenantSchema;
 use App\Models\Tenant\Step;
 use App\Services\SchemaService;
@@ -208,7 +209,7 @@ class ActivityController extends BaseAPIController
     public function delete(int $id) : Response
     {
         try {
-            $activity = Activity::find($id);
+            $activity = DynamicModelFieldTypeGroup::find($id);
             if((!isset($activity))){
                 return $this->success([], 'No activity record found to delete', [], Response::HTTP_NOT_FOUND);
             }
