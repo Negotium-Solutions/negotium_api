@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('field')->nullable();
             $table->integer('dynamic_model_field_type_id')->nullable();
             $table->uuid('dynamic_model_field_group_id')->nullable();
-            $table->integer('step_id')->nullable();
+            $table->uuid('step_id')->nullable();
             $table->integer('order')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -93,7 +93,7 @@ Route::group([
 
     // Activities routes
     Route::get('/activity/{step_id}/{id?}', [ActivityController::class, 'get'])->name('api.activity');
-    Route::post('/activity/create/{step}', [ActivityController::class, 'create'])->name('api.activity.create');
+    Route::post('/activity/create', [ActivityController::class, 'create'])->name('api.activity.create');
     Route::post('/activity/create-schema/{model}', [ActivityController::class, 'createSchema'])->name('api.activity.create-schema');
     Route::put('/activity/update/{id}', [ActivityController::class, 'update'])->name('api.activity.update');
     Route::delete('/activity/delete/{id?}', [ActivityController::class, 'delete'])->name('api.activity.delete');
@@ -162,7 +162,7 @@ Route::group([
     Route::post('/dynamic-field/update', [DynamicModelFieldController::class, 'updateFields'])->name('api.dynamic-field.update');
 
     // Dynamic Model Field routes
-    Route::post('/dynamic-model-field/create', [DynamicModelFieldController::class, 'create'])->name('api.dynamic-model-field.create');
+    // Route::post('/dynamic-model-field/create', [DynamicModelFieldController::class, 'create'])->name('api.dynamic-model-field.create');
     Route::get('/dynamic-model-field/{step_id?}/{id?}', [DynamicModelFieldController::class, 'get'])->name('api.dynamic-model-field');
     Route::delete('/dynamic-model-field/delete/{id?}', [DynamicModelFieldController::class, 'delete'])->name('api.dynamic-model-field.delete');
 

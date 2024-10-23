@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
+use App\Http\Requests\Tenant\ActivityRequest;
 use App\Models\Tenant\Activity;
+use App\Models\Tenant\DynamicModelField;
+use App\Models\Tenant\DynamicModelFieldGroup;
+use App\Models\Tenant\DynamicModelFieldOption;
+use App\Models\Tenant\DynamicModelFieldType;
+use App\Models\Tenant\Schema as TenantSchema;
 use App\Models\Tenant\Step;
 use App\Services\SchemaService;
 use Illuminate\Http\Request;
@@ -11,10 +17,10 @@ use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
 class ActivityController extends BaseAPIController
 {
-    public function __construct(protected SchemaService $schemaService)
-    {
-    }
-
+    const RADIO = 7;
+    const CHECKBOX = 8;
+    const DROPDOWN = 9;
+    const EMAIL = 13;
     /**
      * Get activit(y)/(ies)
      *
@@ -100,43 +106,39 @@ class ActivityController extends BaseAPIController
      * @return Response
      * @throws Exception
      */
-    public function create(Request $request, Step $step) : Response
+    public function create(ActivityRequest $request) : Response
     {
-        $validator = \Validator::make($request->all(), [
-            'name' => 'string|required',
-            'label' => 'string|required',
-            'type_id' => 'integer|required',
-            // 'attributes' => 'string'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         try {
-            $activity = new Activity();
-            $activity->name = $request->input('name');
-            $activity->label = $request->input('label');
-            $activity->type_id = $request->input('type_id');
-            $activity->step_id = $step->id;
-            $activity->attributes = $request->input('attributes');
+            $dynamicModelField = new DynamicModelField();
+            $dynamicModelField->label = $request->get('name');
+            $dynamicModelField->dynamic_model_field_group_id = $request->get('step_id');
+            $dynamicModelField->dynamic_model_field_type_id = $request->get('dynamic_model_field_type_id');
+            $dynamicModelField->setField($dynamicModelField->label);
+            $dynamicModelField->order = $dynamicModelField->id;
 
-            if ($activity->save() === false) {
-                throw new \RuntimeException('Could not save activity');
+            $step = DynamicModelFieldGroup::find($dynamicModelField->dynamic_model_field_group_id);
+            $schema_id = $step->schema_id;
+            $tenantSchema = TenantSchema::find($schema_id);
+
+            $dynamicModelFieldType = DynamicModelFieldType::find($dynamicModelField->dynamic_model_field_type_id);
+            $tenantSchema->createField($tenantSchema->table_name, $dynamicModelField->field, $dynamicModelFieldType->data_type);
+
+            if ($dynamicModelField->save() === false) {
+                throw new \RuntimeException('Could not save note');
             }
 
-            $activity->name .= '_'.$activity->id;
-            $activity->save();
-
-            if (!isset($step->schema->id)) {
-                $this->schemaService->create($step);
+            if (in_array($dynamicModelField->dynamic_model_field_type_id, [self::RADIO, self::CHECKBOX, self::DROPDOWN])) {
+                foreach ($request->get('options') as $option) {
+                    $dynamicModelFieldTypeOption = new DynamicModelFieldOption();
+                    $dynamicModelFieldTypeOption->name = $option;
+                    $dynamicModelFieldTypeOption->dynamic_model_field_id = $dynamicModelField->id;
+                    $dynamicModelFieldTypeOption->save();
+                }
             }
 
-            $this->schemaService->addColumn($activity);
-
-            return $this->success(['id' => $activity->id], 'Activity successfully created.', $request->all(), Response::HTTP_CREATED);
+            return $this->success(['id' => $dynamicModelField->id], 'Dynamic model field successfully created.', $request->all(), Response::HTTP_CREATED);
         } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to create activity.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'An error occurred while trying to create dynamic model field.', [],  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
