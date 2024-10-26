@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dynamic_model_field_groups', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id');
             $table->string('name')->nullable();
             $table->uuid('schema_id')->nullable();
-            $table->bigInteger('order')->nullable();
+            $table->bigIncrements('order');
             $table->timestamps();
             $table->softDeletes();
         });

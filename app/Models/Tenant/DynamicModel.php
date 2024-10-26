@@ -109,11 +109,8 @@ class DynamicModel extends Model
 
     public function getRecord(Request $request, $id)
     {
-        // return $request->input('schema_id');
         $query = Schema::where('id', $request->input('schema_id'));
         $dynamicModel = DynamicModel::find($id);
-
-        // return $dynamicModel;
 
         if ($request->has('with') && ($request->input('with') != '')) {
             $_with = explode(',', $request->input('with'));
@@ -122,7 +119,7 @@ class DynamicModel extends Model
             if (in_array('groups.fields.validations', $_with)) {
                 foreach ($query->groups as $group_key => $group) {
                     foreach ($group->fields as $key => $field) {
-                        $field['value'] = $dynamicModel[$key];
+                        $field['value'] = $dynamicModel[$field->field];
                         $query->groups[$group_key]->fields[$key] = $field;
                     }
                 }

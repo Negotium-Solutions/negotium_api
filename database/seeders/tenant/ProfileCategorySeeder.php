@@ -5,7 +5,7 @@ namespace Database\Seeders\tenant;
 use App\Models\Tenant\DynamicModelCategory;
 use Illuminate\Database\Seeder;
 
-class DynamicModelCategorySeeder extends Seeder
+class ProfileCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.

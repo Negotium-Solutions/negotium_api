@@ -106,17 +106,12 @@ class Schema extends Model
             $dynamicModelFieldGroup->name = $step_name;
             $dynamicModelFieldGroup->schema_id = $schema->id;
             $dynamicModelFieldGroup->save();
-            $dynamicModelFieldGroup->order = (DynamicModelFieldGroup::all()->count() + 1) * 10;
-            $dynamicModelFieldGroup->save();
 
             foreach ($_step as $field => $_dynamicModelField) {
                 $dynamicModelField = new DynamicModelField();
                 $dynamicModelField->setField($field, $defaultProfile);
                 $dynamicModelField->dynamic_model_field_type_id = $_dynamicModelField->type_id;
-                // $dynamicModelField->step_id = $step->id;
                 $dynamicModelField->dynamic_model_field_group_id = $dynamicModelFieldGroup->id;
-                $dynamicModelField->save();
-                $dynamicModelField->order = $dynamicModelField->id;
                 $dynamicModelField->save();
 
                 \Illuminate\Support\Facades\Schema::table($schema->table_name, function (Blueprint $table) use ($_dynamicModelField, $dynamicModelField) {
