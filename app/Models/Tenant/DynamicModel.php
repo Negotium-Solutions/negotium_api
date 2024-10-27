@@ -45,7 +45,18 @@ class DynamicModel extends Model
             return TenantSchema::find(request()->get('schema_id'))->table_name;
         }
 
-        return request()->has('table_name') ? request()->get('table_name') : Session::get('table_name'); // The dynamic table is passed as part of the session
+        if (session()->has('schema_id')) {
+            return TenantSchema::find(Session::get('schema_id'))->table_name;
+        }
+
+        $table_name = '';
+        if (request()->has('table_name')) {
+            $table_name = request()->get('table_name');
+        } elseif (session()->has('table_name')) {
+            $table_name = Session::get('table_name');
+        }
+
+        return $table_name;
     }
 
     /*

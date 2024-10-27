@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Tenant;
 use App\Http\Requests\Tenant\DynamicModelFieldRequest;
 use App\Http\Requests\Tenant\ProcessExecutionRequest;
 use App\Models\Tenant\DynamicModel;
+use App\Models\Tenant\DynamicModelFieldGroup;
+use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\ProfileProcess;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -47,15 +49,7 @@ class ProcessExecutionController extends BaseApiController
         }
 
         try {
-            $this->getProfileProcess($request->input('process_schema_id'), $request->input('process_id'));
-
-            if ( (int)$id === 0) {
-                $process = new DynamicModel();
-                $process->save();
-            } else {
-                $process = DynamicModel::find($id);
-            }
-
+            $process = DynamicModel::find($id);
             $data = $process->getRecord($request, $process->id);
 
             return $this->success($data, 'processes successfully retrieved', [], Response::HTTP_OK);
@@ -64,27 +58,10 @@ class ProcessExecutionController extends BaseApiController
         }
     }
 
-    public function getProfileProcess($profile_id, $process_id) : void
-    {
-        $processProfile = ProfileProcess::where('profile_id', $profile_id)
-            ->where('process_id', $process_id)
-            ->first();
-
-        if ( empty($processProfile) ) {
-            $processProfile = new ProfileProcess();
-            $processProfile->profile_id = $profile_id;
-            $processProfile->process_id = $process_id;
-            $processProfile->process_status_id = 1;
-            $processProfile->save();
-        }
-    }
-
     public function update(ProcessExecutionRequest $request) : Response
     {
         try {
-            Session::put('table_name', $request->input('schema_table'));
-            $dynamicModel = new DynamicModel();
-            $dynamicModel = $dynamicModel->where('parent_id', $request->input('parent_id'))->first();
+            $dynamicModel = DynamicModel::find($request->input('process_id'));
 
             $old_value = $dynamicModel;
             $new_value = $request->all();
@@ -93,27 +70,10 @@ class ProcessExecutionController extends BaseApiController
                 return $this->success([], 'No dynamic model record found to update', [], Response::HTTP_NO_CONTENT);
             }
 
-            /*
-            $fields = null;
-            if ($request->has('step_id') && $request->input('step_id') > 0) {
-                $steps = $request->input('steps');
-                foreach ($steps as $step) {
-                    if ($step['id'] === $request->input('step_id')) {
-                        $fields = $step['fields'];
-                    }
-                }
-            }
-
-            if ($fields === null) {
-                $fields = $request->all();
-            }
-            */
-
-            foreach ($request->all() as $key => $value) {
-                // foreach ($fields as $key => $value) {
-                if (array_key_exists($key, $dynamicModel->getAttributes())) {
-                    if (!in_array($key, ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
-                        $dynamicModel->{$key} = $value;
+            foreach ($request->input('fields') as $field) {
+                if (array_key_exists($field['field'], $dynamicModel->getAttributes())) {
+                    if (!in_array($field['field'], ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
+                        $dynamicModel->{$field['field']} = $field['value'];
                     }
                 }
             }
@@ -122,10 +82,31 @@ class ProcessExecutionController extends BaseApiController
             if ($dynamicModel->save() === false) {
                 throw new \RuntimeException('Could not update profile dynamic model');
             }
+
+            $steps = DynamicModelFieldGroup::where('schema_id', $request->input('schema_id'))
+                    ->orderBy('order')
+                    ->get();
+
+            $step = null;
+            foreach ($steps as $key => $_step) {
+                if ($_step->id === $request->get('id')) {
+                    if (($key + 1) === $steps->count()) {
+                        $step = $steps[$key];
+                    } else {
+                        $step = $steps[$key + 1];
+                    }
+                }
+            }
+
+            $profileProcess = ProfileProcess::find($dynamicModel->parent_id);
+            $profileProcess->step_id = $step->id;
+            $profileProcess->process_status_id = ProcessStatus::ACTIVE;
+            $profileProcess->save();
+
         } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'There was an error trying to update the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success(['id' => $dynamicModel->id], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success(['step_id' => $step->id], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 }

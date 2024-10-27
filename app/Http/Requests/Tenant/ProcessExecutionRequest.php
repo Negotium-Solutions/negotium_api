@@ -28,36 +28,29 @@ class ProcessExecutionRequest extends FormRequest
         }
 
         $validationArray = [];
-        $steps = $this->input('groups');
-        foreach ($steps as $step)
-        {
-            if ( $this->has('step_id') && $this->input('step_id') !== $step['id'] ) {
+
+        foreach ($this->input('fields') as $field) {
+            $validations = [];
+            if (!isset($field['validations'])) {
                 continue;
             }
-
-            foreach ($step['fields'] as $field) {
-                $validations = [];
-                if (!isset($field['validations'])) {
-                    continue;
+            foreach ($field['validations'] as $validation) {
+                switch ($validation['name']) {
+                    case 'sa_id_number':
+                        $validations[] = new SouthAfricanIdNumber;
+                        break;
+                    case 'sa_phone_number':
+                        $validations[] = new SouthAfricanPhoneNumber;
+                        break;
+                    default:
+                        $validations[] = $validation['name'];
+                        break;
                 }
-                foreach ($field['validations'] as $validation) {
-                    switch ($validation['name']) {
-                        case 'sa_id_number':
-                            $validations[] = new SouthAfricanIdNumber;
-                            break;
-                        case 'sa_phone_number':
-                            $validations[] = new SouthAfricanPhoneNumber;
-                            break;
-                        default:
-                            $validations[] = $validation['name'];
-                            break;
-                    }
-                }
-                // Build the validation rules
-                $validationArray[$field['field']] = $validations;
-                // Reconstruct the request
-                $this->merge([$field['field'] => $field['value']]);
             }
+            // Build the validation rules
+            $validationArray[$field['field']] = $validations;
+            // Reconstruct the request
+            $this->merge([$field['field'] => $field['value']]);
         }
 
         return $validationArray;

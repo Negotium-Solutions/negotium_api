@@ -22,7 +22,7 @@ class ProfileProcessSeeder extends Seeder
         foreach ($profileTypes as $profileType) {
             Session::put('table_name', $profileType->table_name);
             $profiles = DynamicModel::where('schema_id', $profileType->id)->limit(4)->get();
-            foreach ($profiles as $key => $profile) {
+            foreach ($profiles as $profile) {
                 foreach ($processes as $process) {
                     $profileProcess = new ProfileProcess();
                     $profileProcess->profile_id = $profile->id;
@@ -30,6 +30,12 @@ class ProfileProcessSeeder extends Seeder
                     $profileProcess->step_id = isset($process->groups[0]->id) ? $process->groups[0]->id : null;
                     $profileProcess->process_status_id = 1;
                     $profileProcess->save();
+
+                    Session::put('table_name', $process->table_name);
+                    $_process = new DynamicModel();
+                    $_process->schema_id = $process->id;
+                    $_process->parent_id = $profileProcess->id;
+                    $_process->save();
                 }
             }
         }

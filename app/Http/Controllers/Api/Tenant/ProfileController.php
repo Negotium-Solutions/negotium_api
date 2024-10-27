@@ -6,6 +6,7 @@ use App\Http\Requests\Tenant\DynamicModelFieldRequest;
 use App\Http\Requests\Tenant\DynamicModelRequest;
 use App\Http\Requests\Tenant\ProfileRequest;
 use App\Models\Tenant\DynamicModel;
+use App\Models\Tenant\DynamicModelFieldGroup;
 use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\Profile;
@@ -207,28 +208,27 @@ class ProfileController extends BaseAPIController
             'data' => 'array|required'
         ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
             return $this->error($validator->errors(), 'Input validation error', $request->all(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
             foreach ($request->input('data') as $data) {
-                $profileProcess = ProfileProcess::where('profile_id', $request->profile_id)->where('process_id', $request->process_id)->first();
+                $profileProcess = ProfileProcess::where('profile_id', $data["profile_id"])->where('process_id', $data["process_id"])->first();
                 if (!isset($profileProcess->id) || !($profileProcess->id > 0)) {
+                    $step = DynamicModelFieldGroup::where('schema_id', $data["process_id"])
+                        ->orderBy('order', 'asc')
+                        ->first();
+
                     $profileProcess = new ProfileProcess();
                     $profileProcess->profile_id = $data["profile_id"];
                     $profileProcess->process_id = $data["process_id"];
+                    $profileProcess->step_id = $step->id;
+                    $profileProcess->process_status_id = ProcessStatus::ASSIGNED;
 
                     if ($profileProcess->save() === false) {
                         throw new \RuntimeException('Could not assign process to profile');
                     }
-
-                    $processLog = new ProcessLog();
-                    $processLog->profile_id = $data["profile_id"];
-                    $processLog->process_id = $data["process_id"];
-                    $processLog->process_status_id = ProcessStatus::ASSIGNED;
-                    $processLog->step_id = 1;
-                    $processLog->save();
                 }
             }
 
@@ -330,15 +330,20 @@ class ProfileController extends BaseAPIController
         }
     }
 
-    public function getProcesses(Request $request, $profile_id)
+    public function getProfileProcesses(Request $request, $profile_id)
     {
-        $schema = TenantSchema::find($request->input('schema_id'));
-        Session::put('table_name', $schema->table_name);
-
         try {
-            $processes = ProfileProcess::with(['process', 'step', 'status'])->where('profile_id', $profile_id)->get();
+            $profileProcesses = ProfileProcess::with(['process', 'step', 'status'])->where('profile_id', $profile_id)->get();
 
-            return $this->success($processes, 'processes successfully retrieved.', $request->all(), Response::HTTP_CREATED, [], []);
+            foreach ($profileProcesses as $key => $profileProcess) {
+                $tenantSchema = TenantSchema::find($profileProcess->process_id);
+                $model = DB::table($tenantSchema->table_name)
+                    ->where('parent_id', $profileProcess->id)
+                    ->first();
+                $profileProcesses[$key]['process']['process_model_id'] = $model->id;
+            }
+
+            return $this->success($profileProcesses, 'processes successfully retrieved.', $request->all(), Response::HTTP_CREATED, [], []);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve processes.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
