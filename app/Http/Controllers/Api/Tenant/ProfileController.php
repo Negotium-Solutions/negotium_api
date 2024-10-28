@@ -229,6 +229,12 @@ class ProfileController extends BaseAPIController
                     if ($profileProcess->save() === false) {
                         throw new \RuntimeException('Could not assign process to profile');
                     }
+
+                    $tenantSchema = TenantSchema::find($data["process_id"]);
+                    Session::put('table_name', $tenantSchema->table_name);
+                    $dynamicModel = new DynamicModel();
+                    $dynamicModel->parent_id = $profileProcess->id;
+                    $dynamicModel->save();
                 }
             }
 

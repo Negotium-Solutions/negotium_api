@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Tenant;
 use App\Http\Requests\Tenant\ProcessRequest;
 use App\Models\Tenant\Process;
 use App\Models\Tenant\ProcessLog;
+use App\Models\Tenant\ProfileProcess;
 use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -187,20 +188,20 @@ class ProcessController extends BaseAPIController
         }
     }
 
-    public function updateProcessLogStatus(Request $request) : Response
+    public function updateProcessStatus(Request $request) : Response
     {
         try {
-            $processLog = ProcessLog::find($request->process_log_id);
-            if((!isset($processLog))){
+            $profileProcess = ProfileProcess::find($request->profile_process_id);
+            if((!isset($profileProcess))){
                 return $this->success([], 'No process status record found to update', [], Response::HTTP_NO_CONTENT);
             }
 
-            $old_value = ProcessLog::findOrFail($request->process_log_id);
+            $old_value = ProfileProcess::findOrFail($request->profile_process_id);
             $new_value = $request->all();
 
-            $processLog->process_status_id = $request->process_status_id;
+            $profileProcess->process_status_id = $request->process_status_id;
 
-            if ($processLog->save() === false) {
+            if ($profileProcess->save() === false) {
                 throw new \RuntimeException('Could not update the process status');
             }
         } catch (Throwable $exception) {
