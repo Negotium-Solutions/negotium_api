@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\Tenant\ProcessExecutionController;
 use App\Http\Controllers\Api\Tenant\DynamicModelController;
 use App\Http\Controllers\Api\Tenant\DynamicModelCategoryController;
 use App\Http\Controllers\Api\Tenant\DynamicModelStepController;
+use App\Http\Controllers\Api\Tenant\ProcessStatusReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -172,4 +173,9 @@ Route::group([
     // Dynamic Model Step routes
     Route::post('/dynamic-model-step/create', [DynamicModelStepController::class, 'create'])->name('api.dynamic-model-step.create');
     // Dynamic Models - End
+
+
+    // Reports
+    Route::get('/report/process-status', [ProcessStatusReportController::class, 'get'])->name('api.report.process-status');
+    // Reports - End
 });
