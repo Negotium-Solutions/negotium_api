@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('profile_id')->nullable();
             $table->uuid('process_id')->nullable();
             $table->uuid('step_id')->nullable();
+            $table->uuid('started_by_user_id')->nullable();
             $table->integer('process_status_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

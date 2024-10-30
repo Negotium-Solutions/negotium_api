@@ -176,6 +176,6 @@ Route::group([
 
 
     // Reports
-    Route::get('/report/process-status', [ProcessStatusReportController::class, 'get'])->name('api.report.process-status');
+    Route::get('/report/process-status/{id?}', [ProcessStatusReportController::class, 'get'])->name('api.report.process-status');
     // Reports - End
 });
