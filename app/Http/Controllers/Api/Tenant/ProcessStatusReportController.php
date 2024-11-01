@@ -57,6 +57,7 @@ class ProcessStatusReportController extends BaseApiController
                 $profiles[$profileKey]['processes'] = $processes;
                 $profiles[$profileKey]['processes_count'] = $processes->count();
                 $profiles[$profileKey]['processes_start_rate_percentage'] = $processes_start_rate_percentage;
+                $profiles[$profileKey]['progress_overall_process'] = rand(1, 100);
             }
 
             $data = [
