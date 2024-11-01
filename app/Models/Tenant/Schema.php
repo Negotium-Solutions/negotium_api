@@ -200,4 +200,8 @@ class Schema extends Model
 
         return $query;
     }
+
+    public function communications() : HasMany {
+        return $this->hasMany(Communication::class, 'profile_id');
+    }
 }

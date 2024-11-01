@@ -343,10 +343,17 @@ class ProfileController extends BaseAPIController
 
             foreach ($profileProcesses as $key => $profileProcess) {
                 $tenantSchema = TenantSchema::find($profileProcess->process_id);
-                $model = DB::table($tenantSchema->table_name)
-                    ->where('parent_id', $profileProcess->id)
-                    ->first();
-                $profileProcesses[$key]['process']['process_model_id'] = $model->id;
+
+                Session::put('schema_id', $tenantSchema->id);
+                $model = DynamicModel::where('parent_id', $profileProcess->id)->first();
+
+                if(!isset($model->id)) {
+                    $model = new DynamicModel();
+                    $model->parent_id = $profileProcess->id;
+                    $model->save();
+                }
+                $model_id = $model->id ?? 0;
+                $profileProcesses[$key]['process']['process_model_id'] = $model_id;
             }
 
             return $this->success($profileProcesses, 'processes successfully retrieved.', $request->all(), Response::HTTP_CREATED, [], []);

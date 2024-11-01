@@ -55,6 +55,10 @@ class CommunicationController extends BaseApiController
         try{
             $query = isset($id) ? Communication::where('id', $id) : Communication::query();
 
+            if( $request->has('profile_id')) {
+                $query = $query->where('profile_id', $request->get('profile_id'));
+            }
+
             if ($request->has('with') && ($request->input('with') != '')) {
                 $_with = explode(',', $request->input('with'));
                 $query = $query->with($_with);

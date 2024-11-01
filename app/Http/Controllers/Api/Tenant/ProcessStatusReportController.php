@@ -17,10 +17,10 @@ class ProcessStatusReportController extends BaseApiController
      * Get process execution
      *
      * @OA\Get(
-     *       path="/{tenant}/process-execution",
-     *       summary="Get Process Execution",
-     *       operationId="getProcessExectution",
-     *       tags={"ProcessExecution"},
+     *       path="/{tenant}/process-status-report",
+     *       summary="Get Process Status Report",
+     *       operationId="getProcessStatusReport",
+     *       tags={"ProcessStatusReport"},
      *       security = {{"BearerAuth": {}}},
      *       description="Authenticate using a bearer token",
      *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),

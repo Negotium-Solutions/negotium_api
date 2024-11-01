@@ -54,9 +54,9 @@ class TenantDatabaseSeeder extends Seeder
         $this->call(ProcessStatusSeeder::class);
         // $this->call(ProcessLogSeeder::class);
         // $this->call(NoteSeeder::class);
-        // $this->call(CommunicationSeeder::class);
-        // $this->call(CommunicationTypeSeeder::class);
-        // $this->call(CommunicationStatusSeeder::class);
+        $this->call(CommunicationSeeder::class);
+        $this->call(CommunicationTypeSeeder::class);
+        $this->call(CommunicationStatusSeeder::class);
         // $this->call(FormSeeder::class);
         // $this->call(SchemaSeeder::class);
         // $this->call(DynamicModelSeeder::class);

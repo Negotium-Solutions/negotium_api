@@ -1851,6 +1851,37 @@
                 ]
             }
         },
+        "/{tenant}/process-status-report": {
+            "get": {
+                "tags": [
+                    "ProcessStatusReport"
+                ],
+                "summary": "Get Process Status Report",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getProcessStatusReport",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/{tenant}/profile/{id}": {
             "get": {
                 "tags": [
@@ -2693,6 +2724,10 @@
         {
             "name": "ProcessExecution",
             "description": "ProcessExecution"
+        },
+        {
+            "name": "ProcessStatusReport",
+            "description": "ProcessStatusReport"
         },
         {
             "name": "Profile",

@@ -2,9 +2,13 @@
 
 namespace Database\Factories\Tenant;
 
+use App\Models\Tenant\DynamicModel;
+use App\Models\Tenant\DynamicModelType;
 use App\Models\Tenant\Profile;
+use App\Models\Tenant\Schema;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Session;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tenant\Communication>
@@ -19,7 +23,11 @@ class CommunicationFactory extends Factory
     public function definition(): array
     {
         $userIds = User::orderBy('id')->pluck('id')->toArray();
-        $profileIds = Profile::pluck('id')->toArray();
+
+        $schema = Schema::where('dynamic_model_type_id', DynamicModelType::PROFILE)->pluck('id')->toArray();
+
+        Session::put('schema_id', $schema[rand(0, 1)]);
+        $profileIds = DynamicModel::pluck('id')->toArray();
 
         return [
             'subject' => fake()->realTextBetween(5, 15),
