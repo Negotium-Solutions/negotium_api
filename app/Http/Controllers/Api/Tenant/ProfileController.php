@@ -341,21 +341,6 @@ class ProfileController extends BaseAPIController
         try {
             $profileProcesses = ProfileProcess::with(['process', 'step', 'status'])->where('profile_id', $profile_id)->get();
 
-            foreach ($profileProcesses as $key => $profileProcess) {
-                $tenantSchema = TenantSchema::find($profileProcess->process_id);
-
-                Session::put('schema_id', $tenantSchema->id);
-                $model = DynamicModel::where('parent_id', $profileProcess->id)->first();
-
-                if(!isset($model->id)) {
-                    $model = new DynamicModel();
-                    $model->parent_id = $profileProcess->id;
-                    $model->save();
-                }
-                $model_id = $model->id ?? 0;
-                $profileProcesses[$key]['process']['process_model_id'] = $model_id;
-            }
-
             return $this->success($profileProcesses, 'processes successfully retrieved.', $request->all(), Response::HTTP_CREATED, [], []);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve processes.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
