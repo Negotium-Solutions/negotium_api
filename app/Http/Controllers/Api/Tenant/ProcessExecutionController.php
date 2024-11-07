@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Http\Requests\Tenant\DynamicModelFieldRequest;
 use App\Http\Requests\Tenant\ProcessExecutionRequest;
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\DynamicModelFieldGroup;
@@ -10,7 +9,6 @@ use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\ProfileProcess;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
@@ -99,7 +97,11 @@ class ProcessExecutionController extends BaseApiController
             }
 
             $profileProcess = ProfileProcess::find($dynamicModel->parent_id);
-            $profileProcess->step_id = $step->id;
+            $currentStep = DynamicModelFieldGroup::find($profileProcess->step_id);
+
+            if($step->order > $currentStep->order) {
+                $profileProcess->step_id = $step->id;
+            }
             $profileProcess->process_status_id = ProcessStatus::ACTIVE;
             $profileProcess->save();
 
@@ -108,5 +110,16 @@ class ProcessExecutionController extends BaseApiController
         }
 
         return $this->success(['step_id' => $step->id], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+    }
+
+    public function getCurrentProcessStep($process_id, $profile_id)
+    {
+        try {
+            $profileProcess = ProfileProcess::with(['step'])->where('process_id', $process_id)->where('profile_id', $profile_id)->first();
+
+            return $this->success($profileProcess, 'current processes step successfully retrieved.', [], Response::HTTP_CREATED, [], []);
+        } catch (\Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve current processes step.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

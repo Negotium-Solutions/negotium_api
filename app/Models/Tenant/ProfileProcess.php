@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,5 +46,10 @@ class ProfileProcess extends Model
                ->first();
 
         return $processData;
+    }
+
+    public function startedByUser() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'started_by_user_id');
     }
 }

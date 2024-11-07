@@ -85,6 +85,7 @@ Route::group([
     // Process Execution routes
     Route::get('/process-execution/{id?}', [ProcessExecutionController::class, 'get'])->name('api.process-execution');
     Route::post('/process-execution/update', [ProcessExecutionController::class, 'update'])->name('api.process-execution.update');
+    Route::get('/process-execution/current-process-step/{process_id}/{profile_id}', [ProcessExecutionController::class, 'getCurrentProcessStep'])->name('api.process-execution.current-process-step');
 
     // Steps routes
     Route::get('/step/{parent_id}/{id?}/{model_id?}', [StepController::class, 'get'])->name('api.step');

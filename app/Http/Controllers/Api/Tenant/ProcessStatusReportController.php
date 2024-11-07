@@ -50,6 +50,13 @@ class ProcessStatusReportController extends BaseApiController
             foreach ($profiles as $profileKey => $profile) {
                 $processIds = ProfileProcess::where('profile_id', $profile->id)->pluck('process_id')->toArray();
                 $processes = TenantSchema::whereIn('id', $processIds)->get();
+                foreach ($processes as $processKey => $process) {
+                    $startedByUser = ProfileProcess::with(['startedByUser'])
+                                    ->where('process_id', $process->id)
+                                    ->where('profile_id', $profile->id)->first();
+                    $processes[$processKey]['started_by_user'] = $startedByUser->startedByUser->full_name;
+                }
+
                 $processes_start_rate_percentage = 0;
                 if ($processes->count() > 0) {
                     $processes_start_rate_percentage = ProfileProcess::where('profile_id', $profile->id)->where('process_status_id', '>', 1)->count() / $processes->count() * 100;

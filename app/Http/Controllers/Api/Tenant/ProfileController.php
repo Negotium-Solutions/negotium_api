@@ -224,6 +224,7 @@ class ProfileController extends BaseAPIController
                     $profileProcess->profile_id = $data["profile_id"];
                     $profileProcess->process_id = $data["process_id"];
                     $profileProcess->step_id = $step->id;
+                    $profileProcess->started_by_user_id = auth()->user()->id;
                     $profileProcess->process_status_id = ProcessStatus::ASSIGNED;
 
                     if ($profileProcess->save() === false) {
@@ -233,6 +234,7 @@ class ProfileController extends BaseAPIController
                     $tenantSchema = TenantSchema::find($data["process_id"]);
                     Session::put('table_name', $tenantSchema->table_name);
                     $dynamicModel = new DynamicModel();
+                    $dynamicModel->schema_id = $tenantSchema->id;
                     $dynamicModel->parent_id = $profileProcess->id;
                     $dynamicModel->save();
                 }
