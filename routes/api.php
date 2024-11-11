@@ -54,7 +54,9 @@ Route::group([
     // Profiles routes
     Route::get('/profile/{id?}', [ProfileController::class, 'get'])->name('api.profile');
     Route::get('/profile/dynamic-model/{id}', [ProfileController::class, 'getDynamicModel'])->name('api.profile.dynamic-model');
+    Route::get('/profile/form/{schema_id}', [ProfileController::class, 'form'])->name('api.profile.create');
     Route::post('/profile/create', [ProfileController::class, 'create'])->name('api.profile.create');
+    Route::get('/profile/edit/{id}', [ProfileController::class, 'edit'])->name('api.profile.edit');
     Route::post('/profile/update/{id}', [ProfileController::class, 'update'])->name('api.profile.update');
     Route::delete('/profile/delete/{id?}', [ProfileController::class, 'delete'])->name('api.profile.delete');
     Route::post('/profile/assign-processes', [ProfileController::class, 'assignProcesses'])->name('api.profile.assign-processes');

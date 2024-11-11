@@ -3,20 +3,17 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Requests\Tenant\DynamicModelFieldRequest;
-use App\Http\Requests\Tenant\DynamicModelRequest;
 use App\Http\Requests\Tenant\ProfileRequest;
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\DynamicModelFieldGroup;
-use App\Models\Tenant\ProcessLog;
 use App\Models\Tenant\ProcessStatus;
-use App\Models\Tenant\Profile;
 use App\Models\Tenant\ProfileProcess;
 use App\Models\Tenant\Schema as TenantSchema;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
+use Throwable;
 
 class ProfileController extends BaseAPIController
 {
@@ -51,7 +48,7 @@ class ProfileController extends BaseAPIController
      * @param Request $request
      * @param Request $id
      * @return Response
-     * @throws Exception
+     * @throws Throwable
      */
     public function get(Request $request, $id = null) : Response
     {
@@ -64,8 +61,54 @@ class ProfileController extends BaseAPIController
             }
 
             return $this->success($data, 'profiles successfully retrieved', [], Response::HTTP_OK);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Get new empty dynamic model record
+     *
+     * @OA\Get(
+     *       path="/{tenant}/profile/create",
+     *       summary="Get new empty profile",
+     *       operationId="getNewEmptyProfile",
+     *       tags={"NewEmptyProfile"},
+     *       security = {{"BearerAuth": {}}},
+     *       description="Authenticate using a bearer token",
+     *       @OA\Response(response=200,description="Successful operation",@OA\JsonContent()),
+     *       @OA\Response(response=401,description="Unauthenticated"),
+     *       @OA\Response(response=500,description="Internal server error")
+     *  ),
+     *
+     * @param Request $request
+     * @return Response
+     * @throws Throwable
+     */
+    public function form(Request $request, $schema_id) : Response
+    {
+        try {
+            $query = TenantSchema::where('id', $schema_id);
+
+            if ($request->has('with') && ($request->input('with') != '')) {
+                $_with = explode(',', $request->input('with'));
+                $query = $query->with($_with)->first();
+
+                if (in_array('groups.fields.validations', $_with)) {
+                    foreach ($query->groups as $group_key => $group) {
+                        foreach ($group->fields as $key => $field) {
+                            $field['value'] = null;
+                            $query->groups[$group_key]->fields[$key] = $field;
+                        }
+                    }
+                }
+            } else {
+                $query = $query->first();
+            }
+
+            return $this->success($query, 'new profile successfully retrieved.', [], Response::HTTP_OK);
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve new profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -84,11 +127,11 @@ class ProfileController extends BaseAPIController
      *        @OA\Response(response=500,description="Internal server error")
      * )
      *
-     * @param Request $request
+     * @param ProfileRequest $request
      * @return Response
-     * @throws Exception
+     * @throws Throwable
      */
-    public function create(DynamicModelRequest $request) : Response
+    public function create(ProfileRequest $request) : Response
     {
         try {
             $dynamicModel = new DynamicModel();
@@ -98,7 +141,14 @@ class ProfileController extends BaseAPIController
                     $dynamicModel->{$field['field']} = isset($field['value']) ? $field['value'] : null;
                 }
             }
-            $dynamicModel->avatar = '/images/individual/avatar'.rand(1, 5).'.png';;
+            switch($request->input('dynamic_model_category_id')) {
+                case 1:
+                    $dynamicModel->avatar = '/images/individual/avatar'.rand(1, 5).'.png';
+                    break;
+                case 2:
+                    $dynamicModel->avatar = '/images/business/avatar'.rand(1, 5).'.png';;
+                    break;
+            }
             $dynamicModel->parent_id = $request->input('dynamic_model_category_id');
             $dynamicModel->schema_id = $request->input('id');
             $dynamicModel->updated_at = now();
@@ -113,6 +163,19 @@ class ProfileController extends BaseAPIController
         }
 
         return $this->success(['id' => $dynamicModel->id], 'Profile created successfully.', $request->all(), Response::HTTP_CREATED, [], $new_value);
+    }
+
+    public function edit(Request $request, $id) : Response
+    {
+        try {
+            $dynamicModel = DynamicModel::find($id);
+            $data = $dynamicModel->getRecord($request, $id);
+
+            // return $this->success(['id' => $id], 'profile successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($data, 'profile successfully retrieved', [], Response::HTTP_OK);
+        } catch (Throwable $exception) {
+            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -149,7 +212,7 @@ class ProfileController extends BaseAPIController
     }
 
     /**
-     * Delete a Profile by IDssssssssssssss.
+     * Delete a Profile by ID.
      *
      * @OA\Delete(
      *      path="/{tenant}/profile/delete/{id}",
@@ -164,7 +227,7 @@ class ProfileController extends BaseAPIController
      *
      * @param String $id
      * @return Response
-     * @throws Exception
+     * @throws Throwable
      */
     public function delete($id) : Response
     {
@@ -179,7 +242,7 @@ class ProfileController extends BaseAPIController
             }
 
             return response()->noContent();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error([$exception->getMessage()], 'There was an error trying to delete the profile', ['profile_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -200,7 +263,7 @@ class ProfileController extends BaseAPIController
      * )
      *
      * @return Response
-     * @throws Exception
+     * @throws Throwable
      */
     public function assignProcesses(Request $request)
     {
@@ -241,77 +304,9 @@ class ProfileController extends BaseAPIController
             }
 
             return $this->success(['id' => $profileProcess->id], 'process successfully assigned to profile.', $request->all(), Response::HTTP_CREATED);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to assign process to profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public function getSchema(Request $request, $id)
-    {
-        try {
-            $schema = TenantSchema::where('dynamic_model_category_id', $id)->first();
-
-            $request->merge(['table_name' => $schema->table_name]);
-            $dynamicModel = new DynamicModel();
-
-            $data['id'] = -1;
-            // $data['validate'] = 1;
-            $data['validate'] = 0;
-            $data['schema_id'] = $schema->id;
-            // $data['table_name'] = $schema->table_name;
-            $data['table_name'] = $schema->name;
-            // $data['steps'] = $dynamicModel->getSchema($schema->id);
-            $data['steps'] = $dynamicModel->getSchemaByGroup($schema->id);
-
-            return $this->success($data, 'profile schema successfully retrieved', [], Response::HTTP_OK);
-        } catch (\Throwable $exception) {
-            return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve profile schema.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function createProfile(ProfileRequest $request) : Response
-    {
-        try {
-            $old_value = [];
-            $new_value = $request->all();
-
-            Session::put('table_name', $request->input('table_name'));
-            $dynamicModel = new DynamicModel();
-            $table_columns = DB::getSchemaBuilder()->getColumnListing($request->input('table_name'));
-            foreach ($request->input('steps') as $key => $step) {
-                foreach ($step['fields'] as $field) {
-                    if (in_array($field['field'], $table_columns) && !in_array($field['field'], ['id', 'created_at', 'updated_at', 'deleted_at'])) {
-                        $dynamicModel->{$field['field']} = $field['value'];
-                    }
-                }
-            }
-
-            $profile = new Profile();
-            $profile->schema_id = $request->input('schema_id');
-            if ( (int)$request->input('profile_type_id') === 100 ) {
-                $profile->avatar = '/images/individual/avatar' . rand(1, 5) . '.png';
-                $profile->profile_type_id = 1;
-            }
-            if ( (int)$request->input('profile_type_id') === 200 ) {
-                $profile->avatar = '/images/business/avatar' . rand(1, 5) . '.png';
-                $profile->profile_type_id = 2;
-            }
-            $profile->save();
-
-            // $dynamicModel->schema_id = $request->input('schema_id');
-            // $dynamicModel->parent_id = $request->input('parent_id');
-            $dynamicModel->parent_id = $profile->id;
-
-            $dynamicModel->updated_at = now();
-
-            if ($dynamicModel->save() === false) {
-                throw new \RuntimeException('Could not create profile dynamic model');
-            }
-        } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to create the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return $this->success(['id' => $profile->id], 'profile successfully created', $request->all(), Response::HTTP_CREATED, $old_value, $new_value);
     }
 
     public function deleteProcess(Request $request)
@@ -333,7 +328,7 @@ class ProfileController extends BaseAPIController
             }
 
             return response()->noContent();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to delete process from profile.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -344,7 +339,7 @@ class ProfileController extends BaseAPIController
             $profileProcesses = ProfileProcess::with(['process', 'step', 'status'])->where('profile_id', $profile_id)->get();
 
             return $this->success($profileProcesses, 'processes successfully retrieved.', $request->all(), Response::HTTP_CREATED, [], []);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve processes.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

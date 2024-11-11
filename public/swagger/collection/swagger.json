@@ -1956,6 +1956,35 @@
             }
         },
         "/{tenant}/profile/create": {
+            "get": {
+                "tags": [
+                    "NewEmptyProfile"
+                ],
+                "summary": "Get new empty profile",
+                "description": "Authenticate using a bearer token",
+                "operationId": "getNewEmptyProfile",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Profile"
@@ -2732,6 +2761,10 @@
         {
             "name": "Profile",
             "description": "Profile"
+        },
+        {
+            "name": "NewEmptyProfile",
+            "description": "NewEmptyProfile"
         },
         {
             "name": "ProfileType",

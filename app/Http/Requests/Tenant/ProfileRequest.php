@@ -23,20 +23,19 @@ class ProfileRequest extends FormRequest
      */
     public function rules(): array
     {
-        $shouldValidate = false;
-        if ( $this->has('validate') && (int)$this->input('validate') === 1) {
-            $shouldValidate = true;
-        }
-
-        if($shouldValidate === false) {
+        if ( $this->has('validation') && $this->input('validation') !== 1) {
             return [];
         }
 
         $validationArray = [];
-        $steps = $this->input('steps');
-        foreach ($steps as $step)
+        $groups = $this->input('groups');
+        foreach ($groups as $group)
         {
-            foreach ($step['fields'] as $field) {
+            if ( $this->has('group_id') && $this->input('group_id') !== $group['id'] ) {
+                continue;
+            }
+
+            foreach ($group['fields'] as $field) {
                 $validations = [];
                 if (!isset($field['validations'])) {
                     continue;
@@ -57,7 +56,7 @@ class ProfileRequest extends FormRequest
                 // Build the validation rules
                 $validationArray[$field['field']] = $validations;
                 // Reconstruct the request
-                $this->merge([$field['field'] => $field['value']]);
+                $this->merge([$field['field'] => isset($field['value']) ? $field['value'] : '']);
             }
         }
 

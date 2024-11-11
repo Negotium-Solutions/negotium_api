@@ -37,13 +37,13 @@ class TenantDatabaseSeeder extends Seeder
     public function run($domain = 'negotium-solutions.com'): void
     {
         $this->call(UserSeeder::class, false, ['domain' => $domain]);
+        $this->call(ProfileCategorySeeder::class);
         $this->call(ProcessCategorySeeder::class);
         $this->call(DynamicModelTypeSeeder::class);
         $this->call(ProcessSeeder::class);
         $this->call(DynamicModelFieldTypeSeeder::class);
         $this->call(ValidationSeeder::class);
         $this->call(DynamicModelFieldSeeder::class);
-        $this->call(ProfileCategorySeeder::class);
         $this->call(DynamicModelTemplateSeeder::class);
         $this->call(ProfileSeeder::class);
         $this->call(ProfileTypeSeeder::class);
