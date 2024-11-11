@@ -48,6 +48,10 @@ class NoteController extends BaseApiController
         try{
             $query = isset($id) ? Note::where('id', $id) : Note::query();
 
+            if ($request->has('profile_id')) {
+                $query->where('profile_id', $request->get('profile_id'));
+            }
+
             if ($request->has('with') && ($request->input('with') != '')) {
                 $_with = explode(',', $request->input('with'));
                 $query = $query->with($_with);

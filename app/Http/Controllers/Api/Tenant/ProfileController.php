@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Http\Requests\Tenant\DynamicModelFieldRequest;
 use App\Http\Requests\Tenant\ProfileRequest;
 use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\DynamicModelFieldGroup;
@@ -198,17 +197,29 @@ class ProfileController extends BaseAPIController
      * @param $id
      * @return Response
      */
-    public function update(DynamicModelFieldRequest $request, $id) : Response
+    public function update(ProfileRequest $request, $id) : Response
     {
         try {
-            $old_value = [];
-            $new_value = [];
-            // Todo: Update profile code
+            $dynamicModel = DynamicModel::find($id);
+
+            $old_value = $dynamicModel->toArray();
+            $new_value = $request->all();
+
+            foreach ($request->input('groups') as $group) {
+                foreach ($group['fields'] as $field) {
+                    $dynamicModel->{$field['field']} = isset($field['value']) ? $field['value'] : null;
+                }
+            }
+            $dynamicModel->updated_at = now();
+
+            if ($dynamicModel->save() === false) {
+                throw new \RuntimeException('Could not update dynamic model');
+            }
         } catch (Throwable $exception) {
-            return $this->error($exception->getMessage(), 'There was an error trying to update the profile', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->error($exception->getMessage(), 'There was an error trying to update profile.', $request->all(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success(['id' => 0], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
+        return $this->success(['id' => $id], 'profile successfully updated', $request->all(), Response::HTTP_OK, $old_value, $new_value);
     }
 
     /**

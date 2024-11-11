@@ -2,9 +2,12 @@
 
 namespace Database\Factories\Tenant;
 
+use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\Profile;
+use App\Models\Tenant\Schema as TenantSchema;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Session;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tenant\Document>
@@ -20,7 +23,11 @@ class DocumentFactory extends Factory
     {
         $userIds = User::orderBy('id')->pluck('id')->toArray();
         $documentType = ['txt', 'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-        $profileIds = Profile::pluck('id')->toArray();
+
+        $tenantSchema = TenantSchema::where('dynamic_model_type_id', 1)->pluck('id')->toArray();
+
+        Session::put('schema_id', $tenantSchema[rand(0, 1)]);
+        $profileIds = DynamicModel::pluck('id')->toArray();
 
         return [
             'name' => fake()->name,

@@ -52,6 +52,10 @@ class DocumentController extends BaseAPIController implements ApiInterface
         try{
             $query = isset($id) ? Document::with(['user'])->where('id', $id) : Document::with(['user']);
 
+            if( $request->has('profile_id') ) {
+                $query->where('profile_id', $request->get('profile_id'));
+            }
+
             $data = isset($id) ? $query->first() : $query->get();
 
             if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){

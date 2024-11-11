@@ -2062,7 +2062,7 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Delete a Profile by IDssssssssssssss.",
+                "summary": "Delete a Profile by ID.",
                 "description": "Authenticate using a bearer token",
                 "operationId": "deleteProfileById",
                 "parameters": [
