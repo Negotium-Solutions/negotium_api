@@ -230,23 +230,19 @@ class DocumentController extends BaseAPIController implements ApiInterface
         }
     }
 
-    public function download($id)
+    public function download($id) : Response
     {
         // Retrieve the document metadata
         $document = Document::findOrFail($id);
 
-        // Retrieve the current tenant
         $currentTenant = app(Tenant::class);
-
-        // Build the path to the document
         $filePath = "tenants{$currentTenant->id}/" . $document->path;
+        $document['tenant_path'] = $filePath;
 
-        // Check if the file exists
-        if (!Storage::exists($filePath)) {
-            abort(404, 'File not found.');
+        if((empty($document))){
+            return $this->success([], 'No document record found', [], Response::HTTP_NOT_FOUND);
         }
 
-        // Serve the file for download
-        return Storage::download($filePath, $document->name);
+        return $this->success($document, 'No document record found to update', [], Response::HTTP_OK, $document);
     }
 }
