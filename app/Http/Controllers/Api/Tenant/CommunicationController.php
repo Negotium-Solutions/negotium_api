@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Tenant;
 
-use App\Helpers\Helper;
 use App\Mail\Tenant\CommunicationEmail;
 use App\Models\Tenant\Communication;
 use App\Models\Tenant\Profile;
@@ -233,7 +232,7 @@ class CommunicationController extends BaseApiController
         try {
             $profile = Profile::find($id);
 
-            $cell_number = Helper::replaceNumberPrefix($profile->cell_number, '27');
+            $cell_number = replaceNumberPrefix($profile->cell_number, '27');
             $payload = [
                 "messages" => [
                     "destinations" => ["to" => $cell_number],
@@ -293,7 +292,7 @@ class CommunicationController extends BaseApiController
         try {
             $profile = Profile::find($id);
 
-            $cell_number = Helper::replaceNumberPrefix($profile->cell_number, '27');
+            $cell_number = replaceNumberPrefix($profile->cell_number, '27');
             $payload = [
                 "messages" => [
                     "from" => app(Tenant::class)->configs->infobip_phone_number,

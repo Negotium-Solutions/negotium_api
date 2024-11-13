@@ -232,17 +232,30 @@ class DocumentController extends BaseAPIController implements ApiInterface
 
     public function download($id) : Response
     {
-        // Retrieve the document metadata
-        $document = Document::findOrFail($id);
+        try {
+            // Retrieve the document metadata
+            $document = Document::findOrFail($id);
 
-        $currentTenant = app(Tenant::class);
-        $filePath = "tenants{$currentTenant->id}/" . $document->path;
-        $document['tenant_path'] = $filePath;
+            if (Storage::exists($document->path)) {
+                $fileContents = Storage::get($document->path); // Get the file contents
+                $base64EncodedFile = base64_encode($fileContents); // Encode to Base64
 
-        if((empty($document))){
-            return $this->success([], 'No document record found', [], Response::HTTP_NOT_FOUND);
+                // Get MIME type for convenience
+                $mimeType = Storage::mimeType($document->path);
+                $dataUri = "data:$mimeType;base64," . $base64EncodedFile;
+
+                $file = [
+                    'file' => $dataUri,
+                    'name' => $document->name,
+                    'url' => tenant_assets(app(Tenant::class), $document->path)
+                ];
+            } else {
+                return $this->error([], 'Document not found', ['document_id' => $id], Response::HTTP_NOT_FOUND);
+            }
+        } catch (\Throwable $exception) {
+            return $this->error([$exception->getMessage()], 'There was an error trying to delete the document', ['document_id' => $id], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->success($document, 'No document record found to update', [], Response::HTTP_OK, $document);
+        return $this->success($file, 'Document retrieved successfully.', [], Response::HTTP_OK, $document);
     }
 }

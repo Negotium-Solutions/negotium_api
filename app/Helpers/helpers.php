@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Helpers;
+use Illuminate\Support\Facades\Storage;
 
-class Helper
-{
-    /**
-     * @param $phoneNumber
-     * @param $prefix
-     * @return mixed|string
-     */
-    public static function replaceNumberPrefix($phoneNumber, $prefix) {
+if (!function_exists('tenant_assets')) {
+    function tenant_assets($tenant, $path) : string
+    {
+        return Storage::disk('tenant_assets')->url("$tenant->id/app/$path");
+    }
+}
+
+if (!function_exists('replaceNumberPrefix')) {
+    function replaceNumberPrefix($phoneNumber, $prefix)
+    {
         // Check if the phone number starts with '0'
         if (substr($phoneNumber, 0, 1) === '0') {
             // Replace the first '0' with '27'
@@ -17,8 +19,10 @@ class Helper
         }
         return $phoneNumber; // Return the number as is if it doesn't start with '0'
     }
+}
 
-    public static function fieldToLabel($fieldName)
+if (!function_exists('fieldToLabel')) {
+    function fieldToLabel($fieldName)
     {
         // Replace underscores with spaces
         $formatted = str_replace('_', ' ', $fieldName);
