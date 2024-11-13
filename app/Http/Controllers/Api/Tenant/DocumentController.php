@@ -56,13 +56,21 @@ class DocumentController extends BaseAPIController implements ApiInterface
                 $query->where('profile_id', $request->get('profile_id'));
             }
 
-            $data = isset($id) ? $query->first() : $query->get();
+            $documents = isset($id) ? $query->first() : $query->get();
 
-            if((isset($id) && !isset($data)) || (!isset($id) && count($data) == 0)){
+            if (isset($id)){
+                $documents['url'] = tenant_assets(app(Tenant::class), $documents->path);
+            } else {
+                foreach ($documents as $key => $document) {
+                    $documents[$key]['url'] = tenant_assets(app(Tenant::class), $document->path);
+                }
+            }
+
+            if((isset($id) && !isset($documents)) || (!isset($id) && count($documents) == 0)){
                 return $this->success([], 'No document record(s) found', [], Response::HTTP_NOT_FOUND);
             }
 
-            return $this->success($data, 'documents successfully retrieved', [], Response::HTTP_OK);
+            return $this->success($documents, 'documents successfully retrieved', [], Response::HTTP_OK);
         } catch (\Throwable $exception) {
             return $this->error($exception->getMessage(), 'An error occurred while trying to retrieve tenant.', [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
