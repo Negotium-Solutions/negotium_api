@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Tenant;
 
 use App\Mail\Tenant\CommunicationEmail;
 use App\Models\Tenant\Communication;
+use App\Models\Tenant\DynamicModel;
 use App\Models\Tenant\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -188,7 +189,7 @@ class CommunicationController extends BaseApiController
         }
 
         try {
-            $profile = Profile::find($id);
+            $profile = DynamicModel::find($id);
 
             Mail::to($request->to)
                 ->cc($request->cc)
