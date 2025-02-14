@@ -14,7 +14,7 @@ namespace App\Http\Controllers;
  *     @OA\Contact(name="Admin", email="admin@negotium-solutions.com")
  * )
  * @OA\Server(
- *     url="https://api.negotium-solutions.com/api",
+ *     url="https://api-staging.negotium-solutions.com/api",
  *     description="This is the Negotium Solutions Swagger API Server"
  * )
  */
