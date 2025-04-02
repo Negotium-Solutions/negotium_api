@@ -27,7 +27,8 @@ class DynamicModelFieldTypeSeeder extends Seeder
            ['name' => 'Images', 'data_type' => 'string', 'dynamic_model_field_type_group_id' => 3],
            ['name' => 'Email Template', 'data_type' => 'string', 'dynamic_model_field_type_group_id' => 4],
            ['name' => 'Notification', 'data_type' => 'string', 'dynamic_model_field_type_group_id' => 4],
-           ['name' => 'Link', 'data_type' => 'string', 'dynamic_model_field_type_group_id' => 4]
+           ['name' => 'Link', 'data_type' => 'string', 'dynamic_model_field_type_group_id' => 4],
+           ['name' => 'Download', 'data_type' => 'string', 'dynamic_model_field_type_group_id' => 4]
         ]);
     }
 }

@@ -117,6 +117,10 @@ class ActivityController extends BaseAPIController
             $dynamicModelField->setField($dynamicModelField->label);
             $dynamicModelField->order = $dynamicModelField->id;
 
+            if (!empty($request->get('file'))) {
+                $dynamicModelField->file = $request->get('file');
+            }
+
             $step = DynamicModelFieldGroup::find($dynamicModelField->dynamic_model_field_group_id);
             $schema_id = $step->schema_id;
             $tenantSchema = TenantSchema::find($schema_id);

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('label')->nullable();
             $table->string('field')->nullable();
+            $table->longText('file')->nullable();
             $table->integer('dynamic_model_field_type_id')->nullable();
             $table->uuid('dynamic_model_field_group_id')->nullable();
             $table->uuid('step_id')->nullable();
