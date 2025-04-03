@@ -9,6 +9,7 @@ use App\Models\Tenant\ProcessStatus;
 use App\Models\Tenant\ProfileProcess;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Rikscss\BaseApi\Http\Controllers\BaseApiController;
 
@@ -71,7 +72,19 @@ class ProcessExecutionController extends BaseApiController
             foreach ($request->input('fields') as $field) {
                 if (array_key_exists($field['field'], $dynamicModel->getAttributes())) {
                     if (!in_array($field['field'], ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
-                        $dynamicModel->{$field['field']} = $field['value'];
+                        switch( $field['dynamic_model_field_type_id']) {
+                            case 16:
+                                $fileContent = base64_decode($field['value']['base64']);
+                                $fileName = date('Y_m_d_h_i_s').'_'.'.xlsx';  // Adjust the file extension accordingly
+                                $filePath = 'uploads/' . $fileName;
+
+
+                                Storage::put($filePath, $fileContent);
+                            break;
+                            default:
+                                $dynamicModel->{$field['field']} = $field['value'];
+                            break;
+                        }
                     }
                 }
             }
