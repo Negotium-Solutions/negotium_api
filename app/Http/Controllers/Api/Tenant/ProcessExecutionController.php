@@ -74,12 +74,18 @@ class ProcessExecutionController extends BaseApiController
                     if (!in_array($field['field'], ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
                         switch( $field['dynamic_model_field_type_id']) {
                             case 16:
-                                $fileContent = base64_decode($field['value']['base64']);
-                                $fileName = date('Y_m_d_h_i_s').'_'.'.xlsx';  // Adjust the file extension accordingly
-                                $filePath = 'uploads/' . $fileName;
+                                $jsonData = json_encode($field['value']);
 
-
-                                Storage::put($filePath, $fileContent);
+                                $file = json_decode($jsonData);
+                                if (isset($file->base64)) {
+                                    $fileContent = base64_decode($file->base64);
+                                    $parts = explode('.', $file->name);
+                                    $extension = end($parts);
+                                    $fileName = 'file_'.date('Y_m_d_h_i_s').'.'.$extension;
+                                    $filePath = 'uploads/process-execution/'.date('Y-m-d').'/' . $fileName;
+                                    Storage::put($filePath, $fileContent);
+                                    $dynamicModel->{$field['field']} = $filePath;
+                                }
                             break;
                             default:
                                 $dynamicModel->{$field['field']} = $field['value'];

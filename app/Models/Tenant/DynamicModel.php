@@ -13,6 +13,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Tenant\Schema as TenantSchema;
+use Stancl\Tenancy\Contracts\Tenant;
 
 class DynamicModel extends Model
 {
@@ -130,7 +131,27 @@ class DynamicModel extends Model
             if (in_array('groups.fields.validations', $_with)) {
                 foreach ($query->groups as $group_key => $group) {
                     foreach ($group->fields as $key => $field) {
-                        $field['value'] = $dynamicModel[$field->field];
+                        switch( $field['dynamic_model_field_type_id']) {
+                            case 16:
+                                if( $dynamicModel[$field->field] !== null ) {
+                                    $parts = explode('/', $dynamicModel[$field->field]);
+                                    $name = end($parts);
+                                    $field['value'] = [
+                                        'name' => $name,
+                                        'type' => null,
+                                        'size' => null,
+                                        'url' => tenant_assets(app(Tenant::class), $dynamicModel[$field->field]),
+                                        'base64' => null,
+                                        'status' => 'uploaded'
+                                    ];
+                                } else {
+                                    $field['value'] = $dynamicModel[$field->field];
+                                }
+                                break;
+                            default:
+                                $field['value'] = $dynamicModel[$field->field];
+                                break;
+                        }
                         $query->groups[$group_key]->fields[$key] = $field;
                     }
                 }
