@@ -73,6 +73,20 @@ class ProcessExecutionController extends BaseApiController
                 if (array_key_exists($field['field'], $dynamicModel->getAttributes())) {
                     if (!in_array($field['field'], ['id', 'created_at', 'updated_at', 'deleted_at', 'parent_id'])) {
                         switch( $field['dynamic_model_field_type_id']) {
+                            case 10:
+                                $jsonData = json_encode($field['value']);
+
+                                $file = json_decode($jsonData);
+                                if (isset($file->base64)) {
+                                    $fileContent = base64_decode($file->base64);
+                                    $parts = explode('.', $file->name);
+                                    $extension = end($parts);
+                                    $fileName = 'file_'.date('Y_m_d_h_i_s').'_'.rand(1, 1000).'.'.$extension;
+                                    $filePath = 'uploads/process-execution/'.date('Y-m-d').'/' . $fileName;
+                                    Storage::put($filePath, $fileContent);
+                                    $dynamicModel->{$field['field']} = $filePath;
+                                }
+                            break;
                             case 16:
                                 $jsonData = json_encode($field['value']);
 
@@ -81,7 +95,7 @@ class ProcessExecutionController extends BaseApiController
                                     $fileContent = base64_decode($file->base64);
                                     $parts = explode('.', $file->name);
                                     $extension = end($parts);
-                                    $fileName = 'file_'.date('Y_m_d_h_i_s').'.'.$extension;
+                                    $fileName = 'file_'.date('Y_m_d_h_i_s').'_'.rand(1, 1000).'.'.$extension;
                                     $filePath = 'uploads/process-execution/'.date('Y-m-d').'/' . $fileName;
                                     Storage::put($filePath, $fileContent);
                                     $dynamicModel->{$field['field']} = $filePath;

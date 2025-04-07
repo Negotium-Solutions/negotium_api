@@ -132,6 +132,22 @@ class DynamicModel extends Model
                 foreach ($query->groups as $group_key => $group) {
                     foreach ($group->fields as $key => $field) {
                         switch( $field['dynamic_model_field_type_id']) {
+                            case 10:
+                                if( $dynamicModel[$field->field] !== null ) {
+                                    $parts = explode('/', $dynamicModel[$field->field]);
+                                    $name = end($parts);
+                                    $field['value'] = [
+                                        'name' => $name,
+                                        'type' => null,
+                                        'size' => null,
+                                        'url' => tenant_assets(app(Tenant::class), $dynamicModel[$field->field]),
+                                        'base64' => null,
+                                        'status' => 'uploaded'
+                                    ];
+                                } else {
+                                    $field['value'] = $dynamicModel[$field->field];
+                                }
+                                break;
                             case 16:
                                 if( $dynamicModel[$field->field] !== null ) {
                                     $parts = explode('/', $dynamicModel[$field->field]);
